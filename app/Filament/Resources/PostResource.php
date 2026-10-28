@@ -25,9 +25,10 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
-use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
 use UnitEnum;
@@ -57,6 +58,11 @@ class PostResource extends Resource
             ->components([
                 Section::make('Inhalt des Beitrags')
                     ->schema([
+                        Toggle::make('is_featured')
+                            ->label('Auf der Startseite anzeigen')
+                            ->helperText('Wenn aktiviert, erscheint dieser Beitrag direkt auf der Startseite unter „Aktuelles aus der Mühlmattenschule“. Alle veröffentlichten Beiträge sind zusätzlich immer unter „Nachrichten & Klassen“ (/aktuelles) sichtbar.')
+                            ->default(true)
+                            ->columnSpanFull(),
                         TextInput::make('title')
                             ->label('Überschrift')
                             ->required()
@@ -102,9 +108,6 @@ class PostResource extends Resource
                             ->relationship('album', 'title')
                             ->searchable()
                             ->preload(),
-                        Toggle::make('is_featured')
-                            ->label('Auf der Startseite oben hervorheben')
-                            ->default(false),
                         Select::make('status')
                             ->label('Status')
                             ->options(PublishStatus::options())
@@ -145,9 +148,9 @@ class PostResource extends Resource
                     ->badge()
                     ->formatStateUsing(fn (PublishStatus $state): string => $state->label())
                     ->color(fn (PublishStatus $state): string => $state === PublishStatus::Published ? 'success' : 'gray'),
-                IconColumn::make('is_featured')
-                    ->label('Startseite')
-                    ->boolean(),
+                ToggleColumn::make('is_featured')
+                    ->label('Auf Startseite')
+                    ->sortable(),
                 TextColumn::make('published_at')
                     ->label('Datum')
                     ->dateTime('d.m.Y H:i')
@@ -157,6 +160,8 @@ class PostResource extends Resource
                     ->placeholder('—'),
             ])
             ->filters([
+                TernaryFilter::make('is_featured')
+                    ->label('Auf der Startseite'),
                 SelectFilter::make('status')
                     ->label('Status')
                     ->options(PublishStatus::options()),

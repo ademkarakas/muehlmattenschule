@@ -17,13 +17,22 @@ class HomeController extends Controller
      */
     public function __invoke(): Response
     {
-        $posts = Post::query()
+        $featuredQuery = Post::query()
             ->published()
+            ->where('is_featured', true)
             ->with(['category:id,name,slug,color', 'media'])
-            ->orderByDesc('is_featured')
-            ->orderByDesc('published_at')
-            ->limit(8)
-            ->get()
+            ->orderByDesc('published_at');
+
+        $postModels = $featuredQuery->exists()
+            ? $featuredQuery->get()
+            : Post::query()
+                ->published()
+                ->with(['category:id,name,slug,color', 'media'])
+                ->orderByDesc('published_at')
+                ->limit(8)
+                ->get();
+
+        $posts = $postModels
             ->map(fn (Post $post): array => [
                 'id' => $post->id,
                 'title' => $post->title,

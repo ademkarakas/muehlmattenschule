@@ -30,7 +30,7 @@ const SCHOOL_HERO_PHOTOS = [
  * Hero-Bereich mit echtem Schulfoto, 1-spaltiger Nachrichten-Stream links und Termin-Widget rechts.
  */
 export default function HomePage({ posts, upcomingEvents, albums }: HomePageProps): ReactElement {
-    const { school } = usePage<SharedInertiaProps>().props;
+    const { school, announcements } = usePage<SharedInertiaProps>().props;
     const [heroPhotoIndex, setHeroPhotoIndex] = useState(0);
     const currentHeroPhoto = SCHOOL_HERO_PHOTOS[heroPhotoIndex] ?? SCHOOL_HERO_PHOTOS[0];
 
@@ -123,6 +123,54 @@ export default function HomePage({ posts, upcomingEvents, albums }: HomePageProp
                     </div>
                 </div>
             </section>
+
+            {/* Aktive Ankündigungen aus dem Admin-Panel (/admin/announcements) */}
+            {announcements.length > 0 && (
+                <section
+                    aria-label="Aktuelle Ankündigungen"
+                    className="mx-auto max-w-[1440px] px-6 lg:px-10 pt-8 space-y-3"
+                >
+                    {announcements.map((item) => {
+                        const isImportant = item.level === 'important';
+                        return (
+                            <div
+                                key={item.id}
+                                className={`flex flex-wrap items-center justify-between gap-4 rounded-2xl border px-5 py-4 shadow-xs ${
+                                    isImportant
+                                        ? 'border-amber-300 bg-gradient-to-r from-amber-50 to-orange-50 text-amber-950'
+                                        : 'border-brand-200 bg-gradient-to-r from-brand-50 to-white text-slate-900'
+                                }`}
+                            >
+                                <div className="flex items-start sm:items-center gap-3.5">
+                                    <span
+                                        className={`inline-flex shrink-0 items-center rounded-xl px-3 py-1 text-xs font-extrabold uppercase tracking-wider ${
+                                            isImportant
+                                                ? 'bg-amber-400 text-slate-950'
+                                                : 'bg-brand-700 text-white'
+                                        }`}
+                                    >
+                                        {isImportant ? 'Wichtig' : 'Ankündigung'}
+                                    </span>
+                                    <p className="text-sm sm:text-base font-bold leading-snug">{item.text}</p>
+                                </div>
+
+                                {item.linkUrl && (
+                                    <Link
+                                        href={item.linkUrl}
+                                        className={`shrink-0 rounded-xl px-4 py-2 text-xs font-extrabold transition ${
+                                            isImportant
+                                                ? 'bg-amber-900 text-white hover:bg-amber-950'
+                                                : 'bg-brand-700 text-white hover:bg-brand-800'
+                                        }`}
+                                    >
+                                        {item.linkLabel || 'Mehr erfahren'} →
+                                    </Link>
+                                )}
+                            </div>
+                        );
+                    })}
+                </section>
+            )}
 
             {/* Hauptbereich im EduPage-Portal-Layout (1 Beitrag pro Zeile links, Termine & Kontakt rechts) */}
             <div className="mx-auto max-w-[1440px] px-6 lg:px-10 py-12 grid gap-10 lg:grid-cols-12">

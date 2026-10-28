@@ -21,8 +21,8 @@ use Filament\Resources\Pages\PageRegistration;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
-use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
 use UnitEnum;
 
@@ -61,7 +61,8 @@ class AnnouncementResource extends Resource
                     ->default(AnnouncementLevel::Info->value)
                     ->required(),
                 Toggle::make('is_active')
-                    ->label('Aktiv geschaltet')
+                    ->label('Auf der Startseite anzeigen (Aktiv)')
+                    ->helperText('Wenn aktiviert, wird diese Ankündigung prominent oben auf der Startseite eingeblendet.')
                     ->default(true),
                 TextInput::make('link_label')
                     ->label('Link-Beschriftung (optional)')
@@ -97,9 +98,8 @@ class AnnouncementResource extends Resource
                     ->badge()
                     ->formatStateUsing(fn (AnnouncementLevel $state): string => $state->label())
                     ->color(fn (AnnouncementLevel $state): string => $state === AnnouncementLevel::Important ? 'warning' : 'primary'),
-                IconColumn::make('is_active')
-                    ->label('Aktiv')
-                    ->boolean(),
+                ToggleColumn::make('is_active')
+                    ->label('Auf Startseite aktiv'),
                 TextColumn::make('visible_until')
                     ->label('Sichtbar bis')
                     ->dateTime('d.m.Y H:i')

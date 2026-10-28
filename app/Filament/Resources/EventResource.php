@@ -21,6 +21,7 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
 use UnitEnum;
 
@@ -63,7 +64,8 @@ class EventResource extends Resource
                     ->label('Ganztägiger Termin')
                     ->default(false),
                 Toggle::make('is_published')
-                    ->label('Auf der Website sichtbar')
+                    ->label('Auf der Startseite („Nächste Termine“) & im Kalender anzeigen')
+                    ->helperText('Kommende Termine ab dem heutigen Datum werden automatisch rechts auf der Startseite unter „Nächste Termine“ sowie im Schulkalender angezeigt.')
                     ->default(true),
                 TextInput::make('location')
                     ->label('Ort (optional)')
@@ -99,9 +101,8 @@ class EventResource extends Resource
                 IconColumn::make('all_day')
                     ->label('Ganztägig')
                     ->boolean(),
-                IconColumn::make('is_published')
-                    ->label('Sichtbar')
-                    ->boolean(),
+                ToggleColumn::make('is_published')
+                    ->label('Startseite & Kalender'),
             ])
             ->recordActions([
                 EditAction::make(),
