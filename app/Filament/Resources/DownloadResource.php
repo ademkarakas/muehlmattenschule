@@ -132,3 +132,4 @@ class DownloadResource extends Resource
         ];
     }
 }
+

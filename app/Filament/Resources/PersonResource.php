@@ -134,3 +134,4 @@ class PersonResource extends Resource
         ];
     }
 }
+

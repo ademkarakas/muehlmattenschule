@@ -24,3 +24,4 @@ class ManageCategories extends ManageRecords
         ];
     }
 }
+

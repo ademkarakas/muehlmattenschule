@@ -36,3 +36,4 @@ class UpcomingEventsWidget extends TableWidget
             ->paginated(false);
     }
 }
+

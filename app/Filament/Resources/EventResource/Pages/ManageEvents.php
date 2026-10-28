@@ -24,3 +24,4 @@ class ManageEvents extends ManageRecords
         ];
     }
 }
+

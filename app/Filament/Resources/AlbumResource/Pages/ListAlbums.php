@@ -24,3 +24,4 @@ class ListAlbums extends ListRecords
         ];
     }
 }
+

@@ -24,3 +24,4 @@ class EditAlbum extends EditRecord
         ];
     }
 }
+

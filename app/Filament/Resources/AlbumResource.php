@@ -173,3 +173,4 @@ class AlbumResource extends Resource
         ];
     }
 }
+

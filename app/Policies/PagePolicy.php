@@ -37,3 +37,4 @@ class PagePolicy
         return $user->isAdminOrLeadership();
     }
 }
+

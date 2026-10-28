@@ -37,3 +37,4 @@ class PersonPolicy
         return $user->isAdminOrLeadership();
     }
 }
+

@@ -24,3 +24,4 @@ class ManageAnnouncements extends ManageRecords
         ];
     }
 }
+

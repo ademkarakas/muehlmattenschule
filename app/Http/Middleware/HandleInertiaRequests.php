@@ -1,25 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Middleware;
 
+use App\Models\Announcement;
+use App\Models\Page;
+use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
 {
     /**
-     * The root template that's loaded on the first page visit.
-     *
-     * @see https://inertiajs.com/server-side-setup#root-template
+     * Das Root-Blade-Template für Inertia-Antworten.
      *
      * @var string
      */
     protected $rootView = 'app';
 
     /**
-     * Determines the current asset version.
-     *
-     * @see https://inertiajs.com/asset-versioning
+     * Bestimmt die aktuelle Asset-Version.
      */
     public function version(Request $request): ?string
     {
@@ -27,17 +29,69 @@ class HandleInertiaRequests extends Middleware
     }
 
     /**
-     * Define the props that are shared by default.
-     *
-     * @see https://inertiajs.com/shared-data
+     * Definiert die auf allen öffentlichen Seiten gemeinsam verfügbaren Props
+     * (Schulstammdaten, aktive Ankündigungen, dynamische Menüpunkte).
      *
      * @return array<string, mixed>
      */
     public function share(Request $request): array
     {
+        /** @var array<string, string> $defaultSchool */
+        $defaultSchool = [
+            'name' => 'Mühlmattenschule',
+            'subtitle' => 'Grundschule Freiburg-Hochdorf',
+            'street' => 'Zu den Mühlmatten 8',
+            'zip_city' => '79108 Freiburg im Breisgau',
+            'phone' => '0761 / 201-7612',
+            'email' => 'sekretariat.mms@freiburg.de',
+            'office_hours' => 'Mo–Fr 07:45–12:00 Uhr',
+            'welcome_title' => 'Willkommen an der Mühlmattenschule',
+            'welcome_text' => 'Grundschule für die Freiburger Stadtteile Hochdorf und Benzhausen.',
+        ];
+
+        $savedSchool = Schema::hasTable('settings')
+            ? Setting::getValue('school', [])
+            : [];
+
+        $school = array_merge($defaultSchool, is_array($savedSchool) ? $savedSchool : []);
+
+        $announcements = Schema::hasTable('announcements')
+            ? Announcement::query()
+                ->currentlyVisible()
+                ->orderByDesc('level')
+                ->latest()
+                ->get(['id', 'text', 'level', 'link_url', 'link_label'])
+                ->map(fn (Announcement $item): array => [
+                    'id' => $item->id,
+                    'text' => $item->text,
+                    'level' => $item->level->value,
+                    'linkUrl' => $item->link_url,
+                    'linkLabel' => $item->link_label,
+                ])
+                ->all()
+            : [];
+
+        $navigationPages = Schema::hasTable('pages')
+            ? Page::query()
+                ->published()
+                ->orderBy('menu_order')
+                ->get(['title', 'slug', 'section'])
+                ->groupBy('section')
+                ->map(fn ($items): array => $items->map(fn (Page $page): array => [
+                    'title' => $page->title,
+                    'slug' => $page->slug,
+                ])->values()->all())
+                ->all()
+            : [];
+
         return [
             ...parent::share($request),
-            //
+            'school' => $school,
+            'announcements' => $announcements,
+            'navigationPages' => [
+                'unsereSchule' => $navigationPages['unsere-schule'] ?? [],
+                'schulleben' => $navigationPages['schulleben'] ?? [],
+            ],
         ];
     }
 }

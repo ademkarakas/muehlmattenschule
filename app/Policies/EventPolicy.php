@@ -49,3 +49,4 @@ class EventPolicy
         return $user->isOfficeStaff();
     }
 }
+

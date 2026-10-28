@@ -127,3 +127,4 @@ class AnnouncementResource extends Resource
         ];
     }
 }
+

@@ -65,3 +65,4 @@ class PostPolicy
         return $user->isOfficeStaff();
     }
 }
+

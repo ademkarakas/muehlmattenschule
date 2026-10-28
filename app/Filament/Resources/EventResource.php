@@ -125,3 +125,4 @@ class EventResource extends Resource
         ];
     }
 }
+

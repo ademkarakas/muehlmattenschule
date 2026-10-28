@@ -24,3 +24,4 @@ class CreatePost extends CreateRecord
         return $data;
     }
 }
+

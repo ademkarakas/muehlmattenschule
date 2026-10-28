@@ -24,3 +24,4 @@ class ManagePeople extends ManageRecords
         ];
     }
 }
+

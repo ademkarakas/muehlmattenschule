@@ -24,3 +24,4 @@ class ManageDownloads extends ManageRecords
         ];
     }
 }
+

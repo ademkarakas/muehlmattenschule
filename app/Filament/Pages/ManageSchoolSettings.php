@@ -161,3 +161,4 @@ class ManageSchoolSettings extends Page
             ->send();
     }
 }
+

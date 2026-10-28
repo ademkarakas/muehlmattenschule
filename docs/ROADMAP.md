@@ -58,16 +58,16 @@
 - [x] 3.14 Taslak/Yayında + zamanlı yayın, duyurularda bitiş tarihi
 
 ## Faz 4 – Frontend (F1–F5)
-- [ ] 4.1 UI bileşenleri (Button, Card, Badge, Container, SectionTitle)
-- [ ] 4.2 Layout: Header, menü (açılır + mobil), duyuru bandı, Footer
-- [ ] 4.3 Ana sayfa: Hero slider, Aktuelles, Nächste Termine, galeri önizleme, hızlı linkler
-- [ ] 4.4 Aktuelles: liste (sayfalama, kategori filtresi) + detay
-- [ ] 4.5 Termine: liste + aylık takvim
-- [ ] 4.6 Galerie: albüm listesi + albüm (lightbox)
-- [ ] 4.7 Sabit sayfalar (blok renderer), Kollegium görünümü
-- [ ] 4.8 Downloads, Kontakt
-- [ ] 4.9 Impressum, Datenschutz
-- [ ] 4.10 Almanca 404/500 hata sayfaları
+- [x] 4.1 UI bileşenleri (`PostCard`, paylaşılan TypeScript tipleri `resources/js/types/school.ts`)
+- [x] 4.2 Layout (`SiteLayout`: turkuaz Header, açılır menü + mobil menü, duyuru bandı, Footer)
+- [x] 4.3 Ana sayfa (`HomePage`: turkuaz Hero, Aktuelles akışı, Nächste Termine, galeri önizleme, hızlı linkler)
+- [x] 4.4 Aktuelles: liste (sayfalama, kategori ve **sınıf (`Klasse`)** filtresi) + detay sayfası
+- [x] 4.5 Termine: aylara göre gruplanmış etkinlik takvimi
+- [x] 4.6 Galerie: albüm listesi + albüm detay ve Lightbox fotoğraf büyütme
+- [x] 4.7 Sabit sayfalar (blok renderer: `rich_text`, `info_box`, `people_list`), Kollegium görünümü
+- [x] 4.8 Downloads (Elternbriefe & Formulare), Kontakt (OpenStreetMap bağlantılı, çerezsiz)
+- [x] 4.9 Impressum, Datenschutzerklärung (DSGVO uyumlu)
+- [x] 4.10 Almanca 404/500 hata sayfaları (`resources/views/errors/404.blade.php`, `500.blade.php`)
 
 ## Faz 5 – Kalite (F6, B8)
 - [ ] 5.1 Feature testleri: genel sayfalar, yayın mantığı
