@@ -42,11 +42,11 @@ class HandleInertiaRequests extends Middleware
             'subtitle' => 'Grundschule Freiburg-Hochdorf',
             'street' => 'Zu den Mühlmatten 8',
             'zip_city' => '79108 Freiburg im Breisgau',
-            'phone' => '0761 / 201-7612',
-            'email' => 'sekretariat.mms@freiburg.de',
-            'office_hours' => 'Mo–Fr 07:45–12:00 Uhr',
+            'phone' => '07665 2232',
+            'email' => 'sekretariat.mmsvn@freiburger-schulen.bwl.de',
+            'office_hours' => 'Mo, Mi, Fr 7:30 – 12:00 Uhr',
             'welcome_title' => 'Willkommen an der Mühlmattenschule',
-            'welcome_text' => 'Grundschule für die Freiburger Stadtteile Hochdorf und Benzhausen.',
+            'welcome_text' => 'Die Grundschule für den Freiburger Stadtteil Hochdorf mit Benzhausen – ein Ort zum Lernen, Wachsen und Entdecken.',
         ];
 
         $savedSchool = Schema::hasTable('settings')

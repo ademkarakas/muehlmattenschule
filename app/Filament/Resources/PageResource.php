@@ -119,9 +119,43 @@ class PageResource extends Resource
                                             ->rows(3)
                                             ->required(),
                                     ]),
+                                Block::make('image_banner')
+                                    ->label('Großes Seitenbild / Foto')
+                                    ->schema([
+                                        TextInput::make('image_url')
+                                            ->label('Bild-Pfad oder URL')
+                                            ->placeholder('/images/school/about-main.jpg')
+                                            ->required(),
+                                        TextInput::make('caption')
+                                            ->label('Bildunterschrift (optional)')
+                                            ->maxLength(200),
+                                    ]),
+                                Block::make('image_gallery')
+                                    ->label('Fotoreihe (2–3 Bilder)')
+                                    ->schema([
+                                        TextInput::make('heading')
+                                            ->label('Überschrift (optional)')
+                                            ->maxLength(160),
+                                        TextInput::make('image_1_url')
+                                            ->label('Bild 1 URL')
+                                            ->required(),
+                                        TextInput::make('image_1_caption')
+                                            ->label('Bild 1 Unterschrift'),
+                                        TextInput::make('image_2_url')
+                                            ->label('Bild 2 URL'),
+                                        TextInput::make('image_2_caption')
+                                            ->label('Bild 2 Unterschrift'),
+                                        TextInput::make('image_3_url')
+                                            ->label('Bild 3 URL'),
+                                        TextInput::make('image_3_caption')
+                                            ->label('Bild 3 Unterschrift'),
+                                    ]),
                                 Block::make('people_list')
                                     ->label('Personenliste (Kollegium / Leitung)')
                                     ->schema([
+                                        TextInput::make('heading')
+                                            ->label('Abschnitts-Überschrift (optional)')
+                                            ->maxLength(160),
                                         Select::make('group')
                                             ->label('Anzuzeigende Gruppe')
                                             ->options([

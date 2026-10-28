@@ -70,15 +70,16 @@ export default function HomePage({ posts, upcomingEvents, albums }: HomePageProp
         <SiteLayout>
             <Head title="Startseite" />
 
-            {/* EduPage-Banner & Highlight-Slider in bläulichem Türkis */}
-            <section className="relative overflow-hidden bg-gradient-to-br from-brand-700 via-brand-600 to-brand-800 text-white">
-                <div
-                    aria-hidden="true"
-                    className="pointer-events-none absolute -top-24 -right-24 h-96 w-96 rounded-full bg-brand-400/20 blur-3xl"
+            {/* EduPage-Banner & Highlight-Slider in bläulichem Türkis mit echtem Schulfoto */}
+            <section className="relative overflow-hidden bg-brand-900 text-white">
+                <img
+                    src="/images/school/hero.jpg"
+                    alt="Mühlmattenschule Freiburg-Hochdorf"
+                    className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-30 mix-blend-luminosity"
                 />
                 <div
                     aria-hidden="true"
-                    className="pointer-events-none absolute -bottom-24 -left-24 h-80 w-80 rounded-full bg-brand-300/20 blur-3xl"
+                    className="pointer-events-none absolute inset-0 bg-gradient-to-br from-brand-900/90 via-brand-700/85 to-brand-800/90"
                 />
 
                 <div className="relative mx-auto max-w-7xl px-4 py-10 md:py-14 grid gap-8 lg:grid-cols-12 items-stretch">
@@ -94,8 +95,24 @@ export default function HomePage({ posts, upcomingEvents, albums }: HomePageProp
 
                         <p className="mt-4 max-w-2xl text-base sm:text-lg text-brand-50/95 leading-relaxed">
                             {school.welcome_text ||
-                                'Gemeinsam lernen, entdecken und wachsen unter unserem hellen Holzdach – hier finden Eltern und Interessierte alle aktuellen Nachrichten, Klassenaktivitäten und Termine.'}
+                                'Ein Ort zum Lernen, Wachsen und Entdecken – hier finden Eltern und Interessierte alle aktuellen Nachrichten, Klassenaktivitäten, Termine und Einblicke in unser Schulleben.'}
                         </p>
+
+                        {/* Kennzahlen aus der bestehenden Website */}
+                        <div className="mt-6 grid grid-cols-3 gap-3 max-w-md">
+                            <div className="rounded-xl bg-white/12 border border-white/20 px-3.5 py-2.5 backdrop-blur-xs">
+                                <span className="block text-xl sm:text-2xl font-extrabold text-white">187</span>
+                                <span className="text-[11px] font-semibold text-brand-100">Kinder</span>
+                            </div>
+                            <div className="rounded-xl bg-white/12 border border-white/20 px-3.5 py-2.5 backdrop-blur-xs">
+                                <span className="block text-xl sm:text-2xl font-extrabold text-white">9 + 1</span>
+                                <span className="text-[11px] font-semibold text-brand-100">Klassen & Außenkl.</span>
+                            </div>
+                            <div className="rounded-xl bg-white/12 border border-white/20 px-3.5 py-2.5 backdrop-blur-xs">
+                                <span className="block text-xl sm:text-2xl font-extrabold text-white">20</span>
+                                <span className="text-[11px] font-semibold text-brand-100">Lehrkräfte</span>
+                            </div>
+                        </div>
 
                         <div className="mt-7 flex flex-wrap gap-3">
                             <Link
@@ -110,63 +127,84 @@ export default function HomePage({ posts, upcomingEvents, albums }: HomePageProp
                             >
                                 Unsere Schule
                             </Link>
+                            <Link
+                                href="/unsere-schule/kollegium"
+                                className="rounded-xl border border-white/35 bg-white/10 px-5 py-3 text-sm font-bold text-white backdrop-blur-xs hover:bg-white/20"
+                            >
+                                Unser Kollegium
+                            </Link>
                         </div>
                     </div>
 
-                    {/* Rechte Seite: EduPage-typischer Nachrichten-Slider / Highlight-Karte */}
+                    {/* Rechte Seite: EduPage-typischer Nachrichten-Slider / Highlight-Karte mit Bild */}
                     <div className="lg:col-span-5 flex">
                         {currentSlide ? (
-                            <div className="flex w-full flex-col justify-between rounded-2xl bg-white/12 backdrop-blur-md border border-white/25 p-6 shadow-xl">
-                                <div>
-                                    <div className="flex items-center justify-between gap-2 text-xs">
-                                        <span className="rounded-full bg-amber-400 px-3 py-0.5 font-extrabold text-slate-950">
-                                            {currentSlide.className ||
-                                                currentSlide.category?.name ||
-                                                'Aktuelles Highlight'}
-                                        </span>
-                                        {currentSlide.publishedAt && (
-                                            <span className="text-brand-100 font-semibold">
-                                                {currentSlide.publishedAt}
+                            <div className="flex w-full flex-col justify-between overflow-hidden rounded-2xl bg-white/12 backdrop-blur-md border border-white/25 shadow-xl">
+                                {currentSlide.coverUrl && (
+                                    <div className="aspect-[16/9] w-full overflow-hidden bg-brand-950/40">
+                                        <img
+                                            src={currentSlide.coverUrl}
+                                            alt={currentSlide.title}
+                                            className="h-full w-full object-cover"
+                                        />
+                                    </div>
+                                )}
+                                <div className="p-6 flex-1 flex flex-col justify-between">
+                                    <div>
+                                        <div className="flex items-center justify-between gap-2 text-xs">
+                                            <span className="rounded-full bg-amber-400 px-3 py-0.5 font-extrabold text-slate-950">
+                                                {currentSlide.className ||
+                                                    currentSlide.category?.name ||
+                                                    'Aktuelles Highlight'}
                                             </span>
+                                            {currentSlide.publishedAt && (
+                                                <span className="text-brand-100 font-semibold">
+                                                    {currentSlide.publishedAt}
+                                                </span>
+                                            )}
+                                        </div>
+
+                                        <h2 className="mt-3 text-lg sm:text-xl font-extrabold leading-snug text-white">
+                                            {currentSlide.title}
+                                        </h2>
+
+                                        {currentSlide.excerpt && (
+                                            <p className="mt-2 line-clamp-2 text-xs sm:text-sm leading-relaxed text-brand-50/90">
+                                                {currentSlide.excerpt}
+                                            </p>
                                         )}
                                     </div>
 
-                                    <h2 className="mt-4 text-xl sm:text-2xl font-extrabold leading-snug text-white">
-                                        {currentSlide.title}
-                                    </h2>
+                                    <div className="mt-5 pt-4 border-t border-white/15 flex items-center justify-between gap-4">
+                                        <Link
+                                            href={`/aktuelles/${currentSlide.slug}`}
+                                            className="rounded-xl bg-white px-4 py-2 text-xs font-extrabold text-brand-800 hover:bg-brand-50"
+                                        >
+                                            Zum Bericht →
+                                        </Link>
 
-                                    {currentSlide.excerpt && (
-                                        <p className="mt-2.5 line-clamp-3 text-sm leading-relaxed text-brand-50/90">
-                                            {currentSlide.excerpt}
-                                        </p>
-                                    )}
-                                </div>
-
-                                <div className="mt-6 pt-4 border-t border-white/15 flex items-center justify-between gap-4">
-                                    <Link
-                                        href={`/aktuelles/${currentSlide.slug}`}
-                                        className="rounded-xl bg-white px-4 py-2 text-xs font-extrabold text-brand-800 hover:bg-brand-50"
-                                    >
-                                        Zum Bericht →
-                                    </Link>
-
-                                    {slides.length > 1 && (
-                                        <div className="flex items-center gap-1.5" role="tablist" aria-label="Highlights">
-                                            {slides.map((slide, idx) => (
-                                                <button
-                                                    key={slide.id}
-                                                    type="button"
-                                                    onClick={() => setActiveSlide(idx)}
-                                                    aria-label={`Highlight ${idx + 1} anzeigen`}
-                                                    className={`h-2.5 rounded-full transition-all ${
-                                                        idx === activeSlide
-                                                            ? 'w-7 bg-white'
-                                                            : 'w-2.5 bg-white/40 hover:bg-white/70'
-                                                    }`}
-                                                />
-                                            ))}
-                                        </div>
-                                    )}
+                                        {slides.length > 1 && (
+                                            <div
+                                                className="flex items-center gap-1.5"
+                                                role="tablist"
+                                                aria-label="Highlights"
+                                            >
+                                                {slides.map((slide, idx) => (
+                                                    <button
+                                                        key={slide.id}
+                                                        type="button"
+                                                        onClick={() => setActiveSlide(idx)}
+                                                        aria-label={`Highlight ${idx + 1} anzeigen`}
+                                                        className={`h-2.5 rounded-full transition-all ${
+                                                            idx === activeSlide
+                                                                ? 'w-7 bg-white'
+                                                                : 'w-2.5 bg-white/40 hover:bg-white/70'
+                                                        }`}
+                                                    />
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         ) : (
@@ -316,6 +354,86 @@ export default function HomePage({ posts, upcomingEvents, albums }: HomePageProp
                     </div>
                 </aside>
             </div>
+
+            {/* Einblick in unsere Schule mit den Originalfotos der Mühlmattenschule */}
+            <section className="mx-auto max-w-7xl px-4 pb-10">
+                <div className="grid gap-6 md:grid-cols-3">
+                    <Link
+                        href="/unsere-schule/schulportrait"
+                        className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xs transition hover:-translate-y-0.5 hover:border-brand-300 hover:shadow-md"
+                    >
+                        <div className="aspect-[16/10] w-full overflow-hidden bg-slate-100">
+                            <img
+                                src="/images/school/about-main.jpg"
+                                alt="Schulgebäude und Pausenhof"
+                                loading="lazy"
+                                className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                            />
+                        </div>
+                        <div className="p-5">
+                            <span className="text-[11px] font-extrabold uppercase tracking-wider text-brand-600">
+                                Schulportrait
+                            </span>
+                            <h3 className="mt-1 text-lg font-extrabold text-slate-900 group-hover:text-brand-700">
+                                Schulgebäude & Architektur
+                            </h3>
+                            <p className="mt-1 text-xs leading-relaxed text-slate-600">
+                                Helle Räume, viel Holz und ein weitläufiger Pausenhof im Grünen am Ortsrand von Hochdorf.
+                            </p>
+                        </div>
+                    </Link>
+
+                    <Link
+                        href="/unsere-schule/kollegium"
+                        className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xs transition hover:-translate-y-0.5 hover:border-brand-300 hover:shadow-md"
+                    >
+                        <div className="aspect-[16/10] w-full overflow-hidden bg-slate-100">
+                            <img
+                                src="/images/school/kollegium-wide.jpg"
+                                alt="Das Kollegium der Mühlmattenschule"
+                                loading="lazy"
+                                className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                            />
+                        </div>
+                        <div className="p-5">
+                            <span className="text-[11px] font-extrabold uppercase tracking-wider text-brand-600">
+                                Unser Team
+                            </span>
+                            <h3 className="mt-1 text-lg font-extrabold text-slate-900 group-hover:text-brand-700">
+                                Kollegium & Schulleitung
+                            </h3>
+                            <p className="mt-1 text-xs leading-relaxed text-slate-600">
+                                20 Lehrkräfte, Schulleitung, Sekretariat und Schulsozialarbeit begleiten unsere 187 Kinder.
+                            </p>
+                        </div>
+                    </Link>
+
+                    <Link
+                        href="/schulleben/betreuung-und-ags"
+                        className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xs transition hover:-translate-y-0.5 hover:border-brand-300 hover:shadow-md"
+                    >
+                        <div className="aspect-[16/10] w-full overflow-hidden bg-slate-100">
+                            <img
+                                src="/images/school/about-kids.jpg"
+                                alt="Schulkindbetreuung und Unterricht"
+                                loading="lazy"
+                                className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                            />
+                        </div>
+                        <div className="p-5">
+                            <span className="text-[11px] font-extrabold uppercase tracking-wider text-brand-600">
+                                Betreuung & AGs
+                            </span>
+                            <h3 className="mt-1 text-lg font-extrabold text-slate-900 group-hover:text-brand-700">
+                                Schulkindbetreuung bis 17 Uhr
+                            </h3>
+                            <p className="mt-1 text-xs leading-relaxed text-slate-600">
+                                Verlässliche Betreuung durch die Caritas von 7:30 bis 17:00 Uhr inklusive Mittagessen und AGs.
+                            </p>
+                        </div>
+                    </Link>
+                </div>
+            </section>
 
             {/* Fotogalerie-Vorschau */}
             {albums.length > 0 && (

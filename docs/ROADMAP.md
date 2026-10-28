@@ -79,7 +79,7 @@
 - [x] 5.7 GitHub Actions CI (`.github/workflows/ci.yml`: test + lint + build)
 
 ## Faz 6 – İçerik
-- [ ] 6.1 Mevcut siteden içerik taşıma (metinler, kadro, sayfa yapısı)
+- [x] 6.1 Mevcut siteden içerik taşıma (26 gerçek fotoğraf `public/images/school/`, 21 kişilik gerçek öğretmen/kadro listesi, gerçek haberler, albümler ve sayfa yapısı)
 - [ ] 6.2 Gerçek logoyu ekle (okuldan gelecek)
 - [ ] 6.3 Impressum/Datenschutz metinlerini okul ile netleştir
 

@@ -37,7 +37,7 @@ class PageController extends Controller
                 'email' => $person->email,
                 'group' => $person->group->value,
                 'groupLabel' => $person->group->label(),
-                'avatarUrl' => $person->getFirstMediaUrl('portrait', 'avatar') ?: $person->getFirstMediaUrl('portrait') ?: null,
+                'avatarUrl' => $person->getFirstMediaUrl('portrait') ?: null,
             ])
             ->all();
 
