@@ -1,0 +1,45 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../js/**/*.tsx';
+
+/*
+ * Design-Tokens der Mühlmattenschule.
+ * Hauptfarbe Türkis (brand-500), dunkles Türkis für Header/Überschriften (brand-700),
+ * warme Akzentfarbe für wichtige Hinweise (accent).
+ * Schriften: nur Systemschriften – keine externen Font-CDNs (DSGVO).
+ */
+@theme {
+    --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif,
+        'Apple Color Emoji', 'Segoe UI Emoji';
+
+    --color-brand-50: #f0fdfa;
+    --color-brand-100: #ccfbf1;
+    --color-brand-200: #99f6e4;
+    --color-brand-300: #5eead4;
+    --color-brand-400: #2dd4bf;
+    --color-brand-500: #14b8a6;
+    --color-brand-600: #0d9488;
+    --color-brand-700: #0f766e;
+    --color-brand-800: #115e59;
+    --color-brand-900: #134e4a;
+
+    --color-accent: #f59e0b;
+    --color-ink: #1f2937;
+    --color-surface: #f8fafc;
+}
+
+@layer base {
+    html {
+        @apply bg-surface text-ink antialiased;
+    }
+
+    a {
+        @apply transition-colors;
+    }
+
+    :focus-visible {
+        @apply outline-2 outline-offset-2 outline-brand-600;
+    }
+}
