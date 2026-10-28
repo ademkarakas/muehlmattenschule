@@ -15,7 +15,7 @@
 - [x] 0.3 Node.js 22 + npm (zaten vardı)
 - [x] 0.4 Laravel 13 projesini oluştur
 - [x] 0.5 Git deposunu başlat, ilk commit
-- [ ] 0.6 GitHub reposu `ademkarakas/muehlmattenschule` oluştur ve push et (kullanıcı `gh auth login` yaptığında)
+- [x] 0.6 GitHub reposu `ademkarakas/muehlmattenschule` oluştur ve push et
 - [x] 0.7 Laravel Boost kur (yapay zeka yönergeleri)
 - [x] 0.8 Proje dokümantasyonu (`README.md`, `docs/*`)
 
