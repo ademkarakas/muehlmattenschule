@@ -25,5 +25,6 @@
 ## Oturum günlüğü
 | Tarih | Ajan / Kişi | Yapılanlar | Sonraki adım |
 |---|---|---|---|
-| 2026-10-28 | Antigravity | Faz 0 & Faz 1 tamamlandı: PHP 8.3 + Composer kurulumu, Laravel 13 + Filament + Inertia + React 19 + TS + Tailwind 4 (turkuaz tema), Almanca dil dosyaları, geçici logo, dokümantasyon, testler ve GitHub (`ademkarakas/muehlmattenschule`) push | Faz 2 (Veri modeli: migration + modeller) |
+| 2026-10-28 | Antigravity | Faz 0 & Faz 1 tamamlandı: PHP 8.3 + Composer kurulumu, Laravel 13 + Filament + Inertia + React 19 + TS + Tailwind 4 (turkuaz tema), Almanca dil dosyaları, geçici logo, dokümantasyon, testler ve GitHub (`ademkarakas/muehlmattenschule`) push | Faz 2 |
+| 2026-10-28 | Antigravity | Faz 2 tamamlandı: Enums (`UserRole`, `PublishStatus`, `AnnouncementLevel`, `PersonGroup`), tüm migration'lar + Spatie Media Library, modeller, DSGVO `consent_confirmed` zorunluluğu, Factory + Almanca `DatabaseSeeder` ve Feature testleri | Faz 3 (Filament `/admin` paneli ve tüm Resource'lar) |
 

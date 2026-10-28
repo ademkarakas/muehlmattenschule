@@ -29,17 +29,17 @@
 - [x] 1.7 Ana sayfa Inertia üzerinden render ediliyor
 
 ## Faz 2 – Veri modeli (B2)
-- [ ] 2.1 `Category` (Kategorien) migration + model
-- [ ] 2.2 `Post` (Beiträge) migration + model
-- [ ] 2.3 `Event` (Termine) migration + model
-- [ ] 2.4 `Album` (Fotoalben) migration + model + Media Library
-- [ ] 2.5 `Announcement` (Ankündigungen) migration + model
-- [ ] 2.6 `Page` (Seiten, blok içerik JSON) migration + model
-- [ ] 2.7 `Person` (Kollegium) migration + model
-- [ ] 2.8 `Download` migration + model
-- [ ] 2.9 Ayarlar (`settings` tablosu, anahtar/değer)
-- [ ] 2.10 `users.role` sütunu (Enum `UserRole`: admin, schulleitung, sekretariat)
-- [ ] 2.11 Factory + Seeder (Almanca demo içerik)
+- [x] 2.1 `Category` (Kategorien) migration + model
+- [x] 2.2 `Post` (Beiträge) migration + model
+- [x] 2.3 `Event` (Termine) migration + model
+- [x] 2.4 `Album` (Fotoalben) migration + model + Media Library
+- [x] 2.5 `Announcement` (Ankündigungen) migration + model
+- [x] 2.6 `Page` (Seiten, blok içerik JSON) migration + model
+- [x] 2.7 `Person` (Kollegium) migration + model
+- [x] 2.8 `Download` migration + model
+- [x] 2.9 Ayarlar (`settings` tablosu, anahtar/değer)
+- [x] 2.10 `users.role` sütunu (Enum `UserRole`: admin, schulleitung, sekretariat)
+- [x] 2.11 Factory + Seeder (Almanca demo içerik)
 
 ## Faz 3 – Filament admin paneli (B3–B6)
 - [ ] 3.1 `/admin` paneli, Almanca arayüz, turkuaz renk, logo

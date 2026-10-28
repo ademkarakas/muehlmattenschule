@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Factories;
 
+use App\Enums\UserRole;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -13,12 +16,12 @@ use Illuminate\Support\Str;
 class UserFactory extends Factory
 {
     /**
-     * The current password being used by the factory.
+     * Das aktuell für Testbenutzer verwendete Passwort.
      */
     protected static ?string $password;
 
     /**
-     * Define the model's default state.
+     * Definiert den Standardzustand des Modells.
      *
      * @return array<string, mixed>
      */
@@ -27,6 +30,7 @@ class UserFactory extends Factory
         return [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
+            'role' => UserRole::Sekretariat,
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
@@ -34,12 +38,32 @@ class UserFactory extends Factory
     }
 
     /**
-     * Indicate that the model's email address should be unverified.
+     * Markiert die E-Mail-Adresse als unbestätigt.
      */
     public function unverified(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'email_verified_at' => null,
+        ]);
+    }
+
+    /**
+     * Erstellt einen Administrator-Benutzer.
+     */
+    public function admin(): static
+    {
+        return $this->state(fn (array $attributes): array => [
+            'role' => UserRole::Admin,
+        ]);
+    }
+
+    /**
+     * Erstellt einen Schulleitungs-Benutzer.
+     */
+    public function schulleitung(): static
+    {
+        return $this->state(fn (array $attributes): array => [
+            'role' => UserRole::Schulleitung,
         ]);
     }
 }

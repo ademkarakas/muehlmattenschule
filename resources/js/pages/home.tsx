@@ -61,3 +61,4 @@ export default function HomePage({ schoolName, subtitle }: HomePageProps): React
         </>
     );
 }
+
