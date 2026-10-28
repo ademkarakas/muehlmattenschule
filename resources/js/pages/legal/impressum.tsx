@@ -4,7 +4,7 @@ import { Head, usePage } from '@inertiajs/react';
 import type { ReactElement } from 'react';
 
 /**
- * Impressum der Mühlmattenschule Freiburg-Hochdorf gemäß § 5 DDG.
+ * Offizielles Impressum der Mühlmattenschule Freiburg-Hochdorf gemäß § 5 DDG.
  */
 export default function ImpressumPage(): ReactElement {
     const { school } = usePage<SharedInertiaProps>().props;
@@ -17,10 +17,16 @@ export default function ImpressumPage(): ReactElement {
                 <h1 className="text-3xl font-extrabold text-slate-900">Impressum</h1>
 
                 <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-6 md:p-8 space-y-5 text-sm leading-relaxed text-slate-700">
+                    <p>
+                        Dies ist der offizielle Internetauftritt der Grundschule Mühlmattenschule. Er stellt
+                        Informationen aus allen Bereichen des Schullebens dar. Alle Seiten und Inhalte dieser
+                        Internetpräsenz, insbesondere Texte, Fotografien und Grafiken, sind urheberrechtlich geschützt.
+                    </p>
+
                     <section>
-                        <h2 className="text-base font-bold text-slate-900">Angaben gemäß § 5 DDG</h2>
+                        <h2 className="text-base font-bold text-slate-900">Verantwortlich für diese Internetseite</h2>
                         <p className="mt-1">
-                            {school.name} ({school.subtitle})
+                            <strong>{school.name}</strong> ({school.subtitle})
                             <br />
                             {school.street}
                             <br />
@@ -29,14 +35,20 @@ export default function ImpressumPage(): ReactElement {
                     </section>
 
                     <section>
-                        <h2 className="text-base font-bold text-slate-900">Vertretungsberechtigt</h2>
-                        <p className="mt-1">Schulleitung: Rektorin Diana Blum</p>
+                        <h2 className="text-base font-bold text-slate-900">Schulleitung & Vertretung</h2>
+                        <p className="mt-1">
+                            Rektorin: Diana Blum
+                            <br />
+                            Konrektorin: Sabine Caputo
+                        </p>
                     </section>
 
                     <section>
                         <h2 className="text-base font-bold text-slate-900">Kontakt</h2>
                         <p className="mt-1">
                             Telefon: {school.phone}
+                            <br />
+                            Telefax: +49 7665 932081
                             <br />
                             E-Mail: {school.email}
                         </p>
@@ -53,11 +65,14 @@ export default function ImpressumPage(): ReactElement {
 
                     <section>
                         <h2 className="text-base font-bold text-slate-900">Zuständige Aufsichtsbehörde</h2>
-                        <p className="mt-1">Staatliches Schulamt Freiburg</p>
+                        <p className="mt-1">
+                            Staatliches Schulamt Freiburg
+                            <br />
+                            Ottmannstraße 22, 79100 Freiburg im Breisgau
+                        </p>
                     </section>
                 </div>
             </div>
         </SiteLayout>
     );
 }
-

@@ -79,9 +79,9 @@
 - [x] 5.7 GitHub Actions CI (`.github/workflows/ci.yml`: test + lint + build)
 
 ## Faz 6 – İçerik
-- [x] 6.1 Mevcut siteden içerik taşıma (26 gerçek fotoğraf `public/images/school/`, 21 kişilik gerçek öğretmen/kadro listesi, gerçek haberler, albümler ve sayfa yapısı)
+- [x] 6.1 Mevcut siteden içerik taşıma (`muehlmattenschule.de` & `muehlmattenschule.0x6e.net`: 71 gerçek fotoğraf `public/images/school/`, 5 orijinal PDF `public/downloads/school/`, 22 kişilik gerçek öğretmen/kadro/sosyal hizmet listesi, 17 gerçek haber ve sınıf aktivitesi, 6 zengin fotoğraf albümü ve 8 tam içerikli sayfa)
 - [ ] 6.2 Gerçek logoyu ekle (okuldan gelecek)
-- [ ] 6.3 Impressum/Datenschutz metinlerini okul ile netleştir
+- [x] 6.3 Impressum/Datenschutz ve Kontakt metinlerini resmi `muehlmattenschule.de` verileriyle güncelle
 
 ## Faz 7 – Yayına alma (IONOS Deploy Now)
 - [ ] 7.1 IONOS „Mitgliedschaft + PHP-Projekt“ (okul adına) satın al

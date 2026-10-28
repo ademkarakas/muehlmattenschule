@@ -22,7 +22,7 @@ class HomeController extends Controller
             ->with(['category:id,name,slug,color', 'media'])
             ->orderByDesc('is_featured')
             ->orderByDesc('published_at')
-            ->limit(6)
+            ->limit(8)
             ->get()
             ->map(fn (Post $post): array => [
                 'id' => $post->id,
@@ -62,7 +62,7 @@ class HomeController extends Controller
             ->with('media')
             ->withCount('media')
             ->orderByDesc('event_date')
-            ->limit(4)
+            ->limit(6)
             ->get()
             ->map(fn (Album $album): array => [
                 'id' => $album->id,

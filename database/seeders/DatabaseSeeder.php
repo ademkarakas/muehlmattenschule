@@ -11,6 +11,7 @@ use App\Enums\UserRole;
 use App\Models\Album;
 use App\Models\Announcement;
 use App\Models\Category;
+use App\Models\Download;
 use App\Models\Event;
 use App\Models\Page;
 use App\Models\Person;
@@ -24,8 +25,8 @@ use Spatie\MediaLibrary\HasMedia;
 class DatabaseSeeder extends Seeder
 {
     /**
-     * Befüllt die Datenbank mit den Original-Inhalten, Fotos und dem Kollegium
-     * der Mühlmattenschule Freiburg-Hochdorf.
+     * Befüllt die Datenbank mit sämtlichen Original-Inhalten, Aktivitäten,
+     * Fotoalben, PDF-Downloads und dem Kollegium von muehlmattenschule.de.
      */
     public function run(): void
     {
@@ -59,12 +60,12 @@ class DatabaseSeeder extends Seeder
             ],
         );
 
-        $lehrkraft2a = User::query()->updateOrCreate(
+        $lehrkraft2b = User::query()->updateOrCreate(
             ['email' => 'klasse2a@muehlmattenschule.de'],
             [
-                'name' => 'Frau Eder (Klasse 2a)',
+                'name' => 'Frau Jakoby (Klasse 2b)',
                 'role' => UserRole::Lehrkraft,
-                'class_name' => 'Klasse 2a',
+                'class_name' => 'Klasse 2b',
                 'password' => Hash::make('Lehrkraft!2026'),
                 'email_verified_at' => now(),
             ],
@@ -84,11 +85,11 @@ class DatabaseSeeder extends Seeder
 
         $catSchulleben = Category::query()->updateOrCreate(
             ['slug' => 'schulleben'],
-            ['name' => 'Schulleben', 'color' => '#0096c7'],
+            ['name' => 'Schulleben', 'color' => '#00838f'],
         );
         $catElterninfo = Category::query()->updateOrCreate(
             ['slug' => 'elterninfos'],
-            ['name' => 'Elterninfos', 'color' => '#0277bd'],
+            ['name' => 'Elterninfos & Ferien', 'color' => '#006978'],
         );
         $catFest = Category::query()->updateOrCreate(
             ['slug' => 'feste-feiern'],
@@ -96,11 +97,11 @@ class DatabaseSeeder extends Seeder
         );
         $catSport = Category::query()->updateOrCreate(
             ['slug' => 'sport-bewegung'],
-            ['name' => 'Sport & Bewegung', 'color' => '#00b4d8'],
+            ['name' => 'Sport & Gesundheit', 'color' => '#0097a7'],
         );
         $catProjekte = Category::query()->updateOrCreate(
             ['slug' => 'projekte'],
-            ['name' => 'Konzepte & Projekte', 'color' => '#01579b'],
+            ['name' => 'Konzepte & Projekte', 'color' => '#005662'],
         );
 
         Announcement::query()->updateOrCreate(
@@ -115,17 +116,127 @@ class DatabaseSeeder extends Seeder
             ],
         );
 
-        // --- Fotoalben mit echten Bildern aus der bestehenden Website ---
+        // --- 6 Reale Fotoalben mit über 50 Originalfotos von muehlmattenschule.de ---
+        $albumCrosslauf = Album::query()->updateOrCreate(
+            ['slug' => 'crosslauf-der-muehlmattenschule'],
+            [
+                'title' => 'Bilder vom Crosslauf & Sponsorenlauf',
+                'event_date' => '2024-06-24',
+                'description' => 'Unser großes Schulsportfest für die ganze Familie, veranstaltet vom Förderverein in Kooperation mit der Mühlmattenschule.',
+                'author_id' => $schulleitung->id,
+                'consent_confirmed' => true,
+                'status' => PublishStatus::Published,
+                'published_at' => now()->subDays(5),
+            ],
+        );
+        $this->attachSingleMedia($albumCrosslauf, 'cover', 'crosslauf-1.jpg');
+        $this->attachGalleryMedia($albumCrosslauf, 'photos', [
+            'crosslauf-1.jpg',
+            'crosslauf-2.jpg',
+            'crosslauf-3.jpg',
+            'crosslauf-4.jpg',
+            'crosslauf-5.jpg',
+            'crosslauf-6.jpg',
+            'crosslauf-7.jpg',
+        ]);
+
+        $albumBewegung = Album::query()->updateOrCreate(
+            ['slug' => 'bewegungs-und-gesundheitstage'],
+            [
+                'title' => 'Bewegungs- & Gesundheitstage: Spielmobil, Slow-Mobil & Tanzen',
+                'event_date' => '2024-10-24',
+                'description' => 'Kochen im Slow-Mobil, Spielstationen mit dem Spielmobil auf dem Pausenhof und Tanzaktion mit der Tanzschule Gutmann.',
+                'author_id' => $schulleitung->id,
+                'consent_confirmed' => true,
+                'status' => PublishStatus::Published,
+                'published_at' => now()->subDays(10),
+            ],
+        );
+        $this->attachSingleMedia($albumBewegung, 'cover', 'slowmobil-1.jpg');
+        $this->attachGalleryMedia($albumBewegung, 'photos', [
+            'slowmobil-1.jpg',
+            'slowmobil-2.jpg',
+            'slowmobil-3.jpg',
+            'slowmobil-4.jpg',
+            'slowmobil-5.jpg',
+            'spielmobil-1.jpg',
+            'spielmobil-2.jpg',
+            'spielmobil-3.jpg',
+            'spielmobil-4.jpg',
+            'spielmobil-5.jpg',
+            'news-tanzen.jpg',
+            'tanzen-2.jpg',
+            'tanzen-3.jpg',
+        ]);
+
+        $albumErnaehrung = Album::query()->updateOrCreate(
+            ['slug' => 'gesundes-fruehstueck-obstsalat-und-brotgesichter'],
+            [
+                'title' => 'Gesunde Ernährung in den 2. Klassen: Frühstück, Obstsalat & Brotgesichter',
+                'class_name' => 'Klasse 2a & 2b',
+                'event_date' => '2024-10-20',
+                'description' => 'Die 2. Klassen bereiten ein gesundes Frühstück, frischen Obstsalat für Kater Cook und lustige Brotgesichter zu.',
+                'author_id' => $lehrkraft2b->id,
+                'consent_confirmed' => true,
+                'status' => PublishStatus::Published,
+                'published_at' => now()->subDays(15),
+            ],
+        );
+        $this->attachSingleMedia($albumErnaehrung, 'cover', 'fruehstueck-2kl-1.jpg');
+        $this->attachGalleryMedia($albumErnaehrung, 'photos', [
+            'fruehstueck-2kl-1.jpg',
+            'fruehstueck-2kl-2.jpg',
+            'fruehstueck-2kl-3.jpg',
+            'fruehstueck-2kl-4.jpg',
+            'fruehstueck-2kl-5.jpg',
+            'obstsalat-2b-1.jpg',
+            'obstsalat-2b-2.jpg',
+            'obstsalat-2b-3.jpg',
+            'brotgesichter-2b-1.jpg',
+            'brotgesichter-2b-2.jpg',
+            'brotgesichter-2b-3.jpg',
+        ]);
+
+        $albumAdvent = Album::query()->updateOrCreate(
+            ['slug' => 'adventszeit-und-basteln'],
+            [
+                'title' => 'Adventssingen, Adventsbasteln & Plätzchenverkauf',
+                'event_date' => '2024-12-19',
+                'description' => 'Weihnachtliche Stimmung, Adventsbasteln in allen Klassen und der Plätzchenverkauf auf dem Hochdorfer Markt.',
+                'author_id' => $schulleitung->id,
+                'consent_confirmed' => true,
+                'status' => PublishStatus::Published,
+                'published_at' => now()->subDays(20),
+            ],
+        );
+        $this->attachSingleMedia($albumAdvent, 'cover', 'news-advent-1.jpg');
+        $this->attachGalleryMedia($albumAdvent, 'photos', [
+            'news-advent-1.jpg',
+            'advent-2.jpg',
+            'advent-3.jpg',
+            'advent-4.jpg',
+            'advent-5.jpg',
+            'news-basteln-1.jpg',
+            'basteln-2.jpg',
+            'basteln-3.jpg',
+            'basteln-4.jpg',
+            'basteln-5.jpg',
+            'basteln-6.jpg',
+            'news-plaetzchen.jpg',
+            'plaetzchen-2.jpg',
+            'plaetzchen-3.jpg',
+        ]);
+
         $albumCampus = Album::query()->updateOrCreate(
             ['slug' => 'unser-schulgebaeude-und-campus'],
             [
                 'title' => 'Unser Schulgebäude & Pausenhof im Grünen',
-                'event_date' => now()->subMonths(2)->toDateString(),
+                'event_date' => '2024-09-15',
                 'description' => 'Helle Flure mit Holzelementen, freundliche Klassenzimmer und unser weitläufiges Schulgelände in Freiburg-Hochdorf.',
                 'author_id' => $schulleitung->id,
                 'consent_confirmed' => true,
                 'status' => PublishStatus::Published,
-                'published_at' => now()->subMonths(2),
+                'published_at' => now()->subMonths(1),
             ],
         );
         $this->attachSingleMedia($albumCampus, 'cover', 'about-main.jpg');
@@ -133,62 +244,23 @@ class DatabaseSeeder extends Seeder
             'about-main.jpg',
             'gebaeude-wide.jpg',
             'gebaeude-full.jpg',
+            'slider-schulgebaeude1.jpg',
             'unsere-schule-innen.jpg',
             'unsere-schule-umgegend.jpg',
             'schule-bei-abend.jpg',
             'slider-schuleinnen.jpg',
         ]);
 
-        $albumAdvent = Album::query()->updateOrCreate(
-            ['slug' => 'adventszeit-und-basteln'],
-            [
-                'title' => 'Adventssingen & Adventsbasteln an der Mühlmattenschule',
-                'event_date' => now()->subDays(25)->toDateString(),
-                'description' => 'Ein Nachmittag voller Kerzen, Papier und Musik: Eindrücke vom Adventsbasteln und dem gemeinsamen Adventssingen.',
-                'author_id' => $schulleitung->id,
-                'consent_confirmed' => true,
-                'status' => PublishStatus::Published,
-                'published_at' => now()->subDays(24),
-            ],
-        );
-        $this->attachSingleMedia($albumAdvent, 'cover', 'news-advent-1.jpg');
-        $this->attachGalleryMedia($albumAdvent, 'photos', [
-            'news-advent-1.jpg',
-            'news-basteln-1.jpg',
-            'news-plaetzchen.jpg',
-        ]);
-
-        $albumSport = Album::query()->updateOrCreate(
-            ['slug' => 'sport-bewegung-und-schulleben'],
-            [
-                'title' => 'Sport, Bewegungstage & Lernen im Schulalltag',
-                'event_date' => now()->subDays(14)->toDateString(),
-                'description' => 'Tanzaktion mit der Tanzschule Gutmann, Crosslauf und gemeinsames Lernen in unseren Klassen.',
-                'author_id' => $lehrkraft2a->id,
-                'consent_confirmed' => true,
-                'status' => PublishStatus::Published,
-                'published_at' => now()->subDays(14),
-            ],
-        );
-        $this->attachSingleMedia($albumSport, 'cover', 'sport.jpg');
-        $this->attachGalleryMedia($albumSport, 'photos', [
-            'sport.jpg',
-            'news-tanzen.jpg',
-            'about-kids.jpg',
-            'konzepte.jpg',
-            'slider-elternhelfenmit.jpg',
-        ]);
-
         $albumRosedale = Album::query()->updateOrCreate(
             ['slug' => 'patenschaft-kinderheim-rosedale-simbabwe'],
             [
                 'title' => 'Patenschaft Midlands Children Home Rosedale (Simbabwe)',
-                'event_date' => now()->subMonths(1)->toDateString(),
+                'event_date' => '2024-05-10',
                 'description' => 'Seit 1995 pflegt die Mühlmattenschule eine lebendige Patenschaft mit dem Kinderheim Rosedale in Gweru, Simbabwe.',
                 'author_id' => $schulleitung->id,
                 'consent_confirmed' => true,
                 'status' => PublishStatus::Published,
-                'published_at' => now()->subMonths(1),
+                'published_at' => now()->subMonths(2),
             ],
         );
         $this->attachSingleMedia($albumRosedale, 'cover', 'rosedale-kinder.jpg');
@@ -197,116 +269,315 @@ class DatabaseSeeder extends Seeder
             'trommeln-rosedale.jpg',
         ]);
 
-        // --- Aktuelle Beiträge aus der bestehenden Website ---
-        $postMundenhof = Post::query()->updateOrCreate(
-            ['slug' => 'ausflug-der-4-klassen-zur-gruenholzwerkstatt-auf-dem-mundenhof'],
+        // --- Sämtliche 18 Original-Beiträge & Klassenaktivitäten von muehlmattenschule.de ---
+        Post::query()->whereIn('slug', [
+            'gemeinsamer-herbstwandertag-durch-den-mooswald',
+            'vorlesetag-an-der-muehlmattenschule',
+            'st-martins-und-laternenfest-auf-dem-schulhof',
+        ])->delete();
+
+        $postsData = [
             [
+                'slug' => 'ausflug-der-4-klassen-zur-gruenholzwerkstatt-auf-dem-mundenhof',
                 'title' => 'Ausflug der 4. Klassen zur Grünholzwerkstatt auf dem Mundenhof',
                 'class_name' => 'Klasse 4a & 4b',
-                'excerpt' => 'Die Klassen 4a und 4b waren auf dem Mundenhof bei der Grünholzwerkstatt des Spielmobils – es wurde gedrechselt, gesägt und gebaut.',
-                'body' => '<p>Die Klassen 4a und 4b besuchten gemeinsam die Grünholzwerkstatt des Spielmobils auf dem Freiburger Mundenhof. Mit frischem Holz aus dem Wald und echtem Werkzeug durften die Kinder nach Herzenslust sägen, schnitzen, bohren und an der Wippdrehbank arbeiten.</p><p>Im Anschluss haben die Schülerinnen und Schüler eigene Berichte über ihre Erlebnisse und ihre selbstgebauten Holzwerke verfasst.</p>',
+                'excerpt' => 'Die Klassen 4a und 4b waren im Januar auf dem Mundenhof bei der Grünholzwerkstatt des Spielmobils. Die Kinder durften drechseln, schnitzen und eigene Berichte schreiben.',
+                'body' => '<p>Die Klassen 4a und 4b waren im Januar auf dem Mundenhof bei der Grünholzwerkstatt des Spielmobils. Die Kinder haben dazu eigene Berichte geschrieben:</p><h3>Die Grünholzwerkstatt (Schülerbericht)</h3><p>„Am 24. Januar war ich mit meiner Klasse in der Grünholzwerkstatt. Diese Werkstatt wurde vom Spielmobil veranstaltet. Wir durften drechseln, schnitzen und auf einem Schnitzesel mit einem Ziehmesser frisches Holz bearbeiten. Am Ende durfte jedes Kind sein eigenes Werkstück mit nach Hause nehmen – es war ein toller Ausflug!"</p>',
                 'category_id' => $catSchulleben->id,
-                'album_id' => $albumSport->id,
+                'album_id' => null,
                 'author_id' => $schulleitung->id,
                 'is_featured' => true,
-                'status' => PublishStatus::Published,
-                'published_at' => now()->subDays(2),
+                'days_ago' => 1,
+                'cover' => 'about-kids.jpg',
             ],
-        );
-        $this->attachSingleMedia($postMundenhof, 'cover', 'about-kids.jpg');
-
-        $postJubilaeum = Post::query()->updateOrCreate(
-            ['slug' => '25-jaehriges-dienstjubilaeum-von-diana-blum'],
             [
-                'title' => '25-jähriges Dienstjubiläum von Rektorin Diana Blum',
-                'excerpt' => 'Rektorin Diana Blum feierte ihr 25-jähriges Dienstjubiläum. Sie ist seit September 2004 an der Mühlmattenschule und leitet sie seit dem Schuljahr 2017/2018.',
-                'body' => '<p>Mit einer herzlichen Überraschungsfeier ehrte die gesamte Schulgemeinschaft unsere Rektorin Diana Blum zu ihrem 25-jährigen Dienstjubiläum.</p><p>Frau Blum unterrichtet bereits seit September 2004 an der Mühlmattenschule und prägt sie seit dem Schuljahr 2017/2018 als Schulleiterin mit großem Engagement und Herzblut.</p>',
-                'category_id' => $catFest->id,
-                'author_id' => $sekretariat->id,
-                'is_featured' => true,
-                'status' => PublishStatus::Published,
-                'published_at' => now()->subDays(5),
-            ],
-        );
-        $this->attachSingleMedia($postJubilaeum, 'cover', 'news-jubilaeum.jpg');
-
-        $postFoerderverein = Post::query()->updateOrCreate(
-            ['slug' => 'der-vorstand-des-foerdervereins-stellt-sich-vor'],
-            [
-                'title' => 'Der Vorstand des Fördervereins stellt sich vor',
-                'excerpt' => 'Nach der Verabschiedung von Nils Henkel und Fabian Baumann stellt sich das neue Vorstandsteam des Fördervereins der Schulgemeinschaft vor.',
-                'body' => '<p>Nach langjähriger, engagierter Unterstützung des Fördervereins wurden Nils Henkel und Fabian Baumann herzlich verabschiedet. Der neue Vorstand freut sich darauf, auch in Zukunft kulturelle und pädagogische Projekte, das gesunde Frühstück, die Spielgeräteausleihe und besondere Anschaffungen an der Mühlmattenschule tatkräftig zu fördern.</p>',
+                'slug' => 'ferienplan-schuljahr-24-25',
+                'title' => 'Ferienplan Schuljahr 2024/25',
+                'class_name' => null,
+                'excerpt' => 'Der aktuelle Ferienkalender der Mühlmattenschule steht ab sofort zum Ansehen und im Bereich Downloads als PDF bereit.',
+                'body' => '<p>Der aktuelle Ferienkalender mit allen Ferienzeiten, beweglichen Ferientagen und Feiertagen steht für alle Familien bereit. Sie finden die druckbare PDF-Version jederzeit auch unter <a href="/downloads">Elternbriefe &amp; Formulare</a>.</p>',
                 'category_id' => $catElterninfo->id,
-                'author_id' => $admin->id,
+                'album_id' => null,
+                'author_id' => $sekretariat->id,
                 'is_featured' => true,
-                'status' => PublishStatus::Published,
-                'published_at' => now()->subDays(8),
+                'days_ago' => 3,
+                'cover' => 'ferienplan-24-25.jpg',
             ],
-        );
-        $this->attachSingleMedia($postFoerderverein, 'cover', 'foerderverein-vorstand.jpg');
-
-        $postAdvent = Post::query()->updateOrCreate(
-            ['slug' => 'weihnachtliche-muehlmattenschule-und-adventssingen'],
             [
+                'slug' => 'elterninfo-zum-schuljahresende-und-schuljahresbeginn',
+                'title' => 'Elterninfo zum Schuljahresende und Start ins neue Schuljahr',
+                'class_name' => null,
+                'excerpt' => 'Wichtige Informationen zur Zeugnisausgabe, zum Unterrichtsschluss vor den Ferien sowie zu den Terminen in der ersten Schulwoche.',
+                'body' => '<p>Liebe Eltern, mit diesem Elternbrief informieren wir Sie über den Ablauf der letzten Schultage vor den Sommerferien, die Ausgabe der Zeugnisse und Schulberichte in den Klassen 1 bis 4 sowie den Unterrichtsbeginn im neuen Schuljahr und die Einschulungsfeier unserer neuen Erstklässlerinnen und Erstklässler.</p>',
+                'category_id' => $catElterninfo->id,
+                'album_id' => null,
+                'author_id' => $schulleitung->id,
+                'is_featured' => false,
+                'days_ago' => 4,
+                'cover' => 'slider-schuleinnen.jpg',
+            ],
+            [
+                'slug' => '25-jaehriges-dienstjubilaeum-von-diana-blum',
+                'title' => '25-jähriges Dienstjubiläum von Rektorin Diana Blum',
+                'class_name' => null,
+                'excerpt' => 'Rektorin Diana Blum feierte ihr 25-jähriges Dienstjubiläum. Sie ist seit September 2004 an der Mühlmattenschule und leitet diese seit dem Schuljahr 2017/2018.',
+                'body' => '<p>Am 15. April feierte unsere Rektorin Diana Blum ihr 25-jähriges Dienstjubiläum im Schuldienst des Landes Baden-Württemberg. Sie unterrichtet bereits seit September 2004 an der Mühlmattenschule und leitet sie seit dem Schuljahr 2017/2018 mit großem Engagement. Das gesamte Kollegium und die Kinder gratulierten herzlich!</p>',
+                'category_id' => $catFest->id,
+                'album_id' => null,
+                'author_id' => $sekretariat->id,
+                'is_featured' => true,
+                'days_ago' => 6,
+                'cover' => 'news-jubilaeum.jpg',
+            ],
+            [
+                'slug' => 'der-vorstand-des-foerdervereins-stellt-sich-vor',
+                'title' => 'Der Vorstand des Fördervereins stellt sich vor',
+                'class_name' => null,
+                'excerpt' => 'Im Rahmen der Jahreshauptversammlung wurden ein neuer Vorstand sowie ein neuer Beirat des Fördervereins der Mühlmattenschule gewählt.',
+                'body' => '<p>Nach langjähriger aktiver ehrenamtlicher Unterstützung des Fördervereins wurden unsere bisherigen Vorstände Nils Henkel und Fabian Baumann im Rahmen der Jahreshauptversammlung feierlich verabschiedet. Gleichzeitig wurden ein neuer Vorstand sowie ein neuer Beirat gewählt, die sich nun gemeinsam für die Kinder der Mühlmattenschule engagieren.</p>',
+                'category_id' => $catElterninfo->id,
+                'album_id' => null,
+                'author_id' => $admin->id,
+                'is_featured' => false,
+                'days_ago' => 8,
+                'cover' => 'foerderverein-vorstand.jpg',
+            ],
+            [
+                'slug' => 'fsj-stelle-sport-und-schule-an-der-muehlmattenschule',
+                'title' => 'FSJ-Stelle „Sport und Schule" an der Mühlmattenschule',
+                'class_name' => null,
+                'excerpt' => 'Wir bieten engagierten jungen Menschen ein Freiwilliges Soziales Jahr (FSJ) im Bereich Sport und Schule an der Mühlmattenschule an.',
+                'body' => '<p>Du hast Lust auf Bewegung, Sport und die Arbeit mit Grundschulkindern? An der Mühlmattenschule bieten wir eine FSJ-Stelle „Sport und Schule" an – mit Begleitung des Sportunterrichts, Unterstützung bei AGs, Pausenangeboten und Schulveranstaltungen wie unserem Crosslauf. Bewerbungen nimmt unser Sekretariat gerne entgegen.</p>',
+                'category_id' => $catSport->id,
+                'album_id' => null,
+                'author_id' => $schulleitung->id,
+                'is_featured' => false,
+                'days_ago' => 10,
+                'cover' => 'fsj-sport.jpg',
+            ],
+            [
+                'slug' => 'weihnachtliche-muehlmattenschule-und-adventssingen',
                 'title' => 'Weihnachtliche Mühlmattenschule & gemeinsames Adventssingen',
-                'excerpt' => 'Weihnachtliche Stimmung und Adventssingen in der Aula der Mühlmattenschule – Bilder und Eindrücke aus der Vorweihnachtszeit.',
-                'body' => '<p>In der Vorweihnachtszeit versammelten sich alle Klassen unter dem geschmückten Weihnachtsbaum in unserer Aula zum gemeinsamen Adventssingen. Mit Flöten, Klavierbegleitung und viel Gesang stimmten sich Kinder und Lehrkräfte auf die Feiertage ein.</p>',
+                'class_name' => null,
+                'excerpt' => 'Weihnachtliche Stimmung und gemeinsames Adventssingen in der Mühlmattenschule – Bilder und Eindrücke aus der Vorweihnachtszeit.',
+                'body' => '<p>In der Vorweihnachtszeit verwandelte sich unser Schulhaus in eine festlich geschmückte Weihnachtswelt. Beim gemeinsamen Adventssingen unter dem großen Weihnachtsbaum musizierten und sangen alle Klassen gemeinsam.</p>',
                 'category_id' => $catFest->id,
                 'album_id' => $albumAdvent->id,
                 'author_id' => $schulleitung->id,
                 'is_featured' => false,
-                'status' => PublishStatus::Published,
-                'published_at' => now()->subDays(12),
+                'days_ago' => 12,
+                'cover' => 'news-advent-1.jpg',
             ],
-        );
-        $this->attachSingleMedia($postAdvent, 'cover', 'news-advent-1.jpg');
-
-        $postBasteln = Post::query()->updateOrCreate(
-            ['slug' => 'adventsbasteln-in-den-klassen-die-bilder'],
             [
-                'title' => 'Adventsbasteln im Schulhaus – Eindrücke aus den Klassen',
-                'excerpt' => 'Ein Vormittag voller Kerzen, Papier, Tannenzweige und Klebstoff: Eindrücke vom diesjährigen Adventsbasteln mit Unterstützung vieler Eltern.',
-                'body' => '<p>Beim traditionellen Adventsbasteln verwandelten sich alle Klassenzimmer in kleine Weihnachtswerkstätten. Dank der tatkräftigen Hilfe zahlreicher Eltern entstanden leuchtende Fensterbilder, Sterne und Adventskränze für unser gesamtes Schulhaus.</p>',
+                'slug' => 'adventsbasteln-in-den-klassen-die-bilder',
+                'title' => 'Adventsbasteln am 12. Dezember – die Bilder',
+                'class_name' => null,
+                'excerpt' => 'Ein Vormittag voller Kerzen, Papier, Tannenzweige und Klebstoff: Eindrücke vom Adventsbasteln in allen Klassen.',
+                'body' => '<p>Beim traditionellen Adventsbasteln am 12. Dezember wurde in allen Klassenzimmern geschnitten, gefaltet und geklebt. Mit tatkräftiger Unterstützung vieler Eltern entstanden wunderschöne Dekorationen für die Adventszeit.</p>',
                 'category_id' => $catSchulleben->id,
                 'album_id' => $albumAdvent->id,
-                'author_id' => $lehrkraft2a->id,
-                'is_featured' => false,
-                'status' => PublishStatus::Published,
-                'published_at' => now()->subDays(15),
-            ],
-        );
-        $this->attachSingleMedia($postBasteln, 'cover', 'news-basteln-1.jpg');
-
-        $postPlaetzchen = Post::query()->updateOrCreate(
-            ['slug' => 'weihnachtsplaetzchenverkauf-auf-dem-hochdorfer-markt'],
-            [
-                'title' => 'Weihnachtsplätzchenverkauf auf dem Hochdorfer Markt',
-                'excerpt' => 'Der Elternbeirat verkaufte auch dieses Jahr wieder auf dem Hochdorfer Markt selbstgebackene Weihnachtsplätzchen für die Elternbeiratskasse.',
-                'body' => '<p>Viele Familien unserer Schule haben fleißig gebacken und gespendet, sodass der Elternbeirat auf dem Hochdorfer Markt wieder ein buntes Sortiment an Weihnachtsplätzchen anbieten konnte. Der Erlös kommt direkt den Projekten unserer Schülerinnen und Schüler zugute.</p>',
-                'category_id' => $catFest->id,
-                'author_id' => $sekretariat->id,
-                'is_featured' => false,
-                'status' => PublishStatus::Published,
-                'published_at' => now()->subDays(18),
-            ],
-        );
-        $this->attachSingleMedia($postPlaetzchen, 'cover', 'news-plaetzchen.jpg');
-
-        $postTanzen = Post::query()->updateOrCreate(
-            ['slug' => 'bewegungs-und-gesundheitstage-tanzen'],
-            [
-                'title' => 'Bewegungs- und Gesundheitstage: Tanzen in der Sporthalle',
-                'excerpt' => 'Tanzaktion mit der Tanzschule Gutmann – einer der Höhepunkte unserer Bewegungs- und Gesundheitstage an der Mühlmattenschule.',
-                'body' => '<p>Im Rahmen unserer Bewegungs- und Gesundheitstage erlebten alle Klassen mitreißende Tanzstunden in der Sporthalle. Gemeinsam mit den Tanzlehrerinnen und Tanzlehrern der Tanzschule Gutmann studierten die Kinder schwungvolle Choreografien ein.</p>',
-                'category_id' => $catSport->id,
-                'album_id' => $albumSport->id,
                 'author_id' => $schulleitung->id,
                 'is_featured' => false,
-                'status' => PublishStatus::Published,
-                'published_at' => now()->subDays(22),
+                'days_ago' => 14,
+                'cover' => 'news-basteln-1.jpg',
             ],
-        );
-        $this->attachSingleMedia($postTanzen, 'cover', 'news-tanzen.jpg');
+            [
+                'slug' => 'weihnachtsplaetzchenverkauf-auf-dem-hochdorfer-markt',
+                'title' => 'Weihnachtsplätzchenverkauf auf dem Hochdorfer Markt',
+                'class_name' => null,
+                'excerpt' => 'Der Elternbeirat verkaufte auch dieses Jahr wieder auf dem Hochdorfer Markt selbstgebackene Weihnachtsplätzchen für die Elternbeiratskasse.',
+                'body' => '<p>Dank der vielen Plätzchenspenden aus der Elternschaft konnte der Elternbeirat auf dem Hochdorfer Markt wieder zahlreiche Tüten selbstgebackener Weihnachtsplätzchen verkaufen. Der Erlös fließt direkt in Projekte für unsere Schülerinnen und Schüler.</p>',
+                'category_id' => $catFest->id,
+                'album_id' => $albumAdvent->id,
+                'author_id' => $sekretariat->id,
+                'is_featured' => false,
+                'days_ago' => 16,
+                'cover' => 'news-plaetzchen.jpg',
+            ],
+            [
+                'slug' => 'bewegungs-und-gesundheitstage-tanzen',
+                'title' => 'Bewegungs- und Gesundheitstage (3): Tanzen mit der Tanzschule Gutmann',
+                'class_name' => null,
+                'excerpt' => 'Tanzaktion mit der Tanzschule Gutmann – einer der Höhepunkte unserer Bewegungs- und Gesundheitstage an der Mühlmattenschule.',
+                'body' => '<p>Im Rahmen unserer Bewegungs- und Gesundheitstage fand eine mitreißende Tanzaktion mit der Tanzschule Gutmann statt. Alle Klassen studierten gemeinsam schwungvolle Tänze in der Sporthalle ein.</p>',
+                'category_id' => $catSport->id,
+                'album_id' => $albumBewegung->id,
+                'author_id' => $schulleitung->id,
+                'is_featured' => false,
+                'days_ago' => 18,
+                'cover' => 'news-tanzen.jpg',
+            ],
+            [
+                'slug' => 'bewegungs-und-gesundheitstage-kochen-mit-dem-slow-mobil',
+                'title' => 'Bewegungs- und Gesundheitstage (2): Kochen und Essen mit dem Slow-Mobil',
+                'class_name' => null,
+                'excerpt' => 'Im bunten Küchenwagen des Slow-Mobils schnippelten, kochten und probierten die Kinder frische regionale Gerichte.',
+                'body' => '<p>Ein besonderes Erlebnis unserer Bewegungs- und Gesundheitstage war der Besuch des Freiburger Slow-Mobils auf unserem Schulhof. In der rollenden Kinderküche bereiteten die Schülerinnen und Schüler aus frischem Gemüse köstliche Mahlzeiten zu und aßen anschließend gemeinsam an einer langen Tafel.</p>',
+                'category_id' => $catSport->id,
+                'album_id' => $albumBewegung->id,
+                'author_id' => $schulleitung->id,
+                'is_featured' => false,
+                'days_ago' => 20,
+                'cover' => 'slowmobil-1.jpg',
+            ],
+            [
+                'slug' => 'bewegungs-und-gesundheitstage-spielmobil',
+                'title' => 'Bewegungs- und Gesundheitstage (1): Aktionstag mit dem Spielmobil',
+                'class_name' => null,
+                'excerpt' => 'Nicht nur die Kinder, sondern auch die Lehrerinnen hatten großen Spaß mit den Bewegungs- und Geschicklichkeitsspielen des Spielmobils.',
+                'body' => '<p>Alle zwei Jahre finden an der Mühlmattenschule die Bewegungs- und Gesundheitstage statt. Zum Auftakt verwandelte das Freiburger Spielmobil unseren Pausenhof in einen großen Bewegungsparcours mit Pedalos, Stelzen, Rollenrutsche und Teamspielen.</p>',
+                'category_id' => $catSport->id,
+                'album_id' => $albumBewegung->id,
+                'author_id' => $schulleitung->id,
+                'is_featured' => false,
+                'days_ago' => 22,
+                'cover' => 'spielmobil-2.jpg',
+            ],
+            [
+                'slug' => 'gesundes-fruehstueck-bei-den-2-klassen',
+                'title' => 'Gesundes Frühstück bei den 2. Klassen',
+                'class_name' => 'Klasse 2a & 2b',
+                'excerpt' => 'Die 2. Klassen bereiteten gemeinsam im Unterricht ein buntes, gesundes Schulfrühstück mit frischem Obst, Gemüse und Vollkornbrot zu.',
+                'body' => '<p>Im Sachunterricht beschäftigten sich die 2. Klassen intensiv mit gesunder Ernährung. Gemeinsam schnitten die Kinder Rohkost, richteten bunte Platten an und genossen das selbst zubereitete gesunde Frühstück im Klassenzimmer.</p>',
+                'category_id' => $catSchulleben->id,
+                'album_id' => $albumErnaehrung->id,
+                'author_id' => $lehrkraft2b->id,
+                'is_featured' => false,
+                'days_ago' => 25,
+                'cover' => 'fruehstueck-2kl-1.jpg',
+            ],
+            [
+                'slug' => 'transfer-von-sprachbildung-lese-und-schreibfoerderung-biss-transfer',
+                'title' => 'Transfer von Sprachbildung, Lese- und Schreibförderung (BiSS-Transfer)',
+                'class_name' => null,
+                'excerpt' => 'Die Mühlmattenschule nimmt an der bundesweiten Initiative BiSS-Transfer zur systematischen Stärkung der Lese- und Schreibkompetenzen teil.',
+                'body' => '<p>BiSS-Transfer ist eine gemeinsame Initiative des Bundesministeriums für Bildung und Forschung (BMBF) und der Kultusministerkonferenz (KMK) zum Transfer von Sprachbildung, Lese- und Schreibförderung. Ziel an der Mühlmattenschule ist die gezielte und durchgängige Stärkung der Basiskompetenzen unserer Schülerinnen und Schüler im Lesen und Schreiben.</p>',
+                'category_id' => $catProjekte->id,
+                'album_id' => null,
+                'author_id' => $schulleitung->id,
+                'is_featured' => false,
+                'days_ago' => 28,
+                'cover' => 'konzepte.jpg',
+            ],
+            [
+                'slug' => 'bilder-vom-crosslauf-der-muehlmattenschule',
+                'title' => 'Bilder vom Crosslauf & Sponsorenlauf der Mühlmattenschule',
+                'class_name' => null,
+                'excerpt' => 'Olympische Stimmung in Hochdorf: Beim Schülerlauf und anschließenden Sponsorenlauf gaben alle Kinder ihr Bestes.',
+                'body' => '<p>Beim traditionellen Crosslauf der Mühlmattenschule liefen alle Jahrgangsstufen um die Wette, angefeuert von zahlreichen Eltern, Großeltern und Lehrkräften. Nach der Siegerehrung folgte der Sponsorenlauf für den guten Zweck sowie ein gemütliches Beisammensein mit Tombola.</p>',
+                'category_id' => $catSport->id,
+                'album_id' => $albumCrosslauf->id,
+                'author_id' => $schulleitung->id,
+                'is_featured' => false,
+                'days_ago' => 30,
+                'cover' => 'crosslauf-1.jpg',
+            ],
+            [
+                'slug' => 'gesunde-ernaehrung-fuer-kater-cook-obstsalat-in-der-2b',
+                'title' => 'Gesunde Ernährung für Kater Cook – Obstsalat in der 2b',
+                'class_name' => 'Klasse 2b',
+                'excerpt' => 'Die Klasse 2b hat im Rahmen des Themas gesunde Ernährung für Kater Cook nach viel Schnippelarbeit einen leckeren Obstsalat zubereitet.',
+                'body' => '<p>Die Klasse 2b hat im Rahmen des Unterrichtsthemas „Gesunde Ernährung für Kater Cook" ein weiteres Rezept ausprobiert. Nach viel fleißiger Schnippelarbeit haben die Kinder einen frischen Obstsalat zubereitet und dazu das passende Rezept im Unterricht aufgeschrieben.</p>',
+                'category_id' => $catSchulleben->id,
+                'album_id' => $albumErnaehrung->id,
+                'author_id' => $lehrkraft2b->id,
+                'is_featured' => false,
+                'days_ago' => 35,
+                'cover' => 'obstsalat-2b-2.jpg',
+            ],
+            [
+                'slug' => 'lustige-brotgesichter-in-der-2b',
+                'title' => 'Lustige Brotgesichter in der Klasse 2b',
+                'class_name' => 'Klasse 2b',
+                'excerpt' => 'Die Klasse 2b hat im Unterricht lustige Brotgesichter gestaltet – die sahen nicht nur gut aus, sondern haben auch tierisch lecker geschmeckt.',
+                'body' => '<p>Mit Vollkornbrot, Frischkäse, Gurken, Paprika, Karotten und Schnittlauch gestalteten die Kinder der Klasse 2b fantasievolle und lustige Brotgesichter. Sie sahen nicht nur toll aus, sondern schmeckten beim gemeinsamen Essen auch hervorragend!</p>',
+                'category_id' => $catSchulleben->id,
+                'album_id' => $albumErnaehrung->id,
+                'author_id' => $lehrkraft2b->id,
+                'is_featured' => false,
+                'days_ago' => 40,
+                'cover' => 'brotgesichter-2b-1.jpg',
+            ],
+        ];
+
+        foreach ($postsData as $postItem) {
+            $coverFile = $postItem['cover'];
+            $daysAgo = $postItem['days_ago'];
+            unset($postItem['cover'], $postItem['days_ago']);
+
+            $post = Post::query()->updateOrCreate(
+                ['slug' => $postItem['slug']],
+                [
+                    ...$postItem,
+                    'status' => PublishStatus::Published,
+                    'published_at' => now()->subDays($daysAgo),
+                ],
+            );
+
+            $this->attachSingleMedia($post, 'cover', $coverFile);
+        }
+
+        // --- Reale PDF-Downloads von muehlmattenschule.de ---
+        $downloadsData = [
+            [
+                'title' => 'Ferienplan Schuljahr 2024/25',
+                'category' => 'Ferienkalender',
+                'description' => 'Übersicht aller Ferientage, beweglichen Ferientage und Feiertage im Schuljahr 2024/25 an der Mühlmattenschule.',
+                'sort_order' => 1,
+                'file' => 'Ferienplan-2024-25.pdf',
+            ],
+            [
+                'title' => 'Beitrittserklärung Förderverein der Mühlmattenschule e.V.',
+                'category' => 'Förderverein & Formulare',
+                'description' => 'Aufnahmeantrag für den Verein der Freunde und Förderer der Mühlmattenschule Freiburg-Hochdorf e.V.',
+                'sort_order' => 2,
+                'file' => 'Beitrittserklaerung-Foerderverein-MMS.pdf',
+            ],
+            [
+                'title' => 'Elterninfo zur Schul-App „Stay Informed"',
+                'category' => 'Elternbriefe & Info',
+                'description' => 'Wichtige Informationen zum Erhalt digitaler Elternbriefe über unsere Schul-App.',
+                'sort_order' => 3,
+                'file' => 'Stay-Informed-Elterninfo.pdf',
+            ],
+            [
+                'title' => 'Anleitung & Registrierung Schul-App',
+                'category' => 'Elternbriefe & Info',
+                'description' => 'Schritt-für-Schritt-Anleitung zur Installation und Anmeldung in der Schul-App der Mühlmattenschule.',
+                'sort_order' => 4,
+                'file' => 'Schul-App-Infoblatt.pdf',
+            ],
+            [
+                'title' => 'Elternflyer EU-Schulprogramm (Obst & Gemüse)',
+                'category' => 'Schulleben & Ernährung',
+                'description' => 'Informationen des Ministeriums zum EU-Schulprogramm für frisches Obst und Gemüse an Grundschulen.',
+                'sort_order' => 5,
+                'file' => 'Elternflyer-EU-Schulprogramm.pdf',
+            ],
+        ];
+
+        foreach ($downloadsData as $dlItem) {
+            $pdfFile = $dlItem['file'];
+            unset($dlItem['file']);
+
+            $download = Download::query()->updateOrCreate(
+                ['title' => $dlItem['title']],
+                [
+                    ...$dlItem,
+                    'is_published' => true,
+                ],
+            );
+
+            $pdfPath = public_path('downloads/school/'.$pdfFile);
+            if (is_file($pdfPath)) {
+                if ($download->getFirstMedia('file') !== null) {
+                    $download->clearMediaCollection('file');
+                }
+                $download->addMedia($pdfPath)
+                    ->preservingOriginal()
+                    ->toMediaCollection('file');
+            }
+        }
 
         // --- Termine ---
         Event::query()->updateOrCreate(
@@ -357,31 +628,7 @@ class DatabaseSeeder extends Seeder
             ],
         );
 
-        // --- Komplette reale Personenliste (Schulleitung, Sekretariat, Kollegium, Sozialarbeit, Betreuung) ---
-        Person::query()->whereNotIn('name', [
-            'Diana Blum',
-            'Sabine Caputo',
-            'Mechthild Vennebusch',
-            'Frau Bett',
-            'Frau Götten',
-            'Frau Eder',
-            'Frau Jakoby',
-            'Frau Bürger',
-            'Frau Piess',
-            'Frau Huber',
-            'Frau Garrido',
-            'Frau Sterzik',
-            'Herr Früh',
-            'Frau Pfattner',
-            'Frau Wastell',
-            'Frau Neumann',
-            'Frau Marquardt',
-            'Frau Borgas',
-            'Frau Dingler',
-            'Herr Markert',
-            'Lisa Jortzik',
-        ])->delete();
-
+        // --- Komplette reale Personenliste von muehlmattenschule.de ---
         $staffList = [
             // Schulleitung
             [
@@ -560,12 +807,21 @@ class DatabaseSeeder extends Seeder
             ],
             // Schulsozialarbeit
             [
-                'name' => 'Herr Markert',
-                'role_title' => 'Schulsozialarbeiter',
+                'name' => 'Philipp Markert',
+                'role_title' => 'Schulsozialarbeiter (Caritas)',
                 'class_name' => 'Schulsozialarbeit',
                 'email' => null,
                 'group' => PersonGroup::Sozialarbeit,
                 'sort_order' => 30,
+                'portrait' => null,
+            ],
+            [
+                'name' => 'Alexandra Mühleisen',
+                'role_title' => 'Schulsozialarbeiterin (Caritas)',
+                'class_name' => 'Schulsozialarbeit',
+                'email' => null,
+                'group' => PersonGroup::Sozialarbeit,
+                'sort_order' => 31,
                 'portrait' => null,
             ],
             // Schulkindbetreuung
@@ -579,6 +835,9 @@ class DatabaseSeeder extends Seeder
                 'portrait' => null,
             ],
         ];
+
+        $validNames = array_column($staffList, 'name');
+        Person::query()->whereNotIn('name', $validNames)->delete();
 
         foreach ($staffList as $staff) {
             $portraitFile = $staff['portrait'];
@@ -597,14 +856,14 @@ class DatabaseSeeder extends Seeder
             }
         }
 
-        // --- Schulseiten mit Originaltexten und Fotos ---
+        // --- Schulseiten mit sämtlichen Originaltexten und Fotos von muehlmattenschule.de ---
         $pages = [
             [
                 'title' => 'Schulportrait',
                 'slug' => 'schulportrait',
                 'section' => 'unsere-schule',
                 'menu_order' => 1,
-                'summary' => 'Eine junge Schule im Grünen: Geschichte, Architektur und Schulleben der Mühlmattenschule in Freiburg-Hochdorf.',
+                'summary' => 'Geschichte, Architektur, Hochschulpartnerschaft und Schulleben der Mühlmattenschule in Freiburg-Hochdorf.',
                 'content' => [
                     [
                         'type' => 'image_banner',
@@ -616,8 +875,8 @@ class DatabaseSeeder extends Seeder
                     [
                         'type' => 'rich_text',
                         'data' => [
-                            'heading' => 'Lage und Geschichte',
-                            'body' => '<p>Die Mühlmattenschule ist die Grundschule für den Freiburger Stadtteil Hochdorf mit Benzhausen. Sie ist eine verhältnismäßig junge Schule: Im Jahr <strong>1995</strong> wurde der erste Bauabschnitt eingeweiht, im Jahr <strong>2000</strong> folgte der zweite Bauabschnitt. Seitdem verfügt die Schule über die Räumlichkeiten für eine bis zu dreizügige Grundschule.</p><p>Aktuell lernen an unserer Schule rund <strong>187 Kinder</strong> in <strong>9 Klassen</strong> sowie einer <strong>Außenklasse</strong>, begleitet von <strong>20 Lehrkräften</strong>.</p>',
+                            'heading' => 'Lage und Geschichte der Mühlmattenschule',
+                            'body' => '<p>Alle Kinder aus dem Freiburger Stadtteil Hochdorf (mit der Ortschaft Benzhausen und dem Gewerbegebiet Hochdorf) besuchen die Mühlmattenschule. Durch den Zuzug vieler junger Familien wurde die frühere Dorfschule, die „Michael-Denzlinger-Schule", zu klein. So wurde eine neue Schule gebaut und <strong>1991</strong> bezogen – benannt nach dem Gewann, in dem sie liegt: <strong>„Mühlmattenschule"</strong>.</p><p>Nach Erweiterungen in den Jahren 1995 und 2000 verfügt die Schule über die Räumlichkeiten für eine bis zu dreizügige Grundschule.</p>',
                         ],
                     ],
                     [
@@ -635,8 +894,8 @@ class DatabaseSeeder extends Seeder
                     [
                         'type' => 'rich_text',
                         'data' => [
-                            'heading' => 'Räume und Ausstattung',
-                            'body' => '<p>Neben den großen und hellen Klassenzimmern verfügt die Schule über zahlreiche Fach- und Gemeinschaftsräume: eine Schülerbücherei, einen Computerraum, einen Musiksaal, Werk- und Kunsträume sowie die direkt benachbarte Sporthalle.</p><p>Im Erdgeschoss befinden sich zudem die Räumlichkeiten der Schulkindbetreuung mit Mensa, Spiel- und Ruheräumen.</p>',
+                            'heading' => 'Hochschulpartnerschule (FACE Praxiskolleg)',
+                            'body' => '<p>Die Mühlmattenschule ist offizielle <strong>Hochschulpartnerschule</strong> und arbeitet im Rahmen des „Praxiskollegs" unter dem Dach des <em>Freiburg Advanced Center of Education (FACE)</em> eng mit der Pädagogischen Hochschule Freiburg und der Albert-Ludwigs-Universität Freiburg in der Aus- und Fortbildung von Lehrkräften zusammen.</p>',
                         ],
                     ],
                 ],
@@ -672,8 +931,8 @@ class DatabaseSeeder extends Seeder
                     [
                         'type' => 'info_box',
                         'data' => [
-                            'title' => 'Öffnungszeiten & Erreichbarkeit des Sekretariats',
-                            'text' => 'Montag, Mittwoch und Freitag von 7:30 bis 12:00 Uhr · Telefon: 07665 2232 · E-Mail: sekretariat.mmsvn@freiburger-schulen.bwl.de',
+                            'title' => 'Fragen zu unserer Schule?',
+                            'text' => 'Unser Sekretariat ist Montag, Mittwoch und Freitag von 7:30 bis 12:00 Uhr erreichbar · Telefon: 07665 2232 · E-Mail: sekretariat.mmsvn@freiburger-schulen.bwl.de',
                         ],
                     ],
                 ],
@@ -683,7 +942,7 @@ class DatabaseSeeder extends Seeder
                 'slug' => 'kollegium',
                 'section' => 'unsere-schule',
                 'menu_order' => 3,
-                'summary' => 'Ein engagiertes Team aus 20 Lehrkräften, Sonderpädagogik und Schulsozialarbeit begleitet die rund 187 Kinder unserer Schule.',
+                'summary' => 'Das pädagogische Team der Mühlmattenschule Freiburg-Hochdorf.',
                 'content' => [
                     [
                         'type' => 'image_banner',
@@ -709,7 +968,7 @@ class DatabaseSeeder extends Seeder
                     [
                         'type' => 'people_list',
                         'data' => [
-                            'heading' => 'Schulsozialarbeit & Schulkindbetreuung',
+                            'heading' => 'Schulsozialarbeit',
                             'group' => PersonGroup::Sozialarbeit->value,
                         ],
                     ],
@@ -750,12 +1009,12 @@ class DatabaseSeeder extends Seeder
                 'slug' => 'schulsozialarbeit',
                 'section' => 'unsere-schule',
                 'menu_order' => 5,
-                'summary' => 'Beratung, Begleitung und Stärkung des sozialen Miteinanders an der Mühlmattenschule.',
+                'summary' => 'Philipp Markert und Alexandra Mühleisen (Caritasverband Freiburg-Stadt e.V.).',
                 'content' => [
                     [
                         'type' => 'people_list',
                         'data' => [
-                            'heading' => 'Ansprechpartner Schulsozialarbeit',
+                            'heading' => 'Team der Schulsozialarbeit',
                             'group' => PersonGroup::Sozialarbeit->value,
                         ],
                     ],
@@ -763,7 +1022,7 @@ class DatabaseSeeder extends Seeder
                         'type' => 'rich_text',
                         'data' => [
                             'heading' => 'Aufgaben und Angebote der Schulsozialarbeit',
-                            'body' => '<p>Die Schulsozialarbeit an der Mühlmattenschule ist ein vertrauliches und kostenfreies Angebot für alle Schülerinnen und Schüler, Eltern sowie Lehrkräfte. Sie unterstützt Kinder bei der Lösung von Konflikten, begleitet den wöchentlichen Klassenrat und berät Familien in Erziehungs- und Lebensfragen.</p>',
+                            'body' => '<p>Träger der Schulsozialarbeit an der Mühlmattenschule ist der <strong>Caritasverband Freiburg-Stadt e.V.</strong> Zu unseren Aufgaben zählen:</p><ul><li>Sozialpädagogische Begleitung von Schülerinnen und Schülern bei persönlichen, schulischen oder sozialen Anliegen</li><li>Förderung sozialer Kompetenzen durch Projekt- und Gruppenangebote sowie Begleitung des Klassenrats</li><li>Vertrauliche Beratung von Kindern, Eltern und Lehrkräften</li><li>Leitung von Arbeitsgemeinschaften wie der Sport-AG und Computer-AG</li></ul>',
                         ],
                     ],
                 ],
@@ -773,20 +1032,32 @@ class DatabaseSeeder extends Seeder
                 'slug' => 'elternbeirat',
                 'section' => 'unsere-schule',
                 'menu_order' => 6,
-                'summary' => 'Aktive Elternarbeit und der Förderverein bereichern unser Schulleben.',
+                'summary' => 'Elternbeirat und der Verein der Freunde und Förderer der Mühlmattenschule Freiburg-Hochdorf e.V.',
                 'content' => [
                     [
                         'type' => 'image_banner',
                         'data' => [
                             'image_url' => '/images/school/foerderverein-vorstand.jpg',
-                            'caption' => 'Engagiert für die Kinder der Mühlmattenschule: unser Förderverein und Elternbeirat.',
+                            'caption' => 'Der Vorstand des Fördervereins der Mühlmattenschule.',
                         ],
                     ],
                     [
                         'type' => 'rich_text',
                         'data' => [
-                            'heading' => 'Gemeinsam Schule gestalten',
-                            'body' => '<p>Elternbeirat und Förderverein bringen sich aktiv in das Schulleben der Mühlmattenschule ein – vom gesunden Schulfrühstück über das Sommer- und Einschulungsfest bis zur Finanzierung besonderer Spielgeräte, Bücher und Ausflüge.</p>',
+                            'heading' => 'Verein der Freunde und Förderer der Mühlmattenschule Freiburg-Hochdorf e.V.',
+                            'body' => '<p>Der Förderverein der Mühlmattenschule wurde im Jahr 1996 gegründet und ist im Vereinsregister Freiburg (Nr. 2943) als gemeinnütziger Verein eingetragen. Er unterstützt schulische Projekte, das gesunde Frühstück, die Spielgeräteausleihe, Autorenlesungen und Ausflüge.</p><h3>Der Crosslauf – unser großes Schulsportfest seit 1998</h3><p>In jedem Schuljahr im Mai oder Juni veranstaltet der Förderverein in Kooperation mit der Mühlmattenschule den großen <strong>Crosslauf</strong> mit Schülerlauf, Sponsorenlauf und Tombola für die ganze Familie.</p><h3>Elternbeirat</h3><p>Der Elternbeirat vertritt die Belange der Elternschaft, gestaltet Einschulungsfeiern, den Weihnachtsplätzchenverkauf auf dem Hochdorfer Markt sowie Schulfeste aktiv mit.</p>',
+                        ],
+                    ],
+                    [
+                        'type' => 'image_gallery',
+                        'data' => [
+                            'heading' => 'Aktionen von Förderverein & Elternbeirat',
+                            'image_1_url' => '/images/school/crosslauf-1.jpg',
+                            'image_1_caption' => 'Start beim jährlichen Crosslauf der Mühlmattenschule.',
+                            'image_2_url' => '/images/school/crosslauf-3.jpg',
+                            'image_2_caption' => 'Voller Einsatz beim Schüler- und Sponsorenlauf.',
+                            'image_3_url' => '/images/school/news-plaetzchen.jpg',
+                            'image_3_caption' => 'Weihnachtsplätzchenverkauf des Elternbeirats auf dem Hochdorfer Markt.',
                         ],
                     ],
                 ],
@@ -796,7 +1067,7 @@ class DatabaseSeeder extends Seeder
                 'slug' => 'konzepte-und-projekte',
                 'section' => 'schulleben',
                 'menu_order' => 1,
-                'summary' => 'Leitbild, Vereinbarung „So ist es bei uns", wöchentlicher Klassenrat und unsere Patenschaft nach Simbabwe.',
+                'summary' => 'Leitbild, Vereinbarung „So ist es bei uns", wöchentlicher Klassenrat, BiSS-Transfer und unsere Patenschaft nach Simbabwe.',
                 'content' => [
                     [
                         'type' => 'image_banner',
@@ -808,8 +1079,8 @@ class DatabaseSeeder extends Seeder
                     [
                         'type' => 'rich_text',
                         'data' => [
-                            'heading' => 'Unser Leitbild & „So ist es bei uns"',
-                            'body' => '<p>Eltern und Lehrkräfte haben gemeinsam das Leitbild der Mühlmattenschule sowie unseren Leitfaden <strong>„So ist es bei uns"</strong> entwickelt – ein Heft, das von zwei Seiten lesbar ist: einmal für Eltern und einmal kindgerecht für unsere Schülerinnen und Schüler.</p><h3>Klassenrat</h3><p>Seit Herbst 2009 findet in jeder Klasse wöchentlich der Klassenrat statt. Soziales Lernen, Gewaltprävention und demokratische Mitbestimmung stehen dabei im Mittelpunkt.</p><h3>Patenschaft mit dem Kinderheim Rosedale in Simbabwe</h3><p>Seit 1995 pflegen wir eine enge Patenschaft mit dem Kinderheim <em>Midlands Children Home Rosedale</em> in Gweru, Simbabwe, in dem rund 60 Kinder ein Zuhause finden.</p>',
+                            'heading' => 'Unser Leitbild & Leitfaden „So ist es bei uns"',
+                            'body' => '<p>Eltern und Lehrkräfte haben gemeinsam das Leitbild der Mühlmattenschule sowie unseren Leitfaden <strong>„So ist es bei uns"</strong> entwickelt – ein Heft, das von zwei Seiten lesbar ist: einmal für Eltern und einmal kindgerecht für unsere Schülerinnen und Schüler.</p><h3>Wöchentlicher Klassenrat</h3><p>Seit Herbst 2009 findet in jeder Klasse wöchentlich der Klassenrat statt. Soziales Lernen, Gewaltprävention und demokratische Mitbestimmung stehen dabei im Mittelpunkt.</p><h3>Patenschaft mit dem Kinderheim Rosedale in Simbabwe</h3><p>Seit 1995 pflegen wir eine enge Patenschaft mit dem Kinderheim <em>Midlands Children Home Rosedale</em> in Gweru, Simbabwe, in dem rund 60 Kinder ein Zuhause finden.</p>',
                         ],
                     ],
                     [
@@ -820,8 +1091,8 @@ class DatabaseSeeder extends Seeder
                             'image_1_caption' => 'Unsere Patenschaft mit dem Kinderheim Rosedale in Gweru, Simbabwe.',
                             'image_2_url' => '/images/school/trommeln-rosedale.jpg',
                             'image_2_caption' => 'Musik- und Trommelprojekte zugunsten unserer Partnerschaft.',
-                            'image_3_url' => '/images/school/slider-elternhelfenmit.jpg',
-                            'image_3_caption' => 'Gemeinsame Projekttage mit Unterstützung der Elternschaft.',
+                            'image_3_url' => '/images/school/slowmobil-1.jpg',
+                            'image_3_caption' => 'Kochen und gesunde Ernährung mit dem Slow-Mobil.',
                         ],
                     ],
                 ],
@@ -831,7 +1102,7 @@ class DatabaseSeeder extends Seeder
                 'slug' => 'betreuung-und-ags',
                 'section' => 'schulleben',
                 'menu_order' => 2,
-                'summary' => 'Schulkindbetreuung durch die Caritas von 7:30 bis 17:00 Uhr sowie vielfältige Arbeitsgemeinschaften und Lesepatenschaften.',
+                'summary' => 'Schulkindbetreuung durch die Caritas von 7:30 bis 17:00 Uhr sowie vielfältige Arbeitsgemeinschaften, Lesepatenschaften und Bibfit.',
                 'content' => [
                     [
                         'type' => 'image_banner',
@@ -844,7 +1115,7 @@ class DatabaseSeeder extends Seeder
                         'type' => 'rich_text',
                         'data' => [
                             'heading' => 'Schulkindbetreuung an der Mühlmattenschule (7:30 – 17:00 Uhr)',
-                            'body' => '<p>Die Schulkindbetreuung wird von der <strong>Caritas Schulkindbetreuung e.V.</strong> direkt in den Räumen der Mühlmattenschule angeboten. Am südlichen Ende des Schulgebäudes, abgetrennt durch eine Glastür, finden die Kinder ihre eigenen Räume zum Lernen, Spielen und Essen.</p><p>Die Betreuung ist von <strong>Montag bis Freitag von 7:30 bis 17:00 Uhr</strong> in verschiedenen Modulen flexibel buchbar – inklusive warmem Mittagessen und Ferienbetreuung.</p>',
+                            'body' => '<p>Offen für alle Schülerinnen und Schüler der Mühlmattenschule ist die Schulkindbetreuung. Zwischen <strong>07:30 Uhr und 17:00 Uhr</strong> – auch während eines Großteils der Ferien – wird die Betreuung in verschiedenen Modulen von der <strong>Caritas Schulkindbetreuung e.V.</strong> in den Räumen der Mühlmattenschule angeboten, inklusive warmem Mittagessen.</p>',
                         ],
                     ],
                     [
@@ -864,18 +1135,20 @@ class DatabaseSeeder extends Seeder
                     [
                         'type' => 'rich_text',
                         'data' => [
-                            'heading' => 'Arbeitsgemeinschaften (AGs), Lesepatenschaften & Bibfit',
-                            'body' => '<p>Über den Unterricht hinaus bieten wir ein breites AG-Angebot für alle Klassenstufen an: <strong>Sport, Computer, Flöte, Chor, Fußball, Englisch und Melodika</strong> sowie Pausenangebote wie Ringen & Raufen oder Yoga.</p><p>Darüber hinaus begleiten ehrenamtliche <strong>Leselernpatinnen</strong> unsere Kinder beim Lesenlernen, und gemeinsam mit der Bücherei St. Martin führen wir für die 1. und 2. Klassen den <strong>Bibfit-Lesekompass</strong> durch.</p>',
+                            'heading' => 'Arbeitsgemeinschaften (AGs), Lesepatenschaften, Bibfit & Kooperationen',
+                            'body' => '<ul><li><strong>Sport-AG:</strong> Jeden Montag in der Mooswaldhalle mit Herrn Markert (Schulsozialarbeit)</li><li><strong>Computer-AG:</strong> Dienstags in zwei Gruppen in Zimmer 12 mit Herrn Markert</li><li><strong>Musik &amp; Bewegung:</strong> Flöten-AG, Chor-AG, Melodika, Fußball-AG und Englisch-AG</li><li><strong>Lesepatenschaften:</strong> Ehrenamtliche Leselernpatinnen begleiten Kleingruppen beim Lesenlernen</li><li><strong>Bibfit-Lesekompass:</strong> Gemeinsam mit der Bücherei St. Martin für die 1. und 2. Klassen</li><li><strong>Kooperationspartner:</strong> Musikschule Freiburg, SV Hochdorf, Chorvereinigung Hochdorf, Akkordeon-Club Hochdorf und Bücherei St. Martin</li></ul>',
                         ],
                     ],
                     [
                         'type' => 'image_gallery',
                         'data' => [
-                            'heading' => 'Sport & Bewegung an unserer Schule',
-                            'image_1_url' => '/images/school/sport.jpg',
-                            'image_1_caption' => 'Kinder beim Crosslauf und den Bewegungstagen.',
-                            'image_2_url' => '/images/school/news-tanzen.jpg',
-                            'image_2_caption' => 'Tanzaktion in unserer Sporthalle.',
+                            'heading' => 'Bewegung, Ernährung & Aktionen im Schulleben',
+                            'image_1_url' => '/images/school/spielmobil-2.jpg',
+                            'image_1_caption' => 'Aktionstag mit dem Spielmobil auf dem Schulhof.',
+                            'image_2_url' => '/images/school/fruehstueck-2kl-1.jpg',
+                            'image_2_caption' => 'Gesundes Frühstück und Kochen in den Klassen.',
+                            'image_3_url' => '/images/school/news-tanzen.jpg',
+                            'image_3_caption' => 'Tanzaktion in unserer Sporthalle.',
                         ],
                     ],
                 ],

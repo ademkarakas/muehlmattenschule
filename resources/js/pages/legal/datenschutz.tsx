@@ -4,7 +4,7 @@ import { Head, usePage } from '@inertiajs/react';
 import type { ReactElement } from 'react';
 
 /**
- * Datenschutzerklärung der Mühlmattenschule gemäß DSGVO.
+ * Offizielle Datenschutzerklärung der Mühlmattenschule gemäß DSGVO.
  */
 export default function DatenschutzPage(): ReactElement {
     const { school } = usePage<SharedInertiaProps>().props;
@@ -27,8 +27,27 @@ export default function DatenschutzPage(): ReactElement {
                     </section>
 
                     <section>
+                        <h2 className="text-base font-bold text-slate-900">2. Datenschutzbeauftragte/r & Aufsicht</h2>
+                        <p className="mt-1">
+                            Unseren Datenschutzbeauftragten erreichen Sie unter{' '}
+                            <a href="mailto:datenschutz@ssa-fr.kv.bwl.de" className="text-brand-700 underline">
+                                datenschutz@ssa-fr.kv.bwl.de
+                            </a>{' '}
+                            oder unter der Postadresse:
+                            <br />
+                            Staatliches Schulamt Freiburg – Datenschutzbeauftragte/r, Ottmannstraße 22, 79100 Freiburg.
+                        </p>
+                        <p className="mt-2">
+                            <strong>Zuständige Datenschutzaufsichtsbehörde:</strong>
+                            <br />
+                            Landesbeauftragte für den Datenschutz und die Informationsfreiheit (LfDI), Königsstraße 10a,
+                            70173 Stuttgart.
+                        </p>
+                    </section>
+
+                    <section>
                         <h2 className="text-base font-bold text-slate-900">
-                            2. Verzicht auf Tracking, Werbe-Cookies und externe Schriftarten
+                            3. Verzicht auf Tracking, Werbe-Cookies und externe Schriftarten
                         </h2>
                         <p className="mt-1">
                             Diese Website verwendet keine Analyse- oder Tracking-Dienste, keine externen Schriftarten
@@ -38,7 +57,7 @@ export default function DatenschutzPage(): ReactElement {
                     </section>
 
                     <section>
-                        <h2 className="text-base font-bold text-slate-900">3. Veröffentlichung von Fotos (DSGVO)</h2>
+                        <h2 className="text-base font-bold text-slate-900">4. Veröffentlichung von Fotos (DSGVO)</h2>
                         <p className="mt-1">
                             Aufnahmen aus dem Schulleben werden ausschließlich veröffentlicht, wenn für abgebildete
                             Personen die schriftliche Einwilligung der Erziehungsberechtigten gemäß Art. 6 Abs. 1 lit. a
@@ -48,7 +67,7 @@ export default function DatenschutzPage(): ReactElement {
                     </section>
 
                     <section>
-                        <h2 className="text-base font-bold text-slate-900">4. Hosting in Deutschland</h2>
+                        <h2 className="text-base font-bold text-slate-900">5. Hosting in Deutschland</h2>
                         <p className="mt-1">
                             Diese Website wird bei der IONOS SE in Rechenzentren innerhalb Deutschlands betrieben.
                         </p>
@@ -58,4 +77,3 @@ export default function DatenschutzPage(): ReactElement {
         </SiteLayout>
     );
 }
-
