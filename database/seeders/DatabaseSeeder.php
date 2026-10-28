@@ -295,7 +295,7 @@ class DatabaseSeeder extends Seeder
                 'title' => 'Ferienplan Schuljahr 2024/25',
                 'class_name' => null,
                 'excerpt' => 'Der aktuelle Ferienkalender der Mühlmattenschule steht ab sofort zum Ansehen und im Bereich Downloads als PDF bereit.',
-                'body' => '<p>Der aktuelle Ferienkalender mit allen Ferienzeiten, beweglichen Ferientagen und Feiertagen steht für alle Familien bereit. Sie finden die druckbare PDF-Version jederzeit auch unter <a href="/downloads">Elternbriefe &amp; Formulare</a>.</p>',
+                'body' => '<p>Der aktuelle Ferienkalender mit allen Ferienzeiten, beweglichen Ferientagen und Feiertagen steht für alle Familien bereit. Sie finden die druckbare PDF-Version jederzeit unter <a href="/downloads">Elternbriefe &amp; Formulare</a> oder direkt als <a href="/files/school/Ferienplan-2024-25.pdf" target="_blank" rel="noopener noreferrer">Ferienplan 2024/25 (PDF)</a>.</p>',
                 'category_id' => $catElterninfo->id,
                 'album_id' => null,
                 'author_id' => $sekretariat->id,
@@ -568,7 +568,7 @@ class DatabaseSeeder extends Seeder
                 ],
             );
 
-            $pdfPath = public_path('downloads/school/'.$pdfFile);
+            $pdfPath = public_path('files/school/'.$pdfFile);
             if (is_file($pdfPath)) {
                 if ($download->getFirstMedia('file') !== null) {
                     $download->clearMediaCollection('file');

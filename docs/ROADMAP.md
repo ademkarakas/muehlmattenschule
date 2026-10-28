@@ -79,7 +79,7 @@
 - [x] 5.7 GitHub Actions CI (`.github/workflows/ci.yml`: test + lint + build)
 
 ## Faz 6 – İçerik
-- [x] 6.1 Mevcut siteden içerik taşıma (`muehlmattenschule.de` & `muehlmattenschule.0x6e.net`: 71 gerçek fotoğraf `public/images/school/`, 5 orijinal PDF `public/downloads/school/`, 22 kişilik gerçek öğretmen/kadro/sosyal hizmet listesi, 17 gerçek haber ve sınıf aktivitesi, 6 zengin fotoğraf albümü ve 8 tam içerikli sayfa)
+- [x] 6.1 Mevcut siteden içerik taşıma (`muehlmattenschule.de` & `muehlmattenschule.0x6e.net`: 71 gerçek fotoğraf `public/images/school/`, 5 orijinal PDF `public/files/school/`, 22 kişilik gerçek öğretmen/kadro/sosyal hizmet listesi, 17 gerçek haber ve sınıf aktivitesi, 6 zengin fotoğraf albümü ve 8 tam içerikli sayfa)
 - [ ] 6.2 Gerçek logoyu ekle (okuldan gelecek)
 - [x] 6.3 Impressum/Datenschutz ve Kontakt metinlerini resmi `muehlmattenschule.de` verileriyle güncelle
 
