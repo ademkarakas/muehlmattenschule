@@ -35,41 +35,41 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
             {/* Oberer Kopfbereich im EduPage-Portalstil */}
             <header className="sticky top-0 z-40 shadow-sm">
                 <div className="bg-white border-b border-slate-200/80">
-                    <div className="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between gap-4">
-                        <Link href="/" className="flex items-center gap-3.5 group">
+                    <div className="mx-auto max-w-[1440px] px-6 lg:px-10 py-4 flex items-center justify-between gap-6">
+                        <Link href="/" className="flex items-center gap-4 group">
                             <img
                                 src="/images/logo.svg"
                                 alt={`Logo ${school.name}`}
-                                className="h-12 w-12 rounded-2xl shadow-xs transition group-hover:scale-105"
+                                className="h-13 w-13 rounded-2xl shadow-xs transition group-hover:scale-105"
                             />
                             <div>
-                                <span className="block text-xl md:text-2xl font-extrabold tracking-tight text-brand-900 leading-tight">
+                                <span className="block text-2xl md:text-[26px] font-extrabold tracking-tight text-brand-900 leading-tight">
                                     {school.name}
                                 </span>
-                                <span className="block text-xs font-medium text-brand-700">
+                                <span className="block text-xs sm:text-sm font-medium text-brand-700">
                                     {school.subtitle} · {school.street}, {school.zip_city}
                                 </span>
                             </div>
                         </Link>
 
-                        <div className="hidden lg:flex items-center gap-5 text-xs">
+                        <div className="hidden lg:flex items-center gap-4 text-xs sm:text-sm">
                             <a
                                 href={`tel:${school.phone}`}
-                                className="flex items-center gap-2 rounded-xl bg-brand-50 px-3.5 py-2 font-semibold text-brand-800 hover:bg-brand-100"
+                                className="flex items-center gap-2 rounded-xl bg-brand-50 px-4 py-2.5 font-semibold text-brand-800 hover:bg-brand-100"
                             >
                                 <span aria-hidden="true">☎</span>
                                 <span>{school.phone}</span>
                             </a>
                             <a
                                 href={`mailto:${school.email}`}
-                                className="flex items-center gap-2 rounded-xl bg-brand-50 px-3.5 py-2 font-semibold text-brand-800 hover:bg-brand-100"
+                                className="flex items-center gap-2 rounded-xl bg-brand-50 px-4 py-2.5 font-semibold text-brand-800 hover:bg-brand-100"
                             >
                                 <span aria-hidden="true">✉</span>
                                 <span>{school.email}</span>
                             </a>
                             <a
                                 href="/admin"
-                                className="rounded-xl bg-gradient-to-r from-brand-500 to-brand-700 px-4 py-2.5 text-xs font-bold text-white shadow-xs hover:from-brand-600 hover:to-brand-800"
+                                className="rounded-xl bg-gradient-to-r from-brand-600 to-brand-800 px-5 py-2.5 text-sm font-bold text-white shadow-xs hover:from-brand-700 hover:to-brand-900"
                             >
                                 Anmelden / Verwaltung
                             </a>
@@ -80,24 +80,24 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                             onClick={() => setMobileOpen((prev) => !prev)}
                             aria-expanded={mobileOpen}
                             aria-label="Hauptmenü öffnen oder schließen"
-                            className="lg:hidden rounded-xl border border-brand-200 bg-brand-50 px-3.5 py-2 text-sm font-bold text-brand-800"
+                            className="lg:hidden rounded-xl border border-brand-200 bg-brand-50 px-4 py-2.5 text-sm font-bold text-brand-800"
                         >
                             {mobileOpen ? 'Schließen ✕' : 'Menü ☰'}
                         </button>
                     </div>
                 </div>
 
-                {/* Bläulich-türkise EduPage-Menüleiste */}
+                {/* Dunkel-türkise, breite EduPage-Menüleiste */}
                 <nav
                     aria-label="Hauptnavigation"
-                    className="bg-gradient-to-r from-brand-600 via-brand-500 to-brand-700 text-white"
+                    className="bg-gradient-to-r from-brand-700 via-brand-600 to-brand-800 text-white"
                 >
-                    <div className="mx-auto max-w-7xl px-4">
-                        <ul className="hidden lg:flex items-center gap-1 text-sm font-bold">
+                    <div className="mx-auto max-w-[1440px] px-6 lg:px-10">
+                        <ul className="hidden lg:flex items-center justify-between text-[15px] font-bold tracking-wide">
                             <li>
                                 <Link
                                     href="/"
-                                    className={`block px-4 py-3 transition ${
+                                    className={`block px-5 py-4 transition ${
                                         isActive('/') ? 'bg-white/20 shadow-inner' : 'hover:bg-white/15'
                                     }`}
                                 >
@@ -107,7 +107,7 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                             <li>
                                 <Link
                                     href="/aktuelles"
-                                    className={`block px-4 py-3 transition ${
+                                    className={`block px-5 py-4 transition ${
                                         isActive('/aktuelles') ? 'bg-white/20 shadow-inner' : 'hover:bg-white/15'
                                     }`}
                                 >
@@ -117,7 +117,7 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                             <li>
                                 <Link
                                     href="/termine"
-                                    className={`block px-4 py-3 transition ${
+                                    className={`block px-5 py-4 transition ${
                                         isActive('/termine') ? 'bg-white/20 shadow-inner' : 'hover:bg-white/15'
                                     }`}
                                 >
@@ -127,7 +127,7 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                             <li>
                                 <Link
                                     href="/galerie"
-                                    className={`block px-4 py-3 transition ${
+                                    className={`block px-5 py-4 transition ${
                                         isActive('/galerie') ? 'bg-white/20 shadow-inner' : 'hover:bg-white/15'
                                     }`}
                                 >
@@ -138,7 +138,7 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                             {navigationPages.unsereSchule.length > 0 && (
                                 <li className="relative group">
                                     <span
-                                        className={`flex items-center gap-1.5 px-4 py-3 cursor-pointer transition ${
+                                        className={`flex items-center gap-1.5 px-5 py-4 cursor-pointer transition ${
                                             isActive('/unsere-schule')
                                                 ? 'bg-white/20 shadow-inner'
                                                 : 'group-hover:bg-white/15'
@@ -146,12 +146,12 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                                     >
                                         Unsere Schule <span aria-hidden="true" className="text-xs">▾</span>
                                     </span>
-                                    <ul className="invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-150 absolute left-0 top-full z-40 w-64 rounded-b-2xl bg-white py-2 text-slate-800 shadow-xl border border-slate-200">
+                                    <ul className="invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-150 absolute left-0 top-full z-40 w-68 rounded-b-2xl bg-white py-2 text-slate-800 shadow-xl border border-slate-200">
                                         {navigationPages.unsereSchule.map((item) => (
                                             <li key={item.slug}>
                                                 <Link
                                                     href={`/unsere-schule/${item.slug}`}
-                                                    className="block px-4 py-2.5 text-sm font-medium hover:bg-brand-50 hover:text-brand-700"
+                                                    className="block px-5 py-2.5 text-sm font-semibold hover:bg-brand-50 hover:text-brand-700"
                                                 >
                                                     {item.title}
                                                 </Link>
@@ -164,7 +164,7 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                             {navigationPages.schulleben.length > 0 && (
                                 <li className="relative group">
                                     <span
-                                        className={`flex items-center gap-1.5 px-4 py-3 cursor-pointer transition ${
+                                        className={`flex items-center gap-1.5 px-5 py-4 cursor-pointer transition ${
                                             isActive('/schulleben')
                                                 ? 'bg-white/20 shadow-inner'
                                                 : 'group-hover:bg-white/15'
@@ -172,12 +172,12 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                                     >
                                         Schulleben & Betreuung <span aria-hidden="true" className="text-xs">▾</span>
                                     </span>
-                                    <ul className="invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-150 absolute left-0 top-full z-40 w-64 rounded-b-2xl bg-white py-2 text-slate-800 shadow-xl border border-slate-200">
+                                    <ul className="invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-150 absolute left-0 top-full z-40 w-68 rounded-b-2xl bg-white py-2 text-slate-800 shadow-xl border border-slate-200">
                                         {navigationPages.schulleben.map((item) => (
                                             <li key={item.slug}>
                                                 <Link
                                                     href={`/schulleben/${item.slug}`}
-                                                    className="block px-4 py-2.5 text-sm font-medium hover:bg-brand-50 hover:text-brand-700"
+                                                    className="block px-5 py-2.5 text-sm font-semibold hover:bg-brand-50 hover:text-brand-700"
                                                 >
                                                     {item.title}
                                                 </Link>
@@ -190,7 +190,7 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                             <li>
                                 <Link
                                     href="/downloads"
-                                    className={`block px-4 py-3 transition ${
+                                    className={`block px-5 py-4 transition ${
                                         isActive('/downloads') ? 'bg-white/20 shadow-inner' : 'hover:bg-white/15'
                                     }`}
                                 >
@@ -200,7 +200,7 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                             <li>
                                 <Link
                                     href="/kontakt"
-                                    className={`block px-4 py-3 transition ${
+                                    className={`block px-5 py-4 transition ${
                                         isActive('/kontakt') ? 'bg-white/20 shadow-inner' : 'hover:bg-white/15'
                                     }`}
                                 >

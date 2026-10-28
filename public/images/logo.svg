@@ -1,13 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Logo der Mühlmattenschule">
-    <defs>
-        <linearGradient id="mmsGrad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#00b4d8" />
-            <stop offset="100%" stop-color="#0277bd" />
-        </linearGradient>
-    </defs>
-    <rect width="64" height="64" rx="16" fill="url(#mmsGrad)" />
-    <path d="M12 30 L32 14 L52 30" fill="none" stroke="#e0f2fe" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-    <path d="M18 28 V48 H46 V28" fill="#0096c7" stroke="#ffffff" stroke-width="2.5" stroke-linejoin="round" />
-    <rect x="28" y="36" width="8" height="12" rx="1.5" fill="#01579b" />
-    <circle cx="32" cy="24" r="3.2" fill="#fbbf24" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Logo Mühlmattenschule">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0097a7" />
+      <stop offset="100%" stop-color="#005662" />
+    </linearGradient>
+  </defs>
+  <rect width="120" height="120" rx="26" fill="url(#bg)" />
+  <path d="M22 62 L60 28 L98 62" fill="none" stroke="#fbbf24" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M34 90 V58 L60 76 L86 58 V90" fill="none" stroke="#ffffff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
 </svg>

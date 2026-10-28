@@ -6,28 +6,27 @@
 
 /*
  * Design-Tokens der Mühlmattenschule.
- * Bläuliches, klares Türkis (Cyan/Sky-Türkis statt Grün-Teal) für einen frischen,
- * modernen EduPage-Look.
+ * Kräftiges, dunkles Türkis (Deep Turquoise / Petrol-Türkis) für einen modernen EduPage-Look.
  * Schriften: nur Systemschriften – keine externen Font-CDNs (DSGVO).
  */
 @theme {
     --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif,
         'Apple Color Emoji', 'Segoe UI Emoji';
 
-    --color-brand-50: #f0f9ff;
-    --color-brand-100: #e0f2fe;
-    --color-brand-200: #bae6fd;
-    --color-brand-300: #67e8f9;
-    --color-brand-400: #22d3ee;
-    --color-brand-500: #00b4d8;
-    --color-brand-600: #0096c7;
-    --color-brand-700: #0277bd;
-    --color-brand-800: #01579b;
-    --color-brand-900: #0c3c60;
+    --color-brand-50: #eefbfc;
+    --color-brand-100: #d5f5f8;
+    --color-brand-200: #aeeaf0;
+    --color-brand-300: #76d8e4;
+    --color-brand-400: #38bdd0;
+    --color-brand-500: #0097a7;
+    --color-brand-600: #00838f;
+    --color-brand-700: #006978;
+    --color-brand-800: #005662;
+    --color-brand-900: #003d46;
 
     --color-accent: #f59e0b;
     --color-ink: #0f172a;
-    --color-surface: #f4f8fb;
+    --color-surface: #f3f8f9;
 }
 
 @layer base {
