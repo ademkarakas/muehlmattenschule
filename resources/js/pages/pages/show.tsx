@@ -129,3 +129,4 @@ export default function PageShow({ page, people }: PageShowProps): ReactElement 
         </SiteLayout>
     );
 }
+

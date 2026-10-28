@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Resources\UserResource\Pages;
 
 use App\Filament\Resources\UserResource;
+use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ManageRecords;
 
@@ -15,7 +16,7 @@ class ManageUsers extends ManageRecords
     /**
      * Kopfzeilen-Aktionen.
      *
-     * @return array<\Filament\Actions\Action>
+     * @return array<Action>
      */
     protected function getHeaderActions(): array
     {
@@ -24,4 +25,3 @@ class ManageUsers extends ManageRecords
         ];
     }
 }
-

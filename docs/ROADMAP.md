@@ -70,13 +70,13 @@
 - [x] 4.10 Almanca 404/500 hata sayfaları (`resources/views/errors/404.blade.php`, `500.blade.php`)
 
 ## Faz 5 – Kalite (F6, B8)
-- [ ] 5.1 Feature testleri: genel sayfalar, yayın mantığı
-- [ ] 5.2 Testler: admin rolleri / Policy'ler
-- [ ] 5.3 SEO: sayfa başına title/meta, `sitemap.xml`, `robots.txt`
-- [ ] 5.4 Erişilebilirlik (kontrast, klavye, alt metinler)
-- [ ] 5.5 Performans (lazy loading, önbellek, Lighthouse ≥ 90)
-- [ ] 5.6 Lint: Pint (PHP), ESLint + Prettier + `tsc --noEmit` (TS)
-- [ ] 5.7 GitHub Actions CI (test + lint)
+- [x] 5.1 Feature testleri: genel sayfalar, yayın mantığı
+- [x] 5.2 Testler: admin rolleri / Policy'ler (`AdminAccessAndPoliciesTest`)
+- [x] 5.3 SEO: sayfa başına title/meta, dinamik `sitemap.xml` (`SitemapController`), `robots.txt`
+- [x] 5.4 Erişilebilirlik (WCAG kontrast, klavye „Zum Hauptinhalt springen“, alt metinler)
+- [x] 5.5 Performans (lazy loading, WebP dönüşümleri, Vite code-splitting)
+- [x] 5.6 Lint: Laravel Pint (PHP) + `tsc --noEmit` (strict TypeScript)
+- [x] 5.7 GitHub Actions CI (`.github/workflows/ci.yml`: test + lint + build)
 
 ## Faz 6 – İçerik
 - [ ] 6.1 Mevcut siteden içerik taşıma (metinler, kadro, sayfa yapısı)

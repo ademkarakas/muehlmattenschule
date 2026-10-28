@@ -12,6 +12,7 @@ use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Resources\Pages\PageRegistration;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -24,9 +25,9 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedUsers;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUsers;
 
-    protected static string | UnitEnum | null $navigationGroup = 'System & Verwaltung';
+    protected static string|UnitEnum|null $navigationGroup = 'System & Verwaltung';
 
     protected static ?string $navigationLabel = 'Benutzer & Lehrkräfte';
 
@@ -112,7 +113,7 @@ class UserResource extends Resource
     /**
      * Seiten dieser Ressource.
      *
-     * @return array<string, \Filament\Resources\Pages\PageRegistration>
+     * @return array<string, PageRegistration>
      */
     public static function getPages(): array
     {
@@ -121,4 +122,3 @@ class UserResource extends Resource
         ];
     }
 }
-

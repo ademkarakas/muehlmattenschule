@@ -19,6 +19,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Resources\Pages\PageRegistration;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Set;
@@ -35,9 +36,9 @@ class AlbumResource extends Resource
 {
     protected static ?string $model = Album::class;
 
-    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedPhoto;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedPhoto;
 
-    protected static string | UnitEnum | null $navigationGroup = 'Aktuelles & Schulleben';
+    protected static string|UnitEnum|null $navigationGroup = 'Aktuelles & Schulleben';
 
     protected static ?string $navigationLabel = 'Fotoalben';
 
@@ -162,7 +163,7 @@ class AlbumResource extends Resource
     /**
      * Seiten dieser Ressource.
      *
-     * @return array<string, \Filament\Resources\Pages\PageRegistration>
+     * @return array<string, PageRegistration>
      */
     public static function getPages(): array
     {
@@ -173,4 +174,3 @@ class AlbumResource extends Resource
         ];
     }
 }
-

@@ -34,4 +34,3 @@ class SchoolOverviewStatsWidget extends StatsOverviewWidget
         ];
     }
 }
-

@@ -16,6 +16,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Resources\Pages\PageRegistration;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -28,9 +29,9 @@ class PersonResource extends Resource
 {
     protected static ?string $model = Person::class;
 
-    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedUserGroup;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUserGroup;
 
-    protected static string | UnitEnum | null $navigationGroup = 'Schulstruktur & Seiten';
+    protected static string|UnitEnum|null $navigationGroup = 'Schulstruktur & Seiten';
 
     protected static ?string $navigationLabel = 'Kollegium & Team';
 
@@ -125,7 +126,7 @@ class PersonResource extends Resource
     /**
      * Seiten dieser Ressource.
      *
-     * @return array<string, \Filament\Resources\Pages\PageRegistration>
+     * @return array<string, PageRegistration>
      */
     public static function getPages(): array
     {
@@ -134,4 +135,3 @@ class PersonResource extends Resource
         ];
     }
 }
-

@@ -36,4 +36,3 @@ enum PublishStatus: string
         ];
     }
 }
-

@@ -65,4 +65,3 @@ class AlbumPolicy
         return $user->isOfficeStaff();
     }
 }
-

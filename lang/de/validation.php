@@ -51,4 +51,3 @@ return [
         'consent_confirmed' => 'Einwilligungserklärung',
     ],
 ];
-

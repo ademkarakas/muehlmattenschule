@@ -69,3 +69,4 @@ export default function EventsIndexPage({ events }: EventsIndexProps): ReactElem
         </SiteLayout>
     );
 }
+

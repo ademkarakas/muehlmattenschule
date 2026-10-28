@@ -24,4 +24,3 @@ class CreateAlbum extends CreateRecord
         return $data;
     }
 }
-

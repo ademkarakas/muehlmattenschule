@@ -75,3 +75,4 @@ export default function AlbumsIndexPage({ albums }: AlbumsIndexProps): ReactElem
         </SiteLayout>
     );
 }
+

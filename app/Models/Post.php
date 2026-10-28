@@ -118,4 +118,3 @@ class Post extends Model implements HasMedia
             ->nonQueued();
     }
 }
-

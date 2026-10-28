@@ -60,4 +60,3 @@ class Announcement extends Model
             });
     }
 }
-

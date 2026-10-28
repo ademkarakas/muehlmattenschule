@@ -13,6 +13,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\TextInput;
+use Filament\Resources\Pages\PageRegistration;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
@@ -27,9 +28,9 @@ class CategoryResource extends Resource
 {
     protected static ?string $model = Category::class;
 
-    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedTag;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTag;
 
-    protected static string | UnitEnum | null $navigationGroup = 'Aktuelles & Schulleben';
+    protected static string|UnitEnum|null $navigationGroup = 'Aktuelles & Schulleben';
 
     protected static ?string $navigationLabel = 'Kategorien';
 
@@ -99,7 +100,7 @@ class CategoryResource extends Resource
     /**
      * Seiten dieser Ressource.
      *
-     * @return array<string, \Filament\Resources\Pages\PageRegistration>
+     * @return array<string, PageRegistration>
      */
     public static function getPages(): array
     {
@@ -108,4 +109,3 @@ class CategoryResource extends Resource
         ];
     }
 }
-

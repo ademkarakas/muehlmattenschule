@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Resources\AlbumResource\Pages;
 
 use App\Filament\Resources\AlbumResource;
+use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 
@@ -15,7 +16,7 @@ class EditAlbum extends EditRecord
     /**
      * Kopfzeilen-Aktionen.
      *
-     * @return array<\Filament\Actions\Action>
+     * @return array<Action>
      */
     protected function getHeaderActions(): array
     {
@@ -24,4 +25,3 @@ class EditAlbum extends EditRecord
         ];
     }
 }
-

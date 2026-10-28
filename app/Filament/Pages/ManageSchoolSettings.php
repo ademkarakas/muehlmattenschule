@@ -24,9 +24,9 @@ use UnitEnum;
  */
 class ManageSchoolSettings extends Page
 {
-    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedCog6Tooth;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCog6Tooth;
 
-    protected static string | UnitEnum | null $navigationGroup = 'System & Verwaltung';
+    protected static string|UnitEnum|null $navigationGroup = 'System & Verwaltung';
 
     protected static ?string $navigationLabel = 'Schuleinstellungen';
 
@@ -161,4 +161,3 @@ class ManageSchoolSettings extends Page
             ->send();
     }
 }
-

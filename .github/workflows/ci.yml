@@ -1,0 +1,52 @@
+name: CI – Tests, Types & Code Style
+
+on:
+    push:
+        branches: [main, 'feature/**']
+    pull_request:
+        branches: [main]
+
+jobs:
+    quality:
+        name: PHP 8.3 & React TypeScript Checks
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Set up PHP 8.3
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: '8.3'
+                  extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, gd, intl, exif
+                  coverage: none
+
+            - name: Install Composer dependencies
+              run: composer install --no-interaction --prefer-dist
+
+            - name: Set up Node.js 22
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '22'
+                  cache: 'npm'
+
+            - name: Install npm dependencies
+              run: npm ci
+
+            - name: TypeScript strict check
+              run: npx tsc --noEmit
+
+            - name: Build production frontend
+              run: npm run build
+
+            - name: Check PHP code style (Laravel Pint)
+              run: vendor/bin/pint --test
+
+            - name: Prepare application environment
+              run: |
+                  cp .env.example .env
+                  php artisan key:generate
+
+            - name: Run automated test suite
+              run: php artisan test

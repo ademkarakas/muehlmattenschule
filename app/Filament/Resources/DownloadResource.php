@@ -16,6 +16,7 @@ use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Resources\Pages\PageRegistration;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -28,9 +29,9 @@ class DownloadResource extends Resource
 {
     protected static ?string $model = Download::class;
 
-    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedArrowDownTray;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedArrowDownTray;
 
-    protected static string | UnitEnum | null $navigationGroup = 'Schulstruktur & Seiten';
+    protected static string|UnitEnum|null $navigationGroup = 'Schulstruktur & Seiten';
 
     protected static ?string $navigationLabel = 'Downloads & Elternbriefe';
 
@@ -123,7 +124,7 @@ class DownloadResource extends Resource
     /**
      * Seiten dieser Ressource.
      *
-     * @return array<string, \Filament\Resources\Pages\PageRegistration>
+     * @return array<string, PageRegistration>
      */
     public static function getPages(): array
     {
@@ -132,4 +133,3 @@ class DownloadResource extends Resource
         ];
     }
 }
-

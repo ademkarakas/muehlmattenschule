@@ -115,4 +115,3 @@ class AdminAccessAndPoliciesTest extends TestCase
         $this->actingAs($schulleitung)->get('/admin/manage-school-settings')->assertOk();
     }
 }
-

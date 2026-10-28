@@ -87,3 +87,4 @@ export default function PostShowPage({ post }: PostShowProps): ReactElement {
         </SiteLayout>
     );
 }
+

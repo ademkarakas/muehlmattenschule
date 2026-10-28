@@ -37,4 +37,3 @@ class CategoryPolicy
         return $user->isOfficeStaff();
     }
 }
-

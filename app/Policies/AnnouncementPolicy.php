@@ -37,4 +37,3 @@ class AnnouncementPolicy
         return $user->isOfficeStaff();
     }
 }
-

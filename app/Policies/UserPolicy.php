@@ -55,4 +55,3 @@ class UserPolicy
         return $user->role === UserRole::Schulleitung && $model->role !== UserRole::Admin;
     }
 }
-

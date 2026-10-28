@@ -13,7 +13,7 @@ class UpcomingEventsWidget extends TableWidget
 {
     protected static ?int $sort = 2;
 
-    protected int | string | array $columnSpan = 'full';
+    protected int|string|array $columnSpan = 'full';
 
     /**
      * Zeigt die nächsten anstehenden Schultermine auf dem Dashboard.
@@ -36,4 +36,3 @@ class UpcomingEventsWidget extends TableWidget
             ->paginated(false);
     }
 }
-

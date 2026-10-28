@@ -9,4 +9,3 @@ return [
     'token' => 'Dieses Token zum Zurücksetzen des Passworts ist ungültig.',
     'user' => 'Es wurde kein Benutzer mit dieser E-Mail-Adresse gefunden.',
 ];
-

@@ -16,6 +16,13 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
 
     return (
         <div className="min-h-screen flex flex-col bg-surface text-ink">
+            <a
+                href="#hauptinhalt"
+                className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-bold focus:text-brand-900 focus:shadow-lg"
+            >
+                Zum Hauptinhalt springen
+            </a>
+
             {/* Oberer Kopfbereich (dunkles Türkis) */}
             <header className="bg-brand-800 text-white">
                 <div className="mx-auto max-w-6xl px-4 py-3.5 flex flex-wrap items-center justify-between gap-4">
@@ -229,7 +236,9 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
             )}
 
             {/* Seiteninhalt */}
-            <main className="flex-1">{children}</main>
+            <main id="hauptinhalt" className="flex-1">
+                {children}
+            </main>
 
             {/* Fußbereich */}
             <footer className="mt-16 bg-brand-900 text-brand-100">
@@ -286,3 +295,4 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
         </div>
     );
 }
+

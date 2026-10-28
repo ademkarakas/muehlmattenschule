@@ -54,4 +54,3 @@ class Event extends Model
             ->orderBy('starts_at');
     }
 }
-

@@ -91,3 +91,4 @@ export interface PersonItem {
     groupLabel: string;
     avatarUrl: string | null;
 }
+

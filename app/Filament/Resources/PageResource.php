@@ -19,6 +19,7 @@ use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Resources\Pages\PageRegistration;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Set;
@@ -33,9 +34,9 @@ class PageResource extends Resource
 {
     protected static ?string $model = Page::class;
 
-    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedDocumentText;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentText;
 
-    protected static string | UnitEnum | null $navigationGroup = 'Schulstruktur & Seiten';
+    protected static string|UnitEnum|null $navigationGroup = 'Schulstruktur & Seiten';
 
     protected static ?string $navigationLabel = 'Schulseiten';
 
@@ -169,7 +170,7 @@ class PageResource extends Resource
     /**
      * Seiten dieser Ressource.
      *
-     * @return array<string, \Filament\Resources\Pages\PageRegistration>
+     * @return array<string, PageRegistration>
      */
     public static function getPages(): array
     {
@@ -180,4 +181,3 @@ class PageResource extends Resource
         ];
     }
 }
-

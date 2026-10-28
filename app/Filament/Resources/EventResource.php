@@ -15,6 +15,7 @@ use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Resources\Pages\PageRegistration;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -27,9 +28,9 @@ class EventResource extends Resource
 {
     protected static ?string $model = Event::class;
 
-    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedCalendarDays;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCalendarDays;
 
-    protected static string | UnitEnum | null $navigationGroup = 'Aktuelles & Schulleben';
+    protected static string|UnitEnum|null $navigationGroup = 'Aktuelles & Schulleben';
 
     protected static ?string $navigationLabel = 'Termine';
 
@@ -116,7 +117,7 @@ class EventResource extends Resource
     /**
      * Seiten dieser Ressource.
      *
-     * @return array<string, \Filament\Resources\Pages\PageRegistration>
+     * @return array<string, PageRegistration>
      */
     public static function getPages(): array
     {
@@ -125,4 +126,3 @@ class EventResource extends Resource
         ];
     }
 }
-

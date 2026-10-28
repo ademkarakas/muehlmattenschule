@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Resources\PostResource\Pages;
 
 use App\Filament\Resources\PostResource;
+use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 
@@ -15,7 +16,7 @@ class ListPosts extends ListRecords
     /**
      * Kopfzeilen-Aktionen.
      *
-     * @return array<\Filament\Actions\Action>
+     * @return array<Action>
      */
     protected function getHeaderActions(): array
     {
@@ -24,4 +25,3 @@ class ListPosts extends ListRecords
         ];
     }
 }
-

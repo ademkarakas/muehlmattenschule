@@ -19,6 +19,7 @@ use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Resources\Pages\PageRegistration;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Set;
@@ -35,9 +36,9 @@ class PostResource extends Resource
 {
     protected static ?string $model = Post::class;
 
-    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedNewspaper;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedNewspaper;
 
-    protected static string | UnitEnum | null $navigationGroup = 'Aktuelles & Schulleben';
+    protected static string|UnitEnum|null $navigationGroup = 'Aktuelles & Schulleben';
 
     protected static ?string $navigationLabel = 'Beiträge & Aktivitäten';
 
@@ -172,7 +173,7 @@ class PostResource extends Resource
     /**
      * Seiten dieser Ressource.
      *
-     * @return array<string, \Filament\Resources\Pages\PageRegistration>
+     * @return array<string, PageRegistration>
      */
     public static function getPages(): array
     {
@@ -183,4 +184,3 @@ class PostResource extends Resource
         ];
     }
 }
-

@@ -29,4 +29,3 @@ class AnnouncementFactory extends Factory
         ];
     }
 }
-

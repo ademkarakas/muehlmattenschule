@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Resources\PageResource\Pages;
 
 use App\Filament\Resources\PageResource;
+use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 
@@ -15,7 +16,7 @@ class ListPages extends ListRecords
     /**
      * Kopfzeilen-Aktionen.
      *
-     * @return array<\Filament\Actions\Action>
+     * @return array<Action>
      */
     protected function getHeaderActions(): array
     {
@@ -24,4 +25,3 @@ class ListPages extends ListRecords
         ];
     }
 }
-

@@ -73,5 +73,8 @@ class ExampleTest extends TestCase
         $this->get('/kontakt')->assertOk();
         $this->get('/impressum')->assertOk();
         $this->get('/datenschutz')->assertOk();
+        $this->get('/sitemap.xml')
+            ->assertOk()
+            ->assertHeader('Content-Type', 'application/xml; charset=UTF-8');
     }
 }
