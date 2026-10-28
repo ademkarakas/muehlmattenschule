@@ -63,8 +63,9 @@ docs/                     ROADMAP, HANDOFF, ARCHITECTURE
 | Rol | Yetki |
 |---|---|
 | `admin` | Her şey |
-| `schulleitung` | Tüm içerik + sekretariat kullanıcılarını yönetme |
-| `sekretariat` | Beiträge, Termine, Fotoalben, Ankündigungen, Downloads |
+| `schulleitung` | Tüm içerik + sekretariat ve lehrkraft kullanıcılarını yönetme + okul ayarları + sabit sayfalar |
+| `sekretariat` | Beiträge, Termine, Fotoalben, Ankündigungen, Downloads, Kategorien, Kollegium |
+| `lehrkraft` | Kendi sınıfı (`class_name`) veya okul için Beiträge ve Fotoalben oluşturma/düzenleme/silme (yalnızca kendi oluşturduklarını değiştirebilir) + Termine ekleme |
 
 ## 6. Kodlama kuralları
 - PHP: PSR-12 / Laravel Pint, strict tipler, `declare(strict_types=1);` yeni dosyalarda.

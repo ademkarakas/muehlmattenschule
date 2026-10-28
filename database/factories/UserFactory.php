@@ -66,4 +66,15 @@ class UserFactory extends Factory
             'role' => UserRole::Schulleitung,
         ]);
     }
+
+    /**
+     * Erstellt einen Lehrkraft-Benutzer für eine bestimmte Klasse.
+     */
+    public function lehrkraft(string $className = 'Klasse 2a'): static
+    {
+        return $this->state(fn (array $attributes): array => [
+            'role' => UserRole::Lehrkraft,
+            'class_name' => $className,
+        ]);
+    }
 }

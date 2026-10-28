@@ -44,3 +44,4 @@ class Download extends Model implements HasMedia
             ->useDisk('public');
     }
 }
+

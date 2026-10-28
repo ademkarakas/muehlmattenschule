@@ -12,6 +12,7 @@ enum UserRole: string
     case Admin = 'admin';
     case Schulleitung = 'schulleitung';
     case Sekretariat = 'sekretariat';
+    case Lehrkraft = 'lehrkraft';
 
     /**
      * Liefert die deutsche Bezeichnung der Rolle.
@@ -22,6 +23,7 @@ enum UserRole: string
             self::Admin => 'Administrator',
             self::Schulleitung => 'Schulleitung',
             self::Sekretariat => 'Sekretariat',
+            self::Lehrkraft => 'Lehrkraft (Klassenaktivitäten)',
         };
     }
 
@@ -36,6 +38,7 @@ enum UserRole: string
             self::Admin->value => self::Admin->label(),
             self::Schulleitung->value => self::Schulleitung->label(),
             self::Sekretariat->value => self::Sekretariat->label(),
+            self::Lehrkraft->value => self::Lehrkraft->label(),
         ];
     }
 }

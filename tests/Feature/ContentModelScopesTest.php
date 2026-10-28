@@ -125,3 +125,4 @@ class ContentModelScopesTest extends TestCase
         $this->assertFalse($sekretariat->isAdminOrLeadership());
     }
 }
+

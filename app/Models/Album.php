@@ -19,6 +19,8 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
     'title',
     'slug',
     'event_date',
+    'class_name',
+    'author_id',
     'description',
     'consent_confirmed',
     'status',
@@ -41,6 +43,16 @@ class Album extends Model implements HasMedia
             'status' => PublishStatus::class,
             'published_at' => 'datetime',
         ];
+    }
+
+    /**
+     * Verfasser (z. B. Lehrkraft oder Sekretariat), der das Album erstellt hat.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User, $this>
+     */
+    public function author(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(User::class, 'author_id');
     }
 
     /**
@@ -95,3 +107,4 @@ class Album extends Model implements HasMedia
             ->nonQueued();
     }
 }
+

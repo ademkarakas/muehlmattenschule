@@ -61,3 +61,4 @@ class Person extends Model implements HasMedia
             ->nonQueued();
     }
 }
+

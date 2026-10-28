@@ -34,3 +34,4 @@ class AlbumFactory extends Factory
         ];
     }
 }
+

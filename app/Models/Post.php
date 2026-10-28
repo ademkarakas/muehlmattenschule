@@ -21,6 +21,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
     'excerpt',
     'body',
     'category_id',
+    'class_name',
     'album_id',
     'author_id',
     'is_featured',
@@ -117,3 +118,4 @@ class Post extends Model implements HasMedia
             ->nonQueued();
     }
 }
+

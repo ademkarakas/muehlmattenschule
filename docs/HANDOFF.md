@@ -27,4 +27,5 @@
 |---|---|---|---|
 | 2026-10-28 | Antigravity | Faz 0 & Faz 1 tamamlandı: PHP 8.3 + Composer kurulumu, Laravel 13 + Filament + Inertia + React 19 + TS + Tailwind 4 (turkuaz tema), Almanca dil dosyaları, geçici logo, dokümantasyon, testler ve GitHub (`ademkarakas/muehlmattenschule`) push | Faz 2 |
 | 2026-10-28 | Antigravity | Faz 2 tamamlandı: Enums (`UserRole`, `PublishStatus`, `AnnouncementLevel`, `PersonGroup`), tüm migration'lar + Spatie Media Library, modeller, DSGVO `consent_confirmed` zorunluluğu, Factory + Almanca `DatabaseSeeder` ve Feature testleri | Faz 3 (Filament `/admin` paneli ve tüm Resource'lar) |
+| 2026-10-28 | Antigravity | Faz 3 tamamlandı: Filament 5 `/admin` paneli (Teal/turkuaz tema, Almanca navigasyon), `Lehrkraft` (öğretmen) rolü ve sınıf bazlı aktivite/albüm paylaşımı (`class_name`), 9 Filament Resource (`Post`, `Album`, `Event`, `Announcement`, `Page`, `Person`, `Download`, `Category`, `User`), `ManageSchoolSettings` sayfası, Dashboard widget'ları, tüm Policy sınıfları ve 11 Feature testi | Faz 4 (EduPage tarzı turkuaz React/Inertia Frontend sayfaları ve Controller'lar) |
 

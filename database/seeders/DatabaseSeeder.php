@@ -57,6 +57,17 @@ class DatabaseSeeder extends Seeder
             ],
         );
 
+        User::query()->updateOrCreate(
+            ['email' => 'klasse2a@muehlmattenschule.de'],
+            [
+                'name' => 'Klassenleitung 2a',
+                'role' => UserRole::Lehrkraft,
+                'class_name' => 'Klasse 2a',
+                'password' => Hash::make('Lehrkraft!2026'),
+                'email_verified_at' => now(),
+            ],
+        );
+
         Setting::setValue('school', [
             'name' => 'Mühlmattenschule',
             'subtitle' => 'Grundschule Freiburg-Hochdorf',

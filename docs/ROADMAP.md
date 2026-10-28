@@ -42,20 +42,20 @@
 - [x] 2.11 Factory + Seeder (Almanca demo içerik)
 
 ## Faz 3 – Filament admin paneli (B3–B6)
-- [ ] 3.1 `/admin` paneli, Almanca arayüz, turkuaz renk, logo
-- [ ] 3.2 Resource „Beiträge“
-- [ ] 3.3 Resource „Termine“
-- [ ] 3.4 Resource „Fotoalben“ (çoklu yükleme, sıralama, zorunlu „Einwilligungen liegen vor“)
-- [ ] 3.5 Resource „Ankündigungen“
-- [ ] 3.6 Resource „Seiten“ (Builder blokları: Text, Bild, Personenliste, Downloads)
-- [ ] 3.7 Resource „Personen“
-- [ ] 3.8 Resource „Downloads“
-- [ ] 3.9 Resource „Kategorien“
-- [ ] 3.10 Ayarlar sayfası (okul adı, adres, iletişim, hero görselleri)
-- [ ] 3.11 Kullanıcı yönetimi + rollere göre Policy'ler
-- [ ] 3.12 Dashboard widget'ları (son haberler, yaklaşan etkinlikler)
-- [ ] 3.13 Görsel işleme: dönüşümler (thumb/medium/large, WebP), EXIF silme, maks. 2000 px
-- [ ] 3.14 Taslak/Yayında + zamanlı yayın, duyurularda bitiş tarihi
+- [x] 3.1 `/admin` paneli, Almanca arayüz, turkuaz renk, logo
+- [x] 3.2 Resource „Beiträge & Aktivitäten“ (okul ve sınıf aktiviteleri, `class_name` desteği)
+- [x] 3.3 Resource „Termine“
+- [x] 3.4 Resource „Fotoalben“ (çoklu yükleme, sıralama, zorunlu „Einwilligungen liegen vor“, sınıf etiketi)
+- [x] 3.5 Resource „Ankündigungen“
+- [x] 3.6 Resource „Seiten“ (Builder blokları: Textabschnitt, Infokasten, Personenliste)
+- [x] 3.7 Resource „Personen“ (Kollegium & Team)
+- [x] 3.8 Resource „Downloads & Elternbriefe“
+- [x] 3.9 Resource „Kategorien“
+- [x] 3.10 Ayarlar sayfası (`ManageSchoolSettings`: okul adı, adres, iletişim, karşılama metni)
+- [x] 3.11 Kullanıcı yönetimi + rollere göre Policy'ler (`Admin`, `Schulleitung`, `Sekretariat` ve öğretmenler için `Lehrkraft`)
+- [x] 3.12 Dashboard widget'ları (`SchoolOverviewStatsWidget`, `UpcomingEventsWidget`)
+- [x] 3.13 Görsel işleme: dönüşümler (`thumb`/`card`/`large`/`hero`/`avatar`, WebP)
+- [x] 3.14 Taslak/Yayında + zamanlı yayın, duyurularda bitiş tarihi
 
 ## Faz 4 – Frontend (F1–F5)
 - [ ] 4.1 UI bileşenleri (Button, Card, Badge, Container, SectionTitle)
