@@ -1,3 +1,4 @@
+import { PhotoLightbox } from '@/components/photo-lightbox';
 import { SiteLayout } from '@/layouts/site-layout';
 import { Head, Link } from '@inertiajs/react';
 import { useState, type ReactElement } from 'react';
@@ -22,11 +23,16 @@ export interface AlbumShowProps {
 }
 
 /**
- * Einzelansicht eines Fotoalbums mit barrierefreier Lightbox-Vergrößerung.
+ * Einzelansicht eines Fotoalbums mit moderner Vollbild-Lightbox
+ * (Tastatur-Pfeiltasten sowie Links-/Rechts-Pfeile am Bildrand).
  */
 export default function AlbumShowPage({ album }: AlbumShowProps): ReactElement {
     const [activeIndex, setActiveIndex] = useState<number | null>(null);
-    const activePhoto = activeIndex !== null ? album.photos[activeIndex] : null;
+
+    const lightboxImages = album.photos.map((photo, index) => ({
+        url: photo.largeUrl,
+        alt: `${photo.alt} (${index + 1})`,
+    }));
 
     return (
         <SiteLayout>
@@ -61,7 +67,7 @@ export default function AlbumShowPage({ album }: AlbumShowProps): ReactElement {
                                 key={photo.id}
                                 type="button"
                                 onClick={() => setActiveIndex(index)}
-                                className="group overflow-hidden rounded-2xl border border-slate-200 bg-white aspect-[4/3] focus:outline-2 focus:outline-brand-600"
+                                className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white aspect-[4/3] shadow-2xs transition hover:-translate-y-0.5 hover:border-brand-400 hover:shadow-md focus:outline-2 focus:outline-brand-600 cursor-pointer"
                             >
                                 <img
                                     src={photo.thumbUrl}
@@ -69,65 +75,19 @@ export default function AlbumShowPage({ album }: AlbumShowProps): ReactElement {
                                     loading="lazy"
                                     className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
                                 />
+                                <div className="pointer-events-none absolute inset-0 bg-slate-950/0 transition group-hover:bg-slate-950/15" />
                             </button>
                         ))}
                     </div>
                 )}
 
-                {activePhoto && activeIndex !== null && (
-                    <div
-                        role="dialog"
-                        aria-modal="true"
-                        aria-label={album.title}
-                        className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 p-4"
-                        onClick={() => setActiveIndex(null)}
-                    >
-                        <div
-                            className="relative max-w-5xl w-full flex flex-col items-center"
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            <img
-                                src={activePhoto.largeUrl}
-                                alt={activePhoto.alt}
-                                className="max-h-[80vh] w-auto rounded-xl object-contain"
-                            />
-                            <div className="mt-4 flex items-center gap-4 text-white text-sm">
-                                <button
-                                    type="button"
-                                    disabled={activeIndex === 0}
-                                    onClick={() => setActiveIndex((i) => (i !== null && i > 0 ? i - 1 : i))}
-                                    className="rounded-lg bg-white/15 px-3 py-1.5 disabled:opacity-40"
-                                >
-                                    ← Vorheriges Bild
-                                </button>
-                                <span>
-                                    {activeIndex + 1} / {album.photos.length}
-                                </span>
-                                <button
-                                    type="button"
-                                    disabled={activeIndex === album.photos.length - 1}
-                                    onClick={() =>
-                                        setActiveIndex((i) =>
-                                            i !== null && i < album.photos.length - 1 ? i + 1 : i,
-                                        )
-                                    }
-                                    className="rounded-lg bg-white/15 px-3 py-1.5 disabled:opacity-40"
-                                >
-                                    Nächstes Bild →
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => setActiveIndex(null)}
-                                    className="rounded-lg bg-brand-600 px-3 py-1.5 font-semibold"
-                                >
-                                    Schließen ✕
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                )}
+                <PhotoLightbox
+                    images={lightboxImages}
+                    activeIndex={activeIndex}
+                    onClose={() => setActiveIndex(null)}
+                    onChangeIndex={setActiveIndex}
+                />
             </div>
         </SiteLayout>
     );
 }
-

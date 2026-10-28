@@ -2,7 +2,7 @@ import { PostCard } from '@/components/post-card';
 import { SiteLayout } from '@/layouts/site-layout';
 import type { AlbumCardItem, PostCardItem, SharedInertiaProps, UpcomingEventItem } from '@/types/school';
 import { Head, Link, usePage } from '@inertiajs/react';
-import { useState, type ReactElement } from 'react';
+import { useEffect, useState, type ReactElement } from 'react';
 
 export interface HomePageProps {
     posts: PostCardItem[];
@@ -65,6 +65,21 @@ export default function HomePage({ posts, upcomingEvents, albums }: HomePageProp
     const slides = posts.slice(0, 3);
     const [activeSlide, setActiveSlide] = useState(0);
     const currentSlide = slides[activeSlide] ?? null;
+
+    useEffect(() => {
+        if (slides.length <= 1) {
+            return;
+        }
+        const handleKeyDown = (event: KeyboardEvent): void => {
+            if (event.key === 'ArrowLeft') {
+                setActiveSlide((prev) => (prev - 1 + slides.length) % slides.length);
+            } else if (event.key === 'ArrowRight') {
+                setActiveSlide((prev) => (prev + 1) % slides.length);
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [slides.length]);
 
     return (
         <SiteLayout>
@@ -141,12 +156,62 @@ export default function HomePage({ posts, upcomingEvents, albums }: HomePageProp
                         {currentSlide ? (
                             <div className="flex w-full flex-col justify-between overflow-hidden rounded-2xl bg-white/12 backdrop-blur-md border border-white/25 shadow-xl">
                                 {currentSlide.coverUrl && (
-                                    <div className="aspect-[16/9] w-full overflow-hidden bg-brand-950/40">
+                                    <div className="relative aspect-[16/9] w-full overflow-hidden bg-brand-950/40">
                                         <img
                                             src={currentSlide.coverUrl}
                                             alt={currentSlide.title}
                                             className="h-full w-full object-cover"
                                         />
+                                        {slides.length > 1 && (
+                                            <>
+                                                <button
+                                                    type="button"
+                                                    onClick={() =>
+                                                        setActiveSlide(
+                                                            (prev) => (prev - 1 + slides.length) % slides.length,
+                                                        )
+                                                    }
+                                                    aria-label="Vorheriger Beitrag"
+                                                    className="absolute left-3 top-1/2 -translate-y-1/2 flex h-9 w-9 items-center justify-center rounded-full border border-white/30 bg-slate-900/55 text-white backdrop-blur-md transition hover:scale-110 hover:bg-brand-600 cursor-pointer"
+                                                >
+                                                    <svg
+                                                        className="h-5 w-5 -ml-0.5"
+                                                        viewBox="0 0 24 24"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        strokeWidth="2.4"
+                                                    >
+                                                        <path
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            d="M15 19l-7-7 7-7"
+                                                        />
+                                                    </svg>
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={() =>
+                                                        setActiveSlide((prev) => (prev + 1) % slides.length)
+                                                    }
+                                                    aria-label="Nächster Beitrag"
+                                                    className="absolute right-3 top-1/2 -translate-y-1/2 flex h-9 w-9 items-center justify-center rounded-full border border-white/30 bg-slate-900/55 text-white backdrop-blur-md transition hover:scale-110 hover:bg-brand-600 cursor-pointer"
+                                                >
+                                                    <svg
+                                                        className="h-5 w-5 ml-0.5"
+                                                        viewBox="0 0 24 24"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        strokeWidth="2.4"
+                                                    >
+                                                        <path
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            d="M9 5l7 7-7 7"
+                                                        />
+                                                    </svg>
+                                                </button>
+                                            </>
+                                        )}
                                     </div>
                                 )}
                                 <div className="p-6 flex-1 flex flex-col justify-between">

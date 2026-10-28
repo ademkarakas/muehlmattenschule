@@ -1,7 +1,8 @@
+import { PhotoLightbox, type LightboxImageItem } from '@/components/photo-lightbox';
 import { SiteLayout } from '@/layouts/site-layout';
 import type { PersonItem } from '@/types/school';
 import { Head } from '@inertiajs/react';
-import type { ReactElement } from 'react';
+import { useState, type ReactElement } from 'react';
 
 export interface PageBlock {
     type: 'rich_text' | 'info_box' | 'people_list' | 'image_banner' | 'image_gallery';
@@ -37,6 +38,39 @@ export interface PageShowProps {
  * Stellt eine über den Admin-Baukasten gepflegte Schulseite dar (inkl. Fotos, Galerien und Kollegiums-Karten).
  */
 export default function PageShow({ page, people }: PageShowProps): ReactElement {
+    const [activeLightboxIndex, setActiveLightboxIndex] = useState<number | null>(null);
+
+    const allPageImages: LightboxImageItem[] = [];
+    for (const block of page.content) {
+        if (block.type === 'image_banner' && block.data.image_url) {
+            allPageImages.push({
+                url: block.data.image_url,
+                alt: block.data.caption || page.title,
+            });
+        } else if (block.type === 'image_gallery') {
+            const galleryItems = [
+                { url: block.data.image_1_url, caption: block.data.image_1_caption },
+                { url: block.data.image_2_url, caption: block.data.image_2_caption },
+                { url: block.data.image_3_url, caption: block.data.image_3_caption },
+            ];
+            for (const item of galleryItems) {
+                if (item.url) {
+                    allPageImages.push({
+                        url: item.url,
+                        alt: item.caption || page.title,
+                    });
+                }
+            }
+        }
+    }
+
+    const openImageInLightbox = (url: string): void => {
+        const idx = allPageImages.findIndex((img) => img.url === url);
+        if (idx !== -1) {
+            setActiveLightboxIndex(idx);
+        }
+    };
+
     return (
         <SiteLayout>
             <Head title={page.title} />
@@ -53,18 +87,23 @@ export default function PageShow({ page, people }: PageShowProps): ReactElement 
                 <div className="space-y-8">
                     {page.content.map((block, index) => {
                         if (block.type === 'image_banner' && block.data.image_url) {
+                            const bannerUrl = block.data.image_url;
                             return (
                                 <figure
                                     key={index}
                                     className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm"
                                 >
-                                    <div className="max-h-[460px] w-full overflow-hidden bg-slate-100">
+                                    <button
+                                        type="button"
+                                        onClick={() => openImageInLightbox(bannerUrl)}
+                                        className="group block max-h-[460px] w-full overflow-hidden bg-slate-100 cursor-pointer"
+                                    >
                                         <img
-                                            src={block.data.image_url}
+                                            src={bannerUrl}
                                             alt={block.data.caption || page.title}
-                                            className="h-full w-full object-cover"
+                                            className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.02]"
                                         />
-                                    </div>
+                                    </button>
                                     {block.data.caption && (
                                         <figcaption className="border-t border-slate-100 bg-slate-50/80 px-5 py-3 text-xs font-medium text-slate-600">
                                             {block.data.caption}
@@ -94,16 +133,20 @@ export default function PageShow({ page, people }: PageShowProps): ReactElement 
                                         {items.map((item, idx) => (
                                             <figure
                                                 key={idx}
-                                                className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xs"
+                                                className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xs transition hover:-translate-y-0.5 hover:border-brand-300 hover:shadow-md"
                                             >
-                                                <div className="aspect-[4/3] w-full overflow-hidden bg-slate-100">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => openImageInLightbox(item.url)}
+                                                    className="group block aspect-[4/3] w-full overflow-hidden bg-slate-100 cursor-pointer"
+                                                >
                                                     <img
                                                         src={item.url}
                                                         alt={item.caption || `${page.title} Bild ${idx + 1}`}
                                                         loading="lazy"
-                                                        className="h-full w-full object-cover transition duration-300 hover:scale-105"
+                                                        className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
                                                     />
-                                                </div>
+                                                </button>
                                                 {item.caption && (
                                                     <figcaption className="p-3.5 text-xs font-medium text-slate-600">
                                                         {item.caption}
@@ -258,6 +301,13 @@ export default function PageShow({ page, people }: PageShowProps): ReactElement 
                         return null;
                     })}
                 </div>
+
+                <PhotoLightbox
+                    images={allPageImages}
+                    activeIndex={activeLightboxIndex}
+                    onClose={() => setActiveLightboxIndex(null)}
+                    onChangeIndex={setActiveLightboxIndex}
+                />
             </div>
         </SiteLayout>
     );
