@@ -41,7 +41,7 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogoHeight('2.25rem')
             ->favicon(asset('images/logo.svg'))
             ->colors([
-                'primary' => Color::Teal,
+                'primary' => Color::Cyan,
                 'warning' => Color::Amber,
             ])
             ->navigationGroups([

@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#0f766e">
+        <meta name="theme-color" content="#0096c7">
         <link rel="icon" href="/images/logo.svg" type="image/svg+xml">
 
         @viteReactRefresh
