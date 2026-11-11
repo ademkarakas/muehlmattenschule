@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\PostResource\Pages;
 
+use App\Filament\Concerns\HasCenteredStickyFormActions;
 use App\Filament\Resources\PostResource;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreatePost extends CreateRecord
 {
+    use HasCenteredStickyFormActions;
+
     protected static string $resource = PostResource::class;
 
     /**

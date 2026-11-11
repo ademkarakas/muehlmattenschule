@@ -1,0 +1,258 @@
+import { SearchIcon } from '@/components/search-icon';
+import { SiteLayout } from '@/layouts/site-layout';
+import { Link, router } from '@inertiajs/react';
+import { useState, type FormEvent, type ReactElement } from 'react';
+
+interface SearchPostResult {
+    id: number;
+    title: string;
+    slug: string;
+    excerpt: string;
+    className: string | null;
+    publishedAt: string | null;
+    categoryName: string | null;
+    href: string;
+}
+
+interface SearchPageResult {
+    id: number;
+    title: string;
+    summary: string | null;
+    section: string;
+    href: string;
+}
+
+interface SearchEventResult {
+    id: number;
+    title: string;
+    dateFormatted: string;
+    location: string | null;
+    className: string | null;
+    href: string;
+}
+
+interface SearchDownloadResult {
+    id: number;
+    title: string;
+    category: string | null;
+    description: string | null;
+    fileUrl: string;
+}
+
+interface SearchPersonResult {
+    id: number;
+    name: string;
+    roleTitle: string;
+    className: string | null;
+    email: string | null;
+}
+
+export interface SearchPageProps {
+    query: string;
+    totalCount: number;
+    results: {
+        posts: SearchPostResult[];
+        pages: SearchPageResult[];
+        events: SearchEventResult[];
+        downloads: SearchDownloadResult[];
+        people: SearchPersonResult[];
+    };
+}
+
+/**
+ * Übergreifende Suchseite (/suche) für Beiträge, Schulseiten, Termine, Downloads und Kollegium.
+ */
+export default function SearchIndex({ query, totalCount, results }: SearchPageProps): ReactElement {
+    const [searchInput, setSearchInput] = useState(query);
+
+    const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
+        event.preventDefault();
+        router.get('/suche', { q: searchInput.trim() }, { preserveState: true });
+    };
+
+    return (
+        <SiteLayout>
+            <div className="mx-auto max-w-5xl px-4 sm:px-6 py-8 sm:py-12">
+                <div className="rounded-3xl bg-gradient-to-br from-brand-700 via-brand-600 to-brand-800 p-6 sm:p-10 text-white shadow-md">
+                    <span className="inline-flex items-center rounded-full bg-white/20 px-3 py-1 text-xs font-bold uppercase tracking-wider">
+                        Suchfunktion
+                    </span>
+                    <h1 className="mt-2 text-2xl sm:text-4xl font-extrabold tracking-tight">
+                        Schulportal durchsuchen
+                    </h1>
+                    <p className="mt-2 text-sm sm:text-base text-brand-50 max-w-2xl">
+                        Finden Sie schnell Berichte aus den Klassen, Schulseiten, Termine, Formulare oder
+                        Ansprechpartnerinnen und Ansprechpartner der Mühlmattenschule.
+                    </p>
+
+                    <form onSubmit={handleSubmit} className="mt-6 flex flex-col sm:flex-row gap-3">
+                        <label htmlFor="portal-search-input" className="sr-only">
+                            Suchbegriff eingeben
+                        </label>
+                        <div className="relative flex flex-1 items-center">
+                            <SearchIcon className="pointer-events-none absolute left-4 h-5 w-5 text-slate-400/75" />
+                            <input
+                                id="portal-search-input"
+                                type="search"
+                                value={searchInput}
+                                onChange={(e) => setSearchInput(e.target.value)}
+                                placeholder="Suchbegriff eingeben (z. B. Crosslauf, Betreuung, Ferienplan, Klassenrat)…"
+                                className="w-full rounded-2xl bg-white pl-11 pr-4 py-3.5 text-base font-medium text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-3 focus:ring-amber-300"
+                            />
+                        </div>
+                        <button
+                            type="submit"
+                            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-amber-400 px-6 py-3.5 text-base font-extrabold text-slate-950 shadow-sm hover:bg-amber-300 cursor-pointer transition"
+                        >
+                            <SearchIcon className="h-5 w-5 opacity-75" />
+                            <span>Suchen</span>
+                        </button>
+                    </form>
+                </div>
+
+                {query !== '' && (
+                    <div className="mt-8 space-y-8">
+                        <p className="text-sm sm:text-base font-semibold text-slate-600">
+                            {totalCount === 0
+                                ? `Keine Treffer für „${query}“ gefunden.`
+                                : `${totalCount} Treffer für „${query}“ gefunden:`}
+                        </p>
+
+                        {results.pages.length > 0 && (
+                            <section className="rounded-2xl bg-white p-6 shadow-xs border border-slate-200/80">
+                                <h2 className="text-lg font-extrabold text-brand-900 mb-4">
+                                    Schulseiten ({results.pages.length})
+                                </h2>
+                                <div className="grid gap-3 sm:grid-cols-2">
+                                    {results.pages.map((page) => (
+                                        <Link
+                                            key={page.id}
+                                            href={page.href}
+                                            className="block rounded-xl border border-slate-200/80 p-4 hover:border-brand-400 hover:bg-brand-50/40 transition"
+                                        >
+                                            <p className="font-bold text-brand-900">{page.title}</p>
+                                            {page.summary && (
+                                                <p className="mt-1 text-xs text-slate-600 line-clamp-2">
+                                                    {page.summary}
+                                                </p>
+                                            )}
+                                        </Link>
+                                    ))}
+                                </div>
+                            </section>
+                        )}
+
+                        {results.posts.length > 0 && (
+                            <section className="rounded-2xl bg-white p-6 shadow-xs border border-slate-200/80">
+                                <h2 className="text-lg font-extrabold text-brand-900 mb-4">
+                                    Nachrichten & Klassenberichte ({results.posts.length})
+                                </h2>
+                                <div className="space-y-3">
+                                    {results.posts.map((post) => (
+                                        <Link
+                                            key={post.id}
+                                            href={post.href}
+                                            className="block rounded-xl border border-slate-200/80 p-4 hover:border-brand-400 hover:bg-brand-50/40 transition"
+                                        >
+                                            <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500 mb-1">
+                                                {post.publishedAt && <span>{post.publishedAt}</span>}
+                                                {post.categoryName && (
+                                                    <span className="rounded-md bg-brand-50 px-2 py-0.5 font-bold text-brand-800">
+                                                        {post.categoryName}
+                                                    </span>
+                                                )}
+                                                {post.className && (
+                                                    <span className="rounded-md bg-amber-50 px-2 py-0.5 font-bold text-amber-900">
+                                                        {post.className}
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <p className="font-bold text-brand-900">{post.title}</p>
+                                            <p className="mt-1 text-xs sm:text-sm text-slate-600 line-clamp-2">
+                                                {post.excerpt}
+                                            </p>
+                                        </Link>
+                                    ))}
+                                </div>
+                            </section>
+                        )}
+
+                        {results.downloads.length > 0 && (
+                            <section className="rounded-2xl bg-white p-6 shadow-xs border border-slate-200/80">
+                                <h2 className="text-lg font-extrabold text-brand-900 mb-4">
+                                    Elternbriefe & Formulare ({results.downloads.length})
+                                </h2>
+                                <div className="grid gap-3 sm:grid-cols-2">
+                                    {results.downloads.map((dl) => (
+                                        <a
+                                            key={dl.id}
+                                            href={dl.fileUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="block rounded-xl border border-slate-200/80 p-4 hover:border-brand-400 hover:bg-brand-50/40 transition"
+                                        >
+                                            <p className="font-bold text-brand-900">📄 {dl.title}</p>
+                                            {dl.description && (
+                                                <p className="mt-1 text-xs text-slate-600 line-clamp-2">
+                                                    {dl.description}
+                                                </p>
+                                            )}
+                                        </a>
+                                    ))}
+                                </div>
+                            </section>
+                        )}
+
+                        {results.events.length > 0 && (
+                            <section className="rounded-2xl bg-white p-6 shadow-xs border border-slate-200/80">
+                                <h2 className="text-lg font-extrabold text-brand-900 mb-4">
+                                    Termine ({results.events.length})
+                                </h2>
+                                <div className="grid gap-3 sm:grid-cols-2">
+                                    {results.events.map((ev) => (
+                                        <Link
+                                            key={ev.id}
+                                            href={ev.href}
+                                            className="block rounded-xl border border-slate-200/80 p-4 hover:border-brand-400 hover:bg-brand-50/40 transition"
+                                        >
+                                            <p className="text-xs font-bold text-brand-700">{ev.dateFormatted}</p>
+                                            <p className="font-bold text-brand-900">{ev.title}</p>
+                                            {ev.location && (
+                                                <p className="mt-0.5 text-xs text-slate-500">📍 {ev.location}</p>
+                                            )}
+                                        </Link>
+                                    ))}
+                                </div>
+                            </section>
+                        )}
+
+                        {results.people.length > 0 && (
+                            <section className="rounded-2xl bg-white p-6 shadow-xs border border-slate-200/80">
+                                <h2 className="text-lg font-extrabold text-brand-900 mb-4">
+                                    Kollegium & Ansprechpartner ({results.people.length})
+                                </h2>
+                                <div className="grid gap-3 sm:grid-cols-2">
+                                    {results.people.map((person) => (
+                                        <div
+                                            key={person.id}
+                                            className="rounded-xl border border-slate-200/80 p-4 bg-slate-50/60"
+                                        >
+                                            <p className="font-bold text-brand-900">{person.name}</p>
+                                            <p className="text-xs text-slate-600">{person.roleTitle}</p>
+                                            {person.className && (
+                                                <p className="mt-1 text-xs font-semibold text-brand-700">
+                                                    {person.className}
+                                                </p>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            </section>
+                        )}
+                    </div>
+                )}
+            </div>
+        </SiteLayout>
+    );
+}
+

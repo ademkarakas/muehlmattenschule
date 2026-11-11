@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Album;
+use App\Support\SeoData;
 use Inertia\Inertia;
 use Inertia\Response;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class AlbumController extends Controller
 {
@@ -19,7 +19,6 @@ class AlbumController extends Controller
         $albums = Album::query()
             ->published()
             ->with('media')
-            ->withCount('media')
             ->orderByDesc('event_date')
             ->get()
             ->map(fn (Album $album): array => [
@@ -29,13 +28,23 @@ class AlbumController extends Controller
                 'className' => $album->class_name,
                 'description' => $album->description,
                 'eventDate' => $album->event_date?->format('d.m.Y'),
-                'photosCount' => $album->media_count,
-                'coverUrl' => $album->getFirstMediaUrl('photos', 'thumb') ?: $album->getFirstMediaUrl('photos') ?: null,
+                'eventDateIso' => $album->event_date?->toDateString(),
+                'photosCount' => $album->totalPhotoCount(),
+                'coverUrl' => $album->coverThumbUrl(),
             ])
             ->all();
 
         return Inertia::render('albums/index', [
             'albums' => $albums,
+            'seo' => SeoData::make([
+                'title' => 'Fotogalerie & Eindrücke',
+                'description' => 'Fotogalerie der Mühlmattenschule Freiburg-Hochdorf: Eindrücke von Ausflügen, Projekten, Festen und Aktivitäten unserer Schulklassen.',
+                'canonicalPath' => '/galerie',
+                'breadcrumbs' => [
+                    ['label' => 'Startseite', 'href' => '/'],
+                    ['label' => 'Fotogalerie', 'href' => null],
+                ],
+            ]),
         ]);
     }
 
@@ -50,12 +59,15 @@ class AlbumController extends Controller
             ->where('slug', $slug)
             ->firstOrFail();
 
-        $photos = $album->getMedia('photos')->map(fn (Media $media): array => [
-            'id' => $media->id,
-            'thumbUrl' => $media->hasGeneratedConversion('thumb') ? $media->getUrl('thumb') : $media->getUrl(),
-            'largeUrl' => $media->hasGeneratedConversion('large') ? $media->getUrl('large') : $media->getUrl(),
-            'alt' => $album->title,
-        ])->values()->all();
+        $photos = $album->resolvedPhotos();
+
+        $coverUrl = $photos[0]['largeUrl'] ?? null;
+        $canonicalPath = "/galerie/{$album->slug}";
+        $canonicalUrl = SeoData::absoluteUrl($canonicalPath);
+        $description = SeoData::cleanDescription(
+            $album->description,
+            "Fotoalbum „{$album->title}“ der Mühlmattenschule Freiburg-Hochdorf."
+        );
 
         return Inertia::render('albums/show', [
             'album' => [
@@ -65,8 +77,34 @@ class AlbumController extends Controller
                 'className' => $album->class_name,
                 'description' => $album->description,
                 'eventDate' => $album->event_date?->format('d.m.Y'),
+                'eventDateIso' => $album->event_date?->toDateString(),
                 'photos' => $photos,
             ],
+            'seo' => SeoData::make([
+                'title' => "{$album->title} – Fotogalerie",
+                'description' => $description,
+                'canonicalPath' => $canonicalPath,
+                'ogImage' => $coverUrl,
+                'ogImageAlt' => $album->title,
+                'breadcrumbs' => [
+                    ['label' => 'Startseite', 'href' => '/'],
+                    ['label' => 'Fotogalerie', 'href' => '/galerie'],
+                    ['label' => $album->title, 'href' => null],
+                ],
+                'schemaNodes' => [
+                    [
+                        '@type' => 'ImageGallery',
+                        '@id' => $canonicalUrl.'#gallery',
+                        'name' => $album->title,
+                        'description' => $description,
+                        'url' => $canonicalUrl,
+                        'datePublished' => ($album->event_date ?? $album->published_at ?? $album->created_at)?->toDateString(),
+                        'about' => [
+                            '@id' => url('/').'#school',
+                        ],
+                    ],
+                ],
+            ]),
         ]);
     }
 }

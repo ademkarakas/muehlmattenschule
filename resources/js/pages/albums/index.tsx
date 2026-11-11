@@ -1,6 +1,7 @@
+import { Breadcrumbs } from '@/components/breadcrumbs';
 import { SiteLayout } from '@/layouts/site-layout';
 import type { AlbumCardItem } from '@/types/school';
-import { Head, Link } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import type { ReactElement } from 'react';
 
 export interface AlbumsIndexProps {
@@ -13,22 +14,24 @@ export interface AlbumsIndexProps {
 export default function AlbumsIndexPage({ albums }: AlbumsIndexProps): ReactElement {
     return (
         <SiteLayout>
-            <Head title="Fotoalben" />
+            <div className="mx-auto max-w-6xl px-4 sm:px-6 py-7 sm:py-10">
+                <Breadcrumbs />
 
-            <div className="mx-auto max-w-6xl px-4 py-10">
-                <header className="mb-8">
-                    <h1 className="text-3xl font-extrabold text-slate-900">Fotoalben & Eindrücke</h1>
-                    <p className="mt-2 text-slate-600">
+                <header className="mb-6 sm:mb-8">
+                    <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 break-words hyphens-auto">
+                        Fotoalben & Eindrücke
+                    </h1>
+                    <p className="mt-2 text-sm sm:text-base text-slate-600">
                         Bilder von Ausflügen, Projekten, Festen und Aktivitäten unserer Klassen.
                     </p>
                 </header>
 
                 {albums.length === 0 ? (
-                    <div className="rounded-2xl border border-slate-200 bg-white p-10 text-center text-slate-600">
+                    <div className="rounded-2xl border border-slate-200 bg-white p-8 sm:p-10 text-center text-slate-600">
                         Aktuell sind noch keine Fotoalben freigegeben.
                     </div>
                 ) : (
-                    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    <div className="grid gap-5 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
                         {albums.map((album) => (
                             <Link
                                 key={album.id}
@@ -41,6 +44,7 @@ export default function AlbumsIndexPage({ albums }: AlbumsIndexProps): ReactElem
                                             src={album.coverUrl}
                                             alt={album.title}
                                             loading="lazy"
+                                            decoding="async"
                                             className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
                                         />
                                     ) : (
@@ -51,7 +55,9 @@ export default function AlbumsIndexPage({ albums }: AlbumsIndexProps): ReactElem
                                 </div>
                                 <div className="p-5 flex-1 flex flex-col">
                                     <div className="flex items-center justify-between text-xs text-slate-500">
-                                        <span>{album.eventDate || 'Schuljahr'}</span>
+                                        <time dateTime={album.eventDateIso ?? undefined}>
+                                            {album.eventDate || 'Schuljahr'}
+                                        </time>
                                         {album.className && (
                                             <span className="rounded-full bg-amber-400 px-2.5 py-0.5 font-bold text-slate-950">
                                                 {album.className}
@@ -75,4 +81,3 @@ export default function AlbumsIndexPage({ albums }: AlbumsIndexProps): ReactElem
         </SiteLayout>
     );
 }
-

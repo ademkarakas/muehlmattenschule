@@ -7,6 +7,8 @@ namespace App\Http\Controllers;
 use App\Models\Album;
 use App\Models\Event;
 use App\Models\Post;
+use App\Support\SeoData;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -15,39 +17,41 @@ class HomeController extends Controller
     /**
      * Rendert die EduPage-ähnliche Startseite mit Beiträgen, nächsten Terminen und neuesten Fotoalben.
      */
-    public function __invoke(): Response
+    public function __invoke(Request $request): Response
     {
-        $featuredQuery = Post::query()
+        $paginated = Post::query()
             ->published()
-            ->where('is_featured', true)
-            ->with(['category:id,name,slug,color', 'media'])
-            ->orderByDesc('published_at');
+            ->with(['category:id,name,slug,color', 'album.media', 'media'])
+            ->orderByDesc('published_at')
+            ->paginate(8)
+            ->withQueryString();
 
-        $postModels = $featuredQuery->exists()
-            ? $featuredQuery->get()
-            : Post::query()
-                ->published()
-                ->with(['category:id,name,slug,color', 'media'])
-                ->orderByDesc('published_at')
-                ->limit(8)
-                ->get();
+        $posts = $paginated
+            ->getCollection()
+            ->map(function (Post $post): array {
+                $ownGalleryCount = count($post->resolvedGalleryPhotos());
+                $albumCount = $post->album !== null && $post->album->isPubliclyVisible()
+                    ? $post->album->totalPhotoCount()
+                    : 0;
 
-        $posts = $postModels
-            ->map(fn (Post $post): array => [
-                'id' => $post->id,
-                'title' => $post->title,
-                'slug' => $post->slug,
-                'excerpt' => $post->excerpt,
-                'className' => $post->class_name,
-                'isFeatured' => $post->is_featured,
-                'publishedAt' => $post->published_at?->format('d.m.Y'),
-                'coverUrl' => $post->getFirstMediaUrl('cover', 'card') ?: $post->getFirstMediaUrl('cover') ?: null,
-                'category' => $post->category ? [
-                    'name' => $post->category->name,
-                    'slug' => $post->category->slug,
-                    'color' => $post->category->color,
-                ] : null,
-            ])
+                return [
+                    'id' => $post->id,
+                    'title' => $post->title,
+                    'slug' => $post->slug,
+                    'excerpt' => $post->excerpt,
+                    'className' => $post->class_name,
+                    'isFeatured' => $post->is_featured,
+                    'publishedAt' => $post->published_at?->format('d.m.Y'),
+                    'publishedAtIso' => $post->published_at?->toDateString(),
+                    'coverUrl' => $post->getFirstMediaUrl('cover', 'card') ?: $post->getFirstMediaUrl('cover') ?: null,
+                    'photosCount' => max($ownGalleryCount, $albumCount),
+                    'category' => $post->category ? [
+                        'name' => $post->category->name,
+                        'slug' => $post->category->slug,
+                        'color' => $post->category->color,
+                    ] : null,
+                ];
+            })
             ->all();
 
         $upcomingEvents = Event::query()
@@ -63,13 +67,15 @@ class HomeController extends Controller
                 'dateFormatted' => $event->starts_at->format('d.m.Y'),
                 'timeFormatted' => $event->all_day ? 'Ganztägig' : $event->starts_at->format('H:i').' Uhr',
                 'location' => $event->location,
+                'className' => $event->class_name,
+                'category' => $event->category ?? 'Termin',
+                'icalUrl' => '/termine/'.$event->id.'/ical',
             ])
             ->all();
 
         $albums = Album::query()
             ->published()
             ->with('media')
-            ->withCount('media')
             ->orderByDesc('event_date')
             ->limit(6)
             ->get()
@@ -79,15 +85,31 @@ class HomeController extends Controller
                 'slug' => $album->slug,
                 'className' => $album->class_name,
                 'eventDate' => $album->event_date?->format('d.m.Y'),
-                'photosCount' => $album->media_count,
-                'coverUrl' => $album->getFirstMediaUrl('photos', 'thumb') ?: $album->getFirstMediaUrl('photos') ?: null,
+                'photosCount' => $album->totalPhotoCount(),
+                'coverUrl' => $album->coverThumbUrl(),
             ])
             ->all();
 
         return Inertia::render('home', [
             'posts' => $posts,
+            'postsPagination' => [
+                'currentPage' => $paginated->currentPage(),
+                'lastPage' => $paginated->lastPage(),
+                'total' => $paginated->total(),
+                'prevUrl' => $paginated->previousPageUrl(),
+                'nextUrl' => $paginated->nextPageUrl(),
+            ],
             'upcomingEvents' => $upcomingEvents,
             'albums' => $albums,
+            'seo' => SeoData::make([
+                'title' => 'Startseite',
+                'description' => 'Willkommen an der Mühlmattenschule – Grundschule Freiburg-Hochdorf mit Benzhausen. Aktuelle Nachrichten, Klassenaktivitäten, Termine, Elternbriefe und Ganztagsbetreuung.',
+                'canonicalPath' => '/',
+                'prevUrl' => $paginated->previousPageUrl(),
+                'nextUrl' => $paginated->nextPageUrl(),
+                'ogImage' => '/images/school/about-main.jpg',
+                'ogImageAlt' => 'Schulgebäude und Pausenhof der Mühlmattenschule Freiburg-Hochdorf',
+            ]),
         ]);
     }
 }

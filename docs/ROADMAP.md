@@ -72,7 +72,7 @@
 ## Faz 5 – Kalite (F6, B8)
 - [x] 5.1 Feature testleri: genel sayfalar, yayın mantığı
 - [x] 5.2 Testler: admin rolleri / Policy'ler (`AdminAccessAndPoliciesTest`)
-- [x] 5.3 SEO: sayfa başına title/meta, dinamik `sitemap.xml` (`SitemapController`), `robots.txt`
+- [x] 5.3 SEO: sayfa başına sunucu + istemci senkronlu title/meta (`SeoData`, `<SeoHead>`), Open Graph & Twitter Cards, Canonical + `rel="prev/next"`, Schema.org JSON-LD (`ElementarySchool`, `WebSite`, `BreadcrumbList`, `NewsArticle`, `Event`, `ImageGallery`, `ContactPage`), semantik `<Breadcrumbs>`, `<lastmod>/<changefreq>/<priority>` destekli dinamik `sitemap.xml` (`SitemapController`), `robots.txt` ve `site.webmanifest`
 - [x] 5.4 Erişilebilirlik (WCAG kontrast, klavye „Zum Hauptinhalt springen“, alt metinler)
 - [x] 5.5 Performans (lazy loading, WebP dönüşümleri, Vite code-splitting)
 - [x] 5.6 Lint: Laravel Pint (PHP) + `tsc --noEmit` (strict TypeScript)
@@ -80,8 +80,9 @@
 
 ## Faz 6 – İçerik
 - [x] 6.1 Mevcut siteden içerik taşıma (`muehlmattenschule.de` & `muehlmattenschule.0x6e.net`: 71 gerçek fotoğraf `public/images/school/`, 5 orijinal PDF `public/files/school/`, 22 kişilik gerçek öğretmen/kadro/sosyal hizmet listesi, 17 gerçek haber ve sınıf aktivitesi, 6 zengin fotoğraf albümü ve 8 tam içerikli sayfa)
-- [ ] 6.2 Gerçek logoyu ekle (okuldan gelecek)
+- [x] 6.2 Gerçek logoyu ekle (muehlmattenschule.de orijinal 2023 amblemi `logo-mms-2023.png`, `logo.png` ve `logo.svg` entegrasyonu + `LogoFoeVe-webGrau.png` Förderverein logosu)
 - [x] 6.3 Impressum/Datenschutz ve Kontakt metinlerini resmi `muehlmattenschule.de` verileriyle güncelle
+- [x] 6.4 Kalan tüm içeriklerin eksiksiz aktarımı: 28 yeni görsel/harita/PDF (`public/images/school/` ve `public/files/school/`), 5 otantik tematik yazı (Chorvereinigung, Schulwegeplan, Johannes Stang Sonderpreis, Inklusive Außenklasse, 25 Jahre Jubiläum), 4 yeni bağımsız sayfa (`foerderverein`, `crosslauf`, `hochschulpartnerschule`, `schulwegeplan`), 4 yeni resmi PDF indirme belgesi (Schulwegeplan Karte & Regeln, Gesamtelternbeiratssitzung Leitfaden & Kurzprotokoll) ve zenginleştirilmiş 8 AG görseli + Leitbild şeması
 
 ## Faz 7 – Yayına alma (IONOS Deploy Now)
 - [ ] 7.1 IONOS „Mitgliedschaft + PHP-Projekt“ (okul adına) satın al
@@ -93,5 +94,52 @@
 
 ## Faz 8 – Teslim
 - [ ] 8.1 Müdür ve sekreter için kullanıcı hesapları
-- [ ] 8.2 Almanca kullanım kılavuzu (ekran görüntülü) `docs/ANLEITUNG-ADMIN.md`
+- [x] 8.2 Almanca kullanım kılavuzu `docs/ANLEITUNG-ADMIN.md`
 - [ ] 8.3 Eğitim
+
+---
+
+## Faz 9 – Gerçek Logo Turkuazı (`#029786`) Kurumsal Kimlik Uyumu
+- [x] 9.1 `docs/ROADMAP.md` ve `docs/ARCHITECTURE.md` dosyalarını yeni aşamalar ve `#029786` logo turkuazı paletiyle güncelle
+- [x] 9.2 `resources/css/app.css` içindeki `@theme` (`brand-50` … `brand-900`) renklerini `logo-mms-2023.png` içindeki gerçek turkuaz (`#029786` ana renk, `#007f70` / `#00695c` koyu, `#003d36` derin) ve `data-font-scale` kurallarıyla güncelle
+- [x] 9.3 `app/Providers/Filament/AdminPanelProvider.php`, `resources/views/filament/admin-theme.blade.php` ve `LocalInitialsAvatarProvider.php` dosyalarını logo turkuazı (`#029786` → `#007f70` → `#00695c`) ile birebir uyumlu hale getir
+- [x] 9.4 Footer (`site-layout.tsx`), Admin logo (`brand-logo.blade.php`) ve hata sayfalarında (`404.blade.php`, `500.blade.php`) gerçek okul logosunu (`/images/logo.png`) kullan ve `public/images/logo.svg` dosyasını da `#029786` rengiyle güncelle
+
+## Faz 10 – Aydınlatıcı ve Şık Bakım Modu (Wartungsmodus – Admin & HTTP 503)
+- [x] 10.1 `ManageSchoolSettings` (`/admin/manage-school-settings`) sayfasına **„Wartungsmodus (Website vorübergehend in Wartung nehmen)“** bölümü ekle (`maintenance_active`, `maintenance_title`, `maintenance_message`, `maintenance_until`, `maintenance_show_contact`)
+- [x] 10.2 `App\Http\Middleware\CheckSchoolMaintenanceMode` middleware oluştur ve `bootstrap/app.php` içine kaydet (Ziyaretçilere HTTP 503 + `Retry-After`, oturum açmış yöneticilere üst bilgi bandıyla canlı önizleme imkanı, `/admin*` ve `/up` her zaman açık)
+- [x] 10.3 Admin Topbar (`resources/views/filament/topbar-actions.blade.php`) üzerinde bakım modu aktifken dikkat çekici **„Wartungsmodus AKTIV“** rozeti ve hızlı geçiş bağlantısı göster
+- [x] 10.4 `resources/views/errors/503.blade.php` şablonunu oluştur (Okul logosu, `#029786` turkuaz tasarım, özel bakım mesajı, tahmini açılış süresi, **Sekretariat & Krankmeldung** ve **Caritas Schulkindbetreuung** tek tıkla arama/e-posta kartları, `/admin` giriş linki)
+- [x] 10.5 Bakım modu için kapsamlı Feature testleri (`tests/Feature/MaintenanceModeTest.php`) yaz
+
+## Faz 11 – Eski Sitedeki (`muehlmattenschule.de`) TÜM Fotoğrafların (~320 Adet), TÜM Yazıların ve TÜM Alt Sayfaların %100 Aktarımı
+- [x] 11.1 Eski sitedeki tüm yazı galerilerinde ve sayfalarda bulunan **eksik ~250 fotoğrafı** (88 Crosslauf, 52 Adventsbasteln, 52 Spielmobil, 44 Slow-Mobil, 40 Gesundes Frühstück, 24 Weihnachtliche MMS, 12 Tanzen, 5 Plätzchenverkauf, 2 Diana Blum Jubiläum, 2 Zeitung in der Schule 4a/4b) ve `wp-content/Schulsozialarbeit/` mikro sitesindeki **6 görseli** (`MMS Schulsoz HP2.jpg`, `Wortwolke.jpeg`, `Klassen und Gruppen.png`, `Bild3.png` vb.) `public/images/school/` altına indir ve EXIF temizliğini yap
+- [x] 11.2 `AlbumResource` fotoğraf yükleme sınırını (`maxFiles`) 120'ye çıkar ve tüm fotoğraf albümlerini (`Crosslauf` 88 foto, `Adventszeit & Basteln` 81 foto, `Bewegungs- & Gesundheitstage` 108 foto, `Gesunde Ernährung 2. Klassen` 46 foto, `Schulgebäude & Campus`, `Patenschaft Rosedale`) eksiksiz fotoğraflarıyla `DatabaseSeeder.php` içine bağla
+- [x] 11.3 Eski sitedeki tüm yazıların (`Post`) metinlerini kısaltılmamış **1:1 orijinal tam metinleriyle** (3.326 karakterlik Mundenhof öğrenci yazıları, tam BiSS-Transfer, Chorvereinigung, Förderverein, Elterninfo metinleri ve yazı içi fotoğraf galerileri dahil) güncelle ve eksik okul yaşamı yazılarını (*Zeitung in der Schule 4a & 4b*, *40-jähriges Dienstjubiläum Edith Jakob*, *1. Mühlmattentreffen* vb.) ekle
+- [x] 11.4 Eski sitedeki Navbar'da (`Hauptmenu`) yer alan **tüm sayfaları ve alt sayfaları** (22 zengin sayfa: `schulportrait`, `schulleitung-und-verwaltung`, `kollegium`, `unsere-klassen`, `schulsozialarbeit`, `elternbeirat`, `aufgaben-des-elternbeirats`, `aktivitaeten-des-elternbeirats`, `foerderverein`, `crosslauf`, `hochschulpartnerschule`, `leitbild`, `so-ist-es-bei-uns`, `klassenrat`, `patenschaft-simbabwe`, `biss-transfer-und-inklusion`, `arbeitsgemeinschaften`, `lesepatenschaften`, `bibfit`, `kooperationen`, `schulkindbetreuung`, `schulwegeplan`) kısaltılmamış tam metinleriyle müstakil sayfalar olarak oluştur
+
+## Faz 12 – Eski Sitedeki Navbar Yapısı + `ghsfreiburg.edupage.org` Mega-Menü, „Beiträge nach Rubriken“, Erişilebilirlik & Arama
+- [x] 12.1 `Page` modeline `menu_group` alanı ekle ve `routes/web.php` + `HandleInertiaRequests` içinde `unsere-schule`, `konzepte-projekte`, `angebote` (ve `schulleben`) bölümlerini destekle
+- [x] 12.2 `SiteLayout` (`resources/js/layouts/site-layout.tsx`) üst menüsünü eski sitedeki **tüm başlıkları** (`Startseite`, `Aktuelles`, `Unsere Schule ▾`, `Konzepte & Projekte ▾`, `Angebote & Betreuung ▾`, `Termine`, `Fotogalerie`, `Downloads`, `Kontakt`) içerecek şekilde `ghsfreiburg.edupage.org` tarzı gruplandırılmış açılır menüyle güncelle
+- [x] 12.3 Eski sitedeki **„Beiträge nach Rubriken“** (`Alle Beiträge`, `Elterninfos`, `Ferienkalender`, `Klasse 4a`, `Klasse 4b`, `Konzept & Didaktik`, `Schulfeste & Feiern`, `Schulleben`, `Sport & Wettbewerbe`, `Inklusive Beschulung`) kutusunu yazı sayılarıyla (`(count)`) birlikte hem Ana Sayfa sağ sütununa hem de `/aktuelles` sayfasına ekle
+- [x] 12.4 `ghsfreiburg.edupage.org` üst barındaki gibi **Barrierefreie Einstellungen (Yazı Boyutu `A- / A / A+`)** ve **Site İçi Arama (`GET /suche?q=...`)** özelliklerini ekle
+
+## Faz 13 – `ghsfreiburg.edupage.org` Ana Sayfa & Takvim Özellikleri (Pausen Widget, Sınıf Etkinlikleri, iCal, Haber Sayfalama)
+- [x] 13.1 Ana sayfa (`resources/js/pages/home.tsx`) sağ sütununa `ghsfreiburg.edupage.org` stilinde:
+  1. **„Unterrichts- & Pausenzeiten“ (`Pausen`) Widget'ı** (Bugünün tarihi + ders/teneffüs saatleri)
+  2. **Gelişmiş „Kalender“ Widget'ı** (Tarih + başlık + sınıf rozeti + tür + `.ics` takvime ekle)
+  3. **„Beiträge nach Rubriken“ Widget'ı** (Yazı sayılarıyla kategoriler ve sınıflar)
+  4. **„Sekretariat & Krankmeldung“ Widget'ı**
+- [x] 13.2 Ana sayfadaki haber akışına `ghsfreiburg.edupage.org` gibi sayfalama (`1, 2, 3 … Weiter`) ve bağlı albüm fotoğraf sayısı rozeti (`📷 88 Fotos`) ekle
+- [x] 13.3 `Event` modeline `class_name` ve `category` alanlarını ekle ve `/termine/{event}/ical` + `/termine.ics` ile **iCal (`.ics`) takvim indirme** desteği sun
+
+## Faz 14 – Admin Paneli (`/admin`) Eksiklerinin Giderilmesi ve Editör Deneyimi (UX) İyileştirmeleri
+- [x] 14.1 `ManageSchoolSettings` sayfasını sekmeli (`Tabs`) yapıya kavuştur (*Stammdaten & Kontakt*, *Startseite & Hero-Bilder*, *Unterrichts- & Pausenzeiten*, *Wartungsmodus*)
+- [x] 14.2 `PageResource` sayfa oluşturucu (`Builder`) bloklarına doğrudan **görsel yükleme (`FileUpload`)**, **`accordion` (SSS)** ve **`downloads_box`** bloklarını ekle
+- [x] 14.3 `PostResource`, `AlbumResource` ve `PageResource` içine **„Auf Website ansehen ↗“** hızlı önizleme butonu ekle
+
+## Faz 15 – Kalite Kontrol, Testler, Build ve Dokümantasyon
+- [x] 15.1 Veritabanı migration ve seeder'larını çalıştır (`php artisan migrate --seed`)
+- [x] 15.2 Yeni özellikler için Feature testlerini yaz/güncelle (`MaintenanceModeTest`, `EdupageFeaturesTest`)
+- [x] 15.3 Laravel Pint, TypeScript (`tsc --noEmit`), Vite Build (`npm run build`) ve tüm PHPUnit testlerini (`php artisan test`) çalıştırıp %100 doğrula
+- [x] 15.4 `docs/ANLEITUNG-ADMIN.md` (Almanca Admin Kullanım Kılavuzu) oluştur ve `docs/ROADMAP.md` + `docs/HANDOFF.md` dosyalarını güncelle

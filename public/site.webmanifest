@@ -1,0 +1,24 @@
+{
+  "name": "Mühlmattenschule – Grundschule Freiburg-Hochdorf",
+  "short_name": "Mühlmattenschule",
+  "description": "Offizielle Website der Mühlmattenschule (Grundschule Freiburg-Hochdorf mit Benzhausen)",
+  "lang": "de-DE",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f3faf8",
+  "theme_color": "#029786",
+  "icons": [
+    {
+      "src": "/images/logo.png",
+      "sizes": "420x395",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/images/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

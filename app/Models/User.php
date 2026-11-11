@@ -8,6 +8,7 @@ use App\Enums\UserRole;
 use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -21,6 +22,22 @@ class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
+
+    /**
+     * Verhindert unbefugte Rechteausweitung (Privilege Escalation) auf die Administrator-Rolle.
+     */
+    protected static function booted(): void
+    {
+        static::saving(function (self $model): void {
+            $actor = auth()->user();
+
+            if ($actor instanceof self && $actor->role !== UserRole::Admin) {
+                if ($model->role === UserRole::Admin && $model->getOriginal('role') !== UserRole::Admin) {
+                    throw new AuthorizationException('Nur Systemadministratoren dürfen die Administrator-Rolle vergeben.');
+                }
+            }
+        });
+    }
 
     /**
      * Attribute, die automatisch gecastet werden.
@@ -75,6 +92,32 @@ class User extends Authenticatable implements FilamentUser
     public function isTeacher(): bool
     {
         return $this->role === UserRole::Lehrkraft;
+    }
+
+    /**
+     * Gibt den bereinigten Anzeigenamen ohne redundante Rollen-Klammern zurück.
+     */
+    public function displayName(): string
+    {
+        $cleaned = trim((string) preg_replace('/\s*\([^)]*\)\s*$/u', '', (string) $this->name));
+
+        return $cleaned !== '' ? $cleaned : (string) $this->name;
+    }
+
+    /**
+     * Gibt die kompakte Rollen- oder Klassenbezeichnung für die Topbar zurück.
+     */
+    public function roleBadgeLabel(): string
+    {
+        $roleLabel = $this->role instanceof UserRole
+            ? $this->role->label()
+            : 'Benutzer';
+
+        if ($this->isTeacher() && filled($this->class_name)) {
+            return (string) $this->class_name;
+        }
+
+        return $roleLabel;
     }
 
     /**

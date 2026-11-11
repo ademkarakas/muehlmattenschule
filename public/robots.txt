@@ -1,4 +1,6 @@
 User-agent: *
+Allow: /
 Disallow: /admin
+Disallow: /livewire
 
-Sitemap: /sitemap.xml
+Sitemap: https://muehlmattenschule.de/sitemap.xml

@@ -1,6 +1,7 @@
+import { Breadcrumbs } from '@/components/breadcrumbs';
 import { SiteLayout } from '@/layouts/site-layout';
 import type { SharedInertiaProps } from '@/types/school';
-import { Head, usePage } from '@inertiajs/react';
+import { usePage } from '@inertiajs/react';
 import type { ReactElement } from 'react';
 
 /**
@@ -9,30 +10,31 @@ import type { ReactElement } from 'react';
  */
 export default function DatenschutzPage(): ReactElement {
     const { school } = usePage<SharedInertiaProps>().props;
+    const phoneHref = `tel:${school.phone.replace(/\s+/g, '')}`;
 
     return (
         <SiteLayout>
-            <Head title="Datenschutzerklärung" />
+            <div className="mx-auto max-w-4xl px-4 sm:px-6 py-7 sm:py-10">
+                <Breadcrumbs />
 
-            <div className="mx-auto max-w-4xl px-4 py-10">
-                <header className="mb-8">
+                <header className="mb-6 sm:mb-8">
                     <span className="text-xs font-extrabold uppercase tracking-wider text-brand-700">
                         Datenschutz & Rechtliches · Stand: Aktuelle Gesetzgebung (DSGVO / TDDDG / LDSG BW)
                     </span>
-                    <h1 className="mt-1 text-3xl sm:text-4xl font-extrabold text-slate-900">
+                    <h1 className="mt-1 text-2xl sm:text-4xl font-extrabold text-slate-900 break-words hyphens-auto">
                         Datenschutzerklärung
                     </h1>
-                    <p className="mt-2 text-sm text-slate-600">
+                    <p className="mt-2 text-xs sm:text-sm text-slate-600 break-words hyphens-auto">
                         Informationen zur Verarbeitung personenbezogener Daten gemäß Art. 13 und Art. 14 der
                         Datenschutz-Grundverordnung (DSGVO), dem Landesdatenschutzgesetz Baden-Württemberg (LDSG BW)
                         sowie dem Telekommunikation-Digitale-Dienste-Datenschutz-Gesetz (TDDDG).
                     </p>
                 </header>
 
-                <div className="rounded-3xl border border-slate-200 bg-white p-6 md:p-10 space-y-8 text-sm leading-relaxed text-slate-700 shadow-xs">
+                <div className="rounded-2xl sm:rounded-3xl border border-slate-200 bg-white p-5 sm:p-6 md:p-10 space-y-7 sm:space-y-8 text-sm leading-relaxed text-slate-700 shadow-xs break-words hyphens-auto">
                     {/* 1. Verantwortliche Stelle */}
                     <section className="space-y-2">
-                        <h2 className="text-lg font-extrabold text-slate-900">
+                        <h2 className="text-base sm:text-lg font-extrabold text-slate-900">
                             1. Name und Anschrift der verantwortlichen Stelle
                         </h2>
                         <p>
@@ -49,11 +51,15 @@ export default function DatenschutzPage(): ReactElement {
                                 <strong>Vertreten durch die Schulleitung:</strong> Rektorin Diana Blum
                             </p>
                             <p>
-                                <strong>Telefon:</strong> {school.phone} · <strong>Telefax:</strong> +49 7665 932081
+                                <strong>Telefon:</strong>{' '}
+                                <a href={phoneHref} className="font-semibold text-brand-700 underline">
+                                    {school.phone}
+                                </a>{' '}
+                                · <strong>Telefax:</strong> +49 7665 932081
                             </p>
                             <p>
                                 <strong>E-Mail:</strong>{' '}
-                                <a href={`mailto:${school.email}`} className="font-semibold text-brand-700 underline">
+                                <a href={`mailto:${school.email}`} className="font-semibold text-brand-700 underline break-all">
                                     {school.email}
                                 </a>
                             </p>

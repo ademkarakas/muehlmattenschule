@@ -47,6 +47,7 @@ class Person extends Model implements HasMedia
     {
         $this->addMediaCollection('portrait')
             ->singleFile()
+            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp'])
             ->useDisk('public');
     }
 

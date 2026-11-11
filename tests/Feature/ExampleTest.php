@@ -77,4 +77,38 @@ class ExampleTest extends TestCase
             ->assertOk()
             ->assertHeader('Content-Type', 'application/xml; charset=UTF-8');
     }
+
+    /**
+     * Stellt sicher, dass die neu gestaltete Kontaktseite das Schulsekretariat zeigt,
+     * aber weder Caritas-Schulkindbetreuung noch Schulleitung/Konrektorin enthält.
+     */
+    public function test_contact_page_excludes_caritas_and_leadership(): void
+    {
+        $response = $this->get('/kontakt');
+
+        $response->assertOk()
+            ->assertInertia(fn (Assert $page): Assert => $page
+                ->component('legal/contact')
+                ->has('school')
+                ->where('school.phone', '07665 2232')
+            );
+
+        $content = $response->getContent() ?: '';
+
+        // Schulsekretariat und Schule vorhanden
+        $this->assertStringContainsString('Mühlmattenschule', $content);
+        $this->assertStringContainsString('07665 2232', $content);
+
+        // Keine Caritas-Schulkindbetreuung
+        $this->assertStringNotContainsString('Lisa Jortzik', $content);
+        $this->assertStringNotContainsString('schulkindbetreuung-muehlmattenschule@caritas-freiburg.de', $content);
+        $this->assertStringNotContainsString('07665 932 92 21', $content);
+        $this->assertStringNotContainsString('0152 02751785', $content);
+
+        // Keine Schulleitung / stellv. Schulleitung auf der Kontaktseite
+        $this->assertStringNotContainsString('Diana Blum', $content);
+        $this->assertStringNotContainsString('Sabine Caputo', $content);
+        $this->assertStringNotContainsString('Rektorin', $content);
+        $this->assertStringNotContainsString('Konrektorin', $content);
+    }
 }

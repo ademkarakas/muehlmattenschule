@@ -19,6 +19,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 use UnitEnum;
 
 class UserResource extends Resource
@@ -77,8 +78,8 @@ class UserResource extends Resource
                     ->dehydrateStateUsing(fn (?string $state): ?string => filled($state) ? Hash::make($state) : null)
                     ->dehydrated(fn (?string $state): bool => filled($state))
                     ->required(fn (string $operation): bool => $operation === 'create')
-                    ->minLength(8)
-                    ->helperText('Mindestens 8 Zeichen. Beim Bearbeiten leer lassen, um das bestehende Passwort zu behalten.'),
+                    ->rule(Password::default())
+                    ->helperText('Mindestens 12 Zeichen mit Groß-/Kleinbuchstaben, Zahl und Sonderzeichen. Beim Bearbeiten leer lassen, um das bestehende Passwort zu behalten.'),
             ]);
     }
 
@@ -92,21 +93,19 @@ class UserResource extends Resource
                 TextColumn::make('name')
                     ->label('Name')
                     ->searchable()
-                    ->sortable(),
-                TextColumn::make('email')
-                    ->label('E-Mail')
-                    ->searchable(),
+                    ->sortable()
+                    ->weight('medium')
+                    ->description(fn (User $record): string => $record->email),
                 TextColumn::make('role')
                     ->label('Rolle')
                     ->badge()
                     ->formatStateUsing(fn (UserRole $state): string => $state->label()),
-                TextColumn::make('class_name')
-                    ->label('Klasse')
-                    ->placeholder('—'),
             ])
+            ->recordAction(EditAction::class)
+            ->recordUrl(null)
             ->recordActions([
-                EditAction::make(),
-                DeleteAction::make(),
+                EditAction::make()->iconButton(),
+                DeleteAction::make()->iconButton(),
             ]);
     }
 

@@ -21,6 +21,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use UnitEnum;
@@ -28,6 +29,8 @@ use UnitEnum;
 class PersonResource extends Resource
 {
     protected static ?string $model = Person::class;
+
+    protected static ?string $recordTitleAttribute = 'name';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUserGroup;
 
@@ -78,6 +81,7 @@ class PersonResource extends Resource
                     ->label('Porträtfoto (optional, nur mit Einwilligung)')
                     ->collection('portrait')
                     ->image()
+                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
                     ->maxSize(6144)
                     ->columnSpanFull(),
                 Toggle::make('is_active')
@@ -94,16 +98,18 @@ class PersonResource extends Resource
         return $table
             ->defaultSort('sort_order')
             ->columns([
+                SpatieMediaLibraryImageColumn::make('portrait')
+                    ->label('Foto')
+                    ->collection('portrait')
+                    ->conversion('avatar')
+                    ->circular()
+                    ->imageSize(40),
                 TextColumn::make('name')
                     ->label('Name')
                     ->searchable()
-                    ->sortable(),
-                TextColumn::make('role_title')
-                    ->label('Funktion')
-                    ->searchable(),
-                TextColumn::make('class_name')
-                    ->label('Klasse')
-                    ->placeholder('—'),
+                    ->sortable()
+                    ->weight('medium')
+                    ->description(fn (Person $record): string => collect([$record->role_title, $record->class_name])->filter()->implode(' · ')),
                 TextColumn::make('group')
                     ->label('Bereich')
                     ->badge()
@@ -112,9 +118,11 @@ class PersonResource extends Resource
                     ->label('Sichtbar')
                     ->boolean(),
             ])
+            ->recordAction(EditAction::class)
+            ->recordUrl(null)
             ->recordActions([
-                EditAction::make(),
-                DeleteAction::make(),
+                EditAction::make()->iconButton(),
+                DeleteAction::make()->iconButton(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

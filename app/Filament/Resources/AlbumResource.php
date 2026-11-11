@@ -10,6 +10,7 @@ use App\Filament\Resources\AlbumResource\Pages\EditAlbum;
 use App\Filament\Resources\AlbumResource\Pages\ListAlbums;
 use App\Models\Album;
 use BackedEnum;
+use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\Checkbox;
@@ -19,6 +20,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Pages\PageRegistration;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
@@ -26,6 +28,7 @@ use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -35,6 +38,8 @@ use UnitEnum;
 class AlbumResource extends Resource
 {
     protected static ?string $model = Album::class;
+
+    protected static ?string $recordTitleAttribute = 'title';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedPhoto;
 
@@ -55,6 +60,15 @@ class AlbumResource extends Resource
     {
         return $schema
             ->components([
+                Section::make('Erstellt von')
+                    ->schema([
+                        TextEntry::make('author_info')
+                            ->hiddenLabel()
+                            ->state(fn (?Album $record): string => 'Erstellt von '.($record?->author?->name ?? 'Unbekannt')
+                                .' am '.$record?->created_at?->format('d.m.Y \u\m H:i')
+                                .' Uhr · Zuletzt geändert am '.$record?->updated_at?->format('d.m.Y \u\m H:i').' Uhr'),
+                    ])
+                    ->visibleOn('edit'),
                 Section::make('Album-Angaben')
                     ->schema([
                         TextInput::make('title')
@@ -90,8 +104,9 @@ class AlbumResource extends Resource
                             ->multiple()
                             ->reorderable()
                             ->image()
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
                             ->maxSize(10240)
-                            ->maxFiles(60)
+                            ->maxFiles(120)
                             ->columnSpanFull(),
                         Checkbox::make('consent_confirmed')
                             ->label('DSGVO-Bestätigung: Für alle abgebildeten Kinder liegen schriftliche Einwilligungserklärungen der Erziehungsberechtigten vor.')
@@ -121,42 +136,60 @@ class AlbumResource extends Resource
     {
         return $table
             ->defaultSort('event_date', 'desc')
+            ->modifyQueryUsing(fn ($query) => $query->withCount('media')->with('author'))
             ->columns([
+                SpatieMediaLibraryImageColumn::make('photos')
+                    ->label('Vorschau')
+                    ->collection('photos')
+                    ->conversion('thumb')
+                    ->circular()
+                    ->stacked()
+                    ->limit(3)
+                    ->imageSize(38),
                 TextColumn::make('title')
                     ->label('Album')
                     ->searchable()
-                    ->sortable(),
-                TextColumn::make('class_name')
-                    ->label('Klasse')
-                    ->badge()
-                    ->placeholder('Alle Klassen'),
-                TextColumn::make('event_date')
-                    ->label('Datum')
-                    ->date('d.m.Y')
-                    ->sortable(),
-                TextColumn::make('media_count')
-                    ->label('Fotos')
-                    ->counts('media'),
-                IconColumn::make('consent_confirmed')
-                    ->label('Einwilligung')
-                    ->boolean(),
+                    ->sortable()
+                    ->weight('medium')
+                    ->wrap()
+                    ->lineClamp(2)
+                    ->description(fn (Album $record): string => collect([
+                        $record->author?->name ?? 'Unbekannt',
+                        $record->event_date?->format('d.m.Y'),
+                        $record->class_name ?: 'Alle Klassen',
+                        $record->totalPhotoCount().' Fotos',
+                    ])->filter()->implode(' · ')),
                 TextColumn::make('status')
                     ->label('Status')
                     ->badge()
                     ->formatStateUsing(fn (PublishStatus $state): string => $state->label())
                     ->color(fn (PublishStatus $state): string => $state === PublishStatus::Published ? 'success' : 'gray'),
+                IconColumn::make('consent_confirmed')
+                    ->label('Einwilligung')
+                    ->boolean()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('author.name')
                     ->label('Erstellt von')
-                    ->placeholder('—'),
+                    ->placeholder('—')
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->recordUrl(fn (Album $record): ?string => auth()->user()?->can('update', $record)
+                ? static::getUrl('edit', ['record' => $record])
+                : null)
             ->filters([
                 SelectFilter::make('status')
                     ->label('Status')
                     ->options(PublishStatus::options()),
             ])
             ->recordActions([
-                EditAction::make(),
-                DeleteAction::make(),
+                Action::make('preview')
+                    ->label('Auf Website ansehen')
+                    ->icon(Heroicon::OutlinedArrowTopRightOnSquare)
+                    ->color('gray')
+                    ->url(fn (Album $record): string => '/galerie/'.$record->slug, shouldOpenInNewTab: true)
+                    ->iconButton(),
+                EditAction::make()->iconButton(),
+                DeleteAction::make()->iconButton(),
             ]);
     }
 

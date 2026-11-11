@@ -7,6 +7,7 @@ namespace Tests\Feature;
 use App\Enums\UserRole;
 use App\Models\Album;
 use App\Models\Announcement;
+use App\Models\Event;
 use App\Models\Page;
 use App\Models\Post;
 use App\Models\User;
@@ -113,5 +114,45 @@ class AdminAccessAndPoliciesTest extends TestCase
         $this->actingAs($schulleitung)->get('/admin/categories')->assertOk();
         $this->actingAs($schulleitung)->get('/admin/users')->assertOk();
         $this->actingAs($schulleitung)->get('/admin/manage-school-settings')->assertOk();
+    }
+
+    /**
+     * Prüft, dass die Ressourcen-Seiten die dezenten Zähler unter dem Titel anzeigen.
+     */
+    public function test_resource_pages_render_subheadings_with_counts(): void
+    {
+        $schulleitung = User::factory()->schulleitung()->create();
+        Post::factory()->count(3)->create();
+        Event::factory()->count(2)->create(['starts_at' => now()->addDays(3)]);
+
+        $postsResponse = $this->actingAs($schulleitung)->get('/admin/posts');
+        $postsResponse->assertOk();
+        $postsResponse->assertSee('Insgesamt 3 Beiträge');
+
+        $eventsResponse = $this->actingAs($schulleitung)->get('/admin/events');
+        $eventsResponse->assertOk();
+        $eventsResponse->assertSee('2 anstehende Termine');
+    }
+
+    /**
+     * Prüft das modernisierte Admin-Layout: Topbar mit Avatar/Name/Rolle, lokaler DSGVO-SVG-Avatar,
+     * „Zur Website“-Schnelllink, Türkis-Sidebar-Theme und Dashboard ohne redundantes AccountWidget.
+     */
+    public function test_admin_dashboard_renders_modern_topbar_user_pill_and_local_avatar(): void
+    {
+        $schulleitung = User::factory()->schulleitung()->create([
+            'name' => 'Diana Blum (Schulleitung)',
+        ]);
+
+        $response = $this->actingAs($schulleitung)->get('/admin');
+
+        $response->assertOk();
+        $response->assertSee('Übersicht & Schnellzugriff');
+        $response->assertSee('mms-topbar-user-pill', false);
+        $response->assertSee('Diana Blum');
+        $response->assertSee('Schulleitung');
+        $response->assertSee('Zur Website');
+        $response->assertSee('data:image/svg+xml;utf8,', false);
+        $response->assertDontSee('ui-avatars.com', false);
     }
 }

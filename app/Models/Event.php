@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\Model;
     'ends_at',
     'all_day',
     'location',
+    'class_name',
+    'category',
     'description',
     'is_published',
 ])]

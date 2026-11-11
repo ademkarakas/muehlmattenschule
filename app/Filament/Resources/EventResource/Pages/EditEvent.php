@@ -1,0 +1,34 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Filament\Resources\EventResource\Pages;
+
+use App\Filament\Concerns\HasCenteredStickyFormActions;
+use App\Filament\Resources\EventResource;
+use Filament\Actions\Action;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Resources\Pages\EditRecord;
+
+class EditEvent extends EditRecord
+{
+    use HasCenteredStickyFormActions;
+
+    protected static string $resource = EventResource::class;
+
+    /**
+     * Speichern, Abbrechen und Löschen nebeneinander in einer zentrierten Leiste.
+     *
+     * @return array<Action | ActionGroup>
+     */
+    protected function getFormActions(): array
+    {
+        return [
+            $this->getSaveFormAction(),
+            $this->getCancelFormAction(),
+            DeleteAction::make(),
+        ];
+    }
+}
+

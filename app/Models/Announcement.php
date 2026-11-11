@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Enums\AnnouncementLevel;
+use App\Support\HtmlSanitizer;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -22,6 +23,16 @@ use Illuminate\Database\Eloquent\Model;
 class Announcement extends Model
 {
     use HasFactory;
+
+    /**
+     * Bereinigt optionale Ziel-URLs gegen gefährliche Protokolle (z. B. javascript:).
+     */
+    protected static function booted(): void
+    {
+        static::saving(function (self $announcement): void {
+            $announcement->link_url = HtmlSanitizer::sanitizeUrl($announcement->link_url);
+        });
+    }
 
     /**
      * Attribute, die automatisch gecastet werden.

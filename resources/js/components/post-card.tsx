@@ -54,31 +54,44 @@ export function PostCard({ post, layout = 'vertical' }: PostCardProps): ReactEle
                         </span>
                     )}
                 </div>
+
+                {Boolean(post.photosCount && post.photosCount > 0) && (
+                    <div className="absolute bottom-3 right-3">
+                        <span className="inline-flex items-center gap-1 rounded-full bg-slate-950/75 px-2.5 py-1 text-[11px] font-bold text-white backdrop-blur-xs shadow-xs">
+                            <span aria-hidden="true">📷</span> {post.photosCount} Fotos
+                        </span>
+                    </div>
+                )}
             </Link>
 
-            <div className="flex flex-1 flex-col justify-between p-5 sm:p-6">
+            <div className="flex flex-1 flex-col justify-between p-4 sm:p-6 min-w-0">
                 <div>
                     {post.publishedAt && (
-                        <time className="text-xs font-bold text-brand-700">{post.publishedAt}</time>
+                        <time
+                            dateTime={post.publishedAtIso ?? undefined}
+                            className="text-xs font-bold text-brand-700"
+                        >
+                            {post.publishedAt}
+                        </time>
                     )}
                     <h3
-                        className={`mt-1.5 font-extrabold leading-snug text-slate-900 group-hover:text-brand-700 ${
-                            isHorizontal ? 'text-xl sm:text-2xl' : 'text-lg'
+                        className={`mt-1.5 font-extrabold leading-snug text-slate-900 group-hover:text-brand-700 break-words hyphens-auto ${
+                            isHorizontal ? 'text-lg sm:text-2xl' : 'text-base sm:text-lg'
                         }`}
                     >
                         <Link href={`/aktuelles/${post.slug}`}>{post.title}</Link>
                     </h3>
                     {post.excerpt && (
-                        <p className="mt-2.5 line-clamp-3 text-sm sm:text-base leading-relaxed text-slate-600">
+                        <p className="mt-2 line-clamp-3 text-sm sm:text-base leading-relaxed text-slate-600 break-words">
                             {post.excerpt}
                         </p>
                     )}
                 </div>
 
-                <div className="mt-5 pt-3.5 border-t border-slate-100 flex items-center justify-between">
+                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
                     <Link
                         href={`/aktuelles/${post.slug}`}
-                        className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wide text-brand-700 hover:text-brand-900"
+                        className="inline-flex min-h-9 items-center gap-1.5 py-1 text-xs font-extrabold uppercase tracking-wide text-brand-700 hover:text-brand-900"
                     >
                         Beitrag lesen <span aria-hidden="true">→</span>
                     </Link>

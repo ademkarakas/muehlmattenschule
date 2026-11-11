@@ -4,18 +4,21 @@ declare(strict_types=1);
 
 namespace App\Providers\Filament;
 
+use App\Filament\AvatarProviders\LocalInitialsAvatarProvider;
+use App\Filament\Pages\Dashboard;
+use App\Filament\Widgets\ActivityOverviewWidget;
 use App\Filament\Widgets\SchoolOverviewStatsWidget;
-use App\Filament\Widgets\UpcomingEventsWidget;
+use App\Http\Middleware\SecurityHeadersMiddleware;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Navigation\NavigationGroup;
-use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
-use Filament\Widgets\AccountWidget;
+use Filament\View\PanelsRenderHook;
+use Illuminate\Contracts\View\View;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
@@ -36,12 +39,15 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->profile()
+            ->defaultAvatarProvider(LocalInitialsAvatarProvider::class)
             ->brandName('Mühlmattenschule')
-            ->brandLogo(asset('images/logo.svg'))
-            ->brandLogoHeight('2.25rem')
-            ->favicon(asset('images/logo.svg'))
+            ->brandLogo(fn (): View => view('filament.brand-logo'))
+            ->brandLogoHeight('2.5rem')
+            ->favicon(asset('images/logo.png'))
+            ->sidebarCollapsibleOnDesktop()
+            ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
             ->colors([
-                'primary' => Color::Cyan,
+                'primary' => Color::hex('#029786'),
                 'warning' => Color::Amber,
             ])
             ->navigationGroups([
@@ -49,6 +55,14 @@ class AdminPanelProvider extends PanelProvider
                 NavigationGroup::make('Schulstruktur & Seiten'),
                 NavigationGroup::make('System & Verwaltung'),
             ])
+            ->renderHook(
+                PanelsRenderHook::HEAD_END,
+                fn (): View => view('filament.admin-theme'),
+            )
+            ->renderHook(
+                PanelsRenderHook::USER_MENU_BEFORE,
+                fn (): View => view('filament.topbar-actions'),
+            )
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
@@ -56,9 +70,8 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-                AccountWidget::class,
                 SchoolOverviewStatsWidget::class,
-                UpcomingEventsWidget::class,
+                ActivityOverviewWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -70,6 +83,7 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                SecurityHeadersMiddleware::class,
             ])
             ->authMiddleware([
                 Authenticate::class,

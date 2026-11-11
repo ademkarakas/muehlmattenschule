@@ -5,6 +5,15 @@
 
     RewriteEngine On
 
+    # Block access to hidden dotfiles and directories (except .well-known)
+    RewriteCond %{REQUEST_URI} "!(^|/)\.well-known/([^./]+./?)+$" [NC]
+    RewriteCond %{SCRIPT_FILENAME} -d [OR]
+    RewriteCond %{SCRIPT_FILENAME} -f
+    RewriteRule "(^|/)\." - [F]
+
+    # Disallow PHP script execution inside public/storage or public/images
+    RewriteRule ^(storage|images|files)/.*\.(php|phar|phtml)$ - [F,L,NC]
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
@@ -23,3 +32,9 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+
+<FilesMatch "(^\.|composer\.(json|lock)|package(-lock)?\.json|phpunit\.xml|artisan)">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+</FilesMatch>

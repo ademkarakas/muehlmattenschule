@@ -41,7 +41,9 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/storage',
+            // Relative URL: Bilder funktionieren unabhängig von Host/Port (localhost vs. 127.0.0.1)
+            // und werden nicht durch die CSP (img-src 'self') blockiert.
+            'url' => '/storage',
             'visibility' => 'public',
             'throw' => false,
             'report' => false,

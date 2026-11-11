@@ -77,9 +77,10 @@ docs/                     ROADMAP, HANDOFF, ARCHITECTURE
 - Gizli bilgiler **asla** repoya girmez (`.env` git'te yok, `.env.example` var).
 
 ## 7. Tasarım
-- Ana renk turkuaz. Tailwind tema değişkenleri: `brand-50 … brand-900` (ana `brand-500 = #14B8A6`, koyu `brand-700 = #0F766E`), vurgu `accent = #F59E0B`.
+- Ana renk: Okulun resmi logosundaki (`public/images/school/logo-mms-2023.png`) gerçek **Logo Turkuazı (`#029786`)**.
+- Tailwind tema değişkenleri (`resources/css/app.css`): `brand-50 … brand-900` (ana `brand-500 = #029786`, koyu `brand-600 = #007f70`, `brand-700 = #00695c`, `brand-800 = #00544a`, `brand-900 = #003d36`), vurgu `accent = #F59E0B`.
 - Font: sistem fontu / yerel barındırılan font (Google Fonts **yok** – DSGVO).
-- Mobil öncelikli, WCAG AA kontrast.
+- Mobil öncelikli, WCAG AA kontrast, `A- / A / A+` erişilebilirlik yazı boyutu ölçekleme desteği.
 
 ## 8. Yasal (DSGVO)
 - Albüm yayınlamak için `consent_confirmed = true` zorunlu.

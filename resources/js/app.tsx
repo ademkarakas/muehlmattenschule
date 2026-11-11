@@ -9,7 +9,15 @@ const pages = import.meta.glob<{ default: ComponentType }>('./pages/**/*.tsx');
  * Initialisiert die Inertia-React-Anwendung im Browser.
  */
 void createInertiaApp({
-    title: (title) => (title ? `${title} – ${appName}` : appName),
+    title: (title) => {
+        if (!title || title === 'Startseite') {
+            return `${appName} – Grundschule Freiburg-Hochdorf`;
+        }
+        if (title.includes(appName)) {
+            return title;
+        }
+        return `${title} – ${appName}`;
+    },
     resolve: async (name) => {
         const loader = pages[`./pages/${name}.tsx`];
         if (!loader) {
@@ -29,7 +37,6 @@ void createInertiaApp({
         );
     },
     progress: {
-        color: '#00b4d8',
+        color: '#00838f',
     },
 });
-

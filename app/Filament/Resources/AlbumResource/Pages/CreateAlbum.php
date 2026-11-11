@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\AlbumResource\Pages;
 
+use App\Filament\Concerns\HasCenteredStickyFormActions;
 use App\Filament\Resources\AlbumResource;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateAlbum extends CreateRecord
 {
+    use HasCenteredStickyFormActions;
+
     protected static string $resource = AlbumResource::class;
 
     /**

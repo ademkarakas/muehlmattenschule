@@ -30,6 +30,8 @@ class AnnouncementResource extends Resource
 {
     protected static ?string $model = Announcement::class;
 
+    protected static ?string $recordTitleAttribute = 'text';
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedMegaphone;
 
     protected static string|UnitEnum|null $navigationGroup = 'Aktuelles & Schulleben';
@@ -91,23 +93,25 @@ class AnnouncementResource extends Resource
             ->columns([
                 TextColumn::make('text')
                     ->label('Mitteilung')
-                    ->limit(70)
-                    ->searchable(),
+                    ->lineClamp(2)
+                    ->wrap()
+                    ->searchable()
+                    ->description(fn (Announcement $record): string => $record->visible_until
+                        ? 'Bis '.$record->visible_until->format('d.m.Y H:i')
+                        : 'Unbegrenzt'),
                 TextColumn::make('level')
                     ->label('Stufe')
                     ->badge()
                     ->formatStateUsing(fn (AnnouncementLevel $state): string => $state->label())
                     ->color(fn (AnnouncementLevel $state): string => $state === AnnouncementLevel::Important ? 'warning' : 'primary'),
                 ToggleColumn::make('is_active')
-                    ->label('Auf Startseite aktiv'),
-                TextColumn::make('visible_until')
-                    ->label('Sichtbar bis')
-                    ->dateTime('d.m.Y H:i')
-                    ->placeholder('Unbegrenzt'),
+                    ->label('Aktiv'),
             ])
+            ->recordAction(EditAction::class)
+            ->recordUrl(null)
             ->recordActions([
-                EditAction::make(),
-                DeleteAction::make(),
+                EditAction::make()->iconButton(),
+                DeleteAction::make()->iconButton(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

@@ -41,6 +41,11 @@ class Download extends Model implements HasMedia
     {
         $this->addMediaCollection('file')
             ->singleFile()
+            ->acceptsMimeTypes([
+                'application/pdf',
+                'application/msword',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            ])
             ->useDisk('public');
     }
 }

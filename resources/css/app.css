@@ -6,32 +6,55 @@
 
 /*
  * Design-Tokens der Mühlmattenschule.
- * Kräftiges, dunkles Türkis (Deep Turquoise / Petrol-Türkis) für einen modernen EduPage-Look.
+ * Original Logo-Türkis (#029786 aus logo-mms-2023.png) als Primärfarbe für Website & Admin-Panel.
  * Schriften: nur Systemschriften – keine externen Font-CDNs (DSGVO).
  */
 @theme {
     --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif,
         'Apple Color Emoji', 'Segoe UI Emoji';
 
-    --color-brand-50: #eefbfc;
-    --color-brand-100: #d5f5f8;
-    --color-brand-200: #aeeaf0;
-    --color-brand-300: #76d8e4;
-    --color-brand-400: #38bdd0;
-    --color-brand-500: #0097a7;
-    --color-brand-600: #00838f;
-    --color-brand-700: #006978;
-    --color-brand-800: #005662;
-    --color-brand-900: #003d46;
+    --color-brand-50: #effcf9;
+    --color-brand-100: #d3f7f0;
+    --color-brand-200: #a8ede1;
+    --color-brand-300: #70ddcd;
+    --color-brand-400: #36c4b2;
+    --color-brand-500: #029786;
+    --color-brand-600: #007f70;
+    --color-brand-700: #00695c;
+    --color-brand-800: #00544a;
+    --color-brand-900: #003d36;
 
     --color-accent: #f59e0b;
     --color-ink: #0f172a;
-    --color-surface: #f3f8f9;
+    --color-surface: #f2f9f8;
 }
 
 @layer base {
     html {
-        @apply bg-surface text-ink antialiased scroll-smooth;
+        @apply bg-surface text-ink antialiased scroll-smooth overflow-x-clip;
+        -webkit-text-size-adjust: 100%;
+    }
+
+    html[data-font-scale='lg'] {
+        font-size: 109%;
+    }
+
+    html[data-font-scale='xl'] {
+        font-size: 118%;
+    }
+
+    body {
+        @apply overflow-x-clip;
+    }
+
+    a,
+    button,
+    [role='button'],
+    input,
+    select,
+    textarea {
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
     }
 
     a {
@@ -41,4 +64,61 @@
     :focus-visible {
         @apply outline-2 outline-offset-2 outline-brand-600;
     }
+}
+
+/*
+ * Mobil-optimierte Darstellung für redaktionelle Rich-Text-Inhalte (Beiträge & Schulseiten).
+ * Verhindert horizontales Überlaufen durch breite Tabellen, lange deutsche Komposita oder URLs.
+ */
+.prose-school {
+    overflow-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
+}
+
+.prose-school h2 {
+    @apply mt-6 mb-2 text-lg sm:text-xl font-extrabold text-brand-900 leading-snug;
+}
+
+.prose-school h3 {
+    @apply mt-4 mb-1.5 text-base sm:text-lg font-bold text-slate-900 leading-snug;
+}
+
+.prose-school p {
+    @apply mt-2.5 first:mt-0 leading-relaxed text-slate-800;
+}
+
+.prose-school ul {
+    @apply mt-2.5 list-disc pl-5 space-y-1;
+}
+
+.prose-school ol {
+    @apply mt-2.5 list-decimal pl-5 space-y-1;
+}
+
+.prose-school a {
+    @apply font-semibold text-brand-700 underline underline-offset-2 hover:text-brand-900 break-words;
+}
+
+.prose-school img,
+.prose-school video,
+.prose-school iframe {
+    @apply max-w-full h-auto rounded-xl my-4;
+}
+
+.prose-school table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    @apply my-4 border-collapse text-xs sm:text-sm;
+}
+
+.prose-school th,
+.prose-school td {
+    @apply border border-slate-200 px-3 py-2 text-left align-top;
+}
+
+.prose-school pre {
+    @apply my-4 overflow-x-auto rounded-xl bg-slate-900 p-4 text-xs text-slate-100;
 }

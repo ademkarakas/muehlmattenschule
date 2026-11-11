@@ -29,6 +29,8 @@ class DownloadResource extends Resource
 {
     protected static ?string $model = Download::class;
 
+    protected static ?string $recordTitleAttribute = 'title';
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedArrowDownTray;
 
     protected static string|UnitEnum|null $navigationGroup = 'Schulstruktur & Seiten';
@@ -99,20 +101,19 @@ class DownloadResource extends Resource
                 TextColumn::make('title')
                     ->label('Titel')
                     ->searchable()
-                    ->sortable(),
-                TextColumn::make('category')
-                    ->label('Bereich')
-                    ->badge(),
+                    ->sortable()
+                    ->wrap()
+                    ->weight('medium')
+                    ->description(fn (Download $record): string => $record->category.' · '.$record->updated_at?->format('d.m.Y')),
                 IconColumn::make('is_published')
                     ->label('Sichtbar')
                     ->boolean(),
-                TextColumn::make('updated_at')
-                    ->label('Aktualisiert')
-                    ->date('d.m.Y'),
             ])
+            ->recordAction(EditAction::class)
+            ->recordUrl(null)
             ->recordActions([
-                EditAction::make(),
-                DeleteAction::make(),
+                EditAction::make()->iconButton(),
+                DeleteAction::make()->iconButton(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

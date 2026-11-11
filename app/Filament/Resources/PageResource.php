@@ -11,10 +11,12 @@ use App\Filament\Resources\PageResource\Pages\EditPage;
 use App\Filament\Resources\PageResource\Pages\ListPages;
 use App\Models\Page;
 use BackedEnum;
+use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\Builder;
 use Filament\Forms\Components\Builder\Block;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -33,6 +35,8 @@ use UnitEnum;
 class PageResource extends Resource
 {
     protected static ?string $model = Page::class;
+
+    protected static ?string $recordTitleAttribute = 'title';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentText;
 
@@ -70,10 +74,16 @@ class PageResource extends Resource
                             ->label('Menübereich')
                             ->options([
                                 'unsere-schule' => 'Unsere Schule',
-                                'schulleben' => 'Schulleben & Betreuung',
+                                'konzepte-projekte' => 'Konzepte & Projekte',
+                                'angebote' => 'Angebote & Betreuung',
+                                'schulleben' => 'Schulleben (Übersicht)',
                             ])
                             ->default('unsere-schule')
                             ->required(),
+                        TextInput::make('menu_group')
+                            ->label('Untergruppe im Menü (optional)')
+                            ->placeholder('z. B. Profil & Menschen, Gremien & Partner')
+                            ->maxLength(100),
                         TextInput::make('menu_order')
                             ->label('Reihenfolge im Menü')
                             ->numeric()
@@ -165,6 +175,36 @@ class PageResource extends Resource
                                             ->default('all')
                                             ->required(),
                                     ]),
+                                Block::make('accordion')
+                                    ->label('Aufklappbare Fragen & Antworten (FAQ / Akkordeon)')
+                                    ->schema([
+                                        TextInput::make('heading')
+                                            ->label('Abschnitts-Überschrift (optional)')
+                                            ->maxLength(160),
+                                        Repeater::make('items')
+                                            ->label('Einträge')
+                                            ->schema([
+                                                TextInput::make('question')
+                                                    ->label('Frage / Titel')
+                                                    ->required()
+                                                    ->maxLength(180),
+                                                RichEditor::make('content')
+                                                    ->label('Antwort / Inhalt')
+                                                    ->required(),
+                                            ])
+                                            ->defaultItems(1),
+                                    ]),
+                                Block::make('downloads_box')
+                                    ->label('Downloads-Kasten (PDF-Dokumente)')
+                                    ->schema([
+                                        TextInput::make('heading')
+                                            ->label('Überschrift')
+                                            ->default('Passende Elternbriefe & Formulare')
+                                            ->maxLength(160),
+                                        TextInput::make('category')
+                                            ->label('Download-Kategorie filtern (optional, z. B. Förderverein & Formulare)')
+                                            ->maxLength(120),
+                                    ]),
                             ])
                             ->columnSpanFull(),
                     ]),
@@ -182,13 +222,14 @@ class PageResource extends Resource
                 TextColumn::make('title')
                     ->label('Seitentitel')
                     ->searchable()
-                    ->sortable(),
-                TextColumn::make('section')
-                    ->label('Menübereich')
-                    ->badge(),
-                TextColumn::make('menu_order')
-                    ->label('Reihenfolge')
-                    ->sortable(),
+                    ->sortable()
+                    ->weight('medium')
+                    ->description(fn (Page $record): string => match ($record->section) {
+                        'konzepte-projekte' => 'Konzepte & Projekte',
+                        'angebote' => 'Angebote & Betreuung',
+                        'schulleben' => 'Schulleben',
+                        default => 'Unsere Schule',
+                    }.($record->menu_group ? ' ('.$record->menu_group.')' : '').' · Position '.$record->menu_order),
                 TextColumn::make('status')
                     ->label('Status')
                     ->badge()
@@ -196,8 +237,14 @@ class PageResource extends Resource
                     ->color(fn (PublishStatus $state): string => $state === PublishStatus::Published ? 'success' : 'gray'),
             ])
             ->recordActions([
-                EditAction::make(),
-                DeleteAction::make(),
+                Action::make('preview')
+                    ->label('Auf Website ansehen')
+                    ->icon(Heroicon::OutlinedArrowTopRightOnSquare)
+                    ->color('gray')
+                    ->url(fn (Page $record): string => '/'.$record->section.'/'.$record->slug, shouldOpenInNewTab: true)
+                    ->iconButton(),
+                EditAction::make()->iconButton(),
+                DeleteAction::make()->iconButton(),
             ]);
     }
 
