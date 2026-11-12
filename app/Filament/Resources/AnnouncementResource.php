@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Filament\Resources;
 
 use App\Enums\AnnouncementLevel;
-use App\Filament\Resources\AnnouncementResource\Pages\ManageAnnouncements;
+use App\Filament\Resources\AnnouncementResource\Pages\CreateAnnouncement;
+use App\Filament\Resources\AnnouncementResource\Pages\EditAnnouncement;
+use App\Filament\Resources\AnnouncementResource\Pages\ListAnnouncements;
 use App\Models\Announcement;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
@@ -19,6 +21,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Pages\PageRegistration;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
@@ -51,35 +54,46 @@ class AnnouncementResource extends Resource
     {
         return $schema
             ->components([
-                Textarea::make('text')
-                    ->label('Mitteilungstext')
-                    ->required()
-                    ->maxLength(500)
-                    ->rows(3)
-                    ->columnSpanFull(),
-                Select::make('level')
-                    ->label('Wichtigkeit')
-                    ->options(AnnouncementLevel::options())
-                    ->default(AnnouncementLevel::Info->value)
-                    ->required(),
-                Toggle::make('is_active')
-                    ->label('Auf der Startseite anzeigen (Aktiv)')
-                    ->helperText('Wenn aktiviert, wird diese Ankündigung prominent oben auf der Startseite eingeblendet.')
-                    ->default(true),
-                TextInput::make('link_label')
-                    ->label('Link-Beschriftung (optional)')
-                    ->placeholder('z. B. Weitere Informationen')
-                    ->maxLength(100),
-                TextInput::make('link_url')
-                    ->label('Zieladresse / URL (optional)')
-                    ->placeholder('z. B. /aktuelles oder /downloads')
-                    ->maxLength(300),
-                DateTimePicker::make('visible_from')
-                    ->label('Sichtbar ab (optional)')
-                    ->seconds(false),
-                DateTimePicker::make('visible_until')
-                    ->label('Automatisch ausblenden am (optional)')
-                    ->seconds(false),
+                Section::make()
+                    ->columnSpanFull()
+                    ->columns(2)
+                    ->schema([
+                        Textarea::make('text')
+                            ->label('Mitteilungstext')
+                            ->required()
+                            ->maxLength(500)
+                            ->rows(3)
+                            ->columnSpanFull(),
+                        Select::make('level')
+                            ->label('Wichtigkeit')
+                            ->prefixIcon(Heroicon::OutlinedMegaphone)
+                            ->options(AnnouncementLevel::options())
+                            ->native(false)
+                            ->default(AnnouncementLevel::Info->value)
+                            ->required(),
+                        Toggle::make('is_active')
+                            ->label('Auf der Startseite anzeigen (Aktiv)')
+                            ->helperText('Wenn aktiviert, wird diese Ankündigung prominent oben auf der Startseite eingeblendet.')
+                            ->default(true),
+                        TextInput::make('link_label')
+                            ->label('Link-Beschriftung (optional)')
+                            ->placeholder('z. B. Weitere Informationen')
+                            ->prefixIcon(Heroicon::OutlinedTag)
+                            ->maxLength(100),
+                        TextInput::make('link_url')
+                            ->label('Zieladresse / URL (optional)')
+                            ->placeholder('z. B. /aktuelles oder /downloads')
+                            ->prefixIcon(Heroicon::OutlinedLink)
+                            ->maxLength(300),
+                        DateTimePicker::make('visible_from')
+                            ->label('Sichtbar ab (optional)')
+                            ->prefixIcon(Heroicon::OutlinedCalendarDays)
+                            ->seconds(false),
+                        DateTimePicker::make('visible_until')
+                            ->label('Automatisch ausblenden am (optional)')
+                            ->prefixIcon(Heroicon::OutlinedClock)
+                            ->seconds(false),
+                    ]),
             ]);
     }
 
@@ -107,8 +121,9 @@ class AnnouncementResource extends Resource
                 ToggleColumn::make('is_active')
                     ->label('Aktiv'),
             ])
-            ->recordAction(EditAction::class)
-            ->recordUrl(null)
+            ->recordUrl(fn (Announcement $record): ?string => auth()->user()?->can('update', $record)
+                ? static::getUrl('edit', ['record' => $record])
+                : null)
             ->recordActions([
                 EditAction::make()->iconButton(),
                 DeleteAction::make()->iconButton(),
@@ -128,7 +143,9 @@ class AnnouncementResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ManageAnnouncements::route('/'),
+            'index' => ListAnnouncements::route('/'),
+            'create' => CreateAnnouncement::route('/create'),
+            'edit' => EditAnnouncement::route('/{record}/edit'),
         ];
     }
 }

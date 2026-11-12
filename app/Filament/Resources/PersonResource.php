@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Filament\Resources;
 
 use App\Enums\PersonGroup;
-use App\Filament\Resources\PersonResource\Pages\ManagePeople;
+use App\Filament\Resources\PersonResource\Pages\CreatePerson;
+use App\Filament\Resources\PersonResource\Pages\EditPerson;
+use App\Filament\Resources\PersonResource\Pages\ListPeople;
 use App\Models\Person;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
@@ -18,6 +20,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Pages\PageRegistration;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
@@ -51,42 +54,55 @@ class PersonResource extends Resource
     {
         return $schema
             ->components([
-                TextInput::make('name')
-                    ->label('Vor- und Nachname')
-                    ->required()
-                    ->maxLength(160),
-                TextInput::make('role_title')
-                    ->label('Funktion / Aufgabe')
-                    ->placeholder('z. B. Rektorin, Klassenlehrerin, Sekretariat')
-                    ->required()
-                    ->maxLength(160),
-                Select::make('group')
-                    ->label('Bereich')
-                    ->options(PersonGroup::options())
-                    ->default(PersonGroup::Kollegium->value)
-                    ->required(),
-                TextInput::make('class_name')
-                    ->label('Klasse (optional)')
-                    ->placeholder('z. B. Klasse 2a')
-                    ->maxLength(60),
-                TextInput::make('email')
-                    ->label('E-Mail-Adresse (optional)')
-                    ->email()
-                    ->maxLength(160),
-                TextInput::make('sort_order')
-                    ->label('Reihenfolge')
-                    ->numeric()
-                    ->default(0),
-                SpatieMediaLibraryFileUpload::make('portrait')
-                    ->label('Porträtfoto (optional, nur mit Einwilligung)')
-                    ->collection('portrait')
-                    ->image()
-                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
-                    ->maxSize(6144)
-                    ->columnSpanFull(),
-                Toggle::make('is_active')
-                    ->label('Auf der Website anzeigen')
-                    ->default(true),
+                Section::make()
+                    ->columnSpanFull()
+                    ->columns(2)
+                    ->schema([
+                        TextInput::make('name')
+                            ->label('Vor- und Nachname')
+                            ->prefixIcon(Heroicon::OutlinedUser)
+                            ->required()
+                            ->maxLength(160),
+                        TextInput::make('role_title')
+                            ->label('Funktion / Aufgabe')
+                            ->placeholder('z. B. Rektorin, Klassenlehrerin, Sekretariat')
+                            ->prefixIcon(Heroicon::OutlinedBriefcase)
+                            ->required()
+                            ->maxLength(160),
+                        Select::make('group')
+                            ->label('Bereich')
+                            ->prefixIcon(Heroicon::OutlinedUserGroup)
+                            ->options(PersonGroup::options())
+                            ->native(false)
+                            ->default(PersonGroup::Kollegium->value)
+                            ->required(),
+                        TextInput::make('class_name')
+                            ->label('Klasse (optional)')
+                            ->placeholder('z. B. Klasse 2a')
+                            ->prefixIcon(Heroicon::OutlinedAcademicCap)
+                            ->maxLength(60),
+                        TextInput::make('email')
+                            ->label('E-Mail-Adresse (optional)')
+                            ->prefixIcon(Heroicon::OutlinedEnvelope)
+                            ->email()
+                            ->maxLength(160),
+                        TextInput::make('sort_order')
+                            ->label('Reihenfolge')
+                            ->prefixIcon(Heroicon::OutlinedArrowsUpDown)
+                            ->numeric()
+                            ->default(0),
+                        SpatieMediaLibraryFileUpload::make('portrait')
+                            ->label('Porträtfoto (optional, nur mit Einwilligung)')
+                            ->collection('portrait')
+                            ->image()
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                            ->maxSize(6144)
+                            ->columnSpanFull(),
+                        Toggle::make('is_active')
+                            ->label('Auf der Website anzeigen')
+                            ->default(true)
+                            ->columnSpanFull(),
+                    ]),
             ]);
     }
 
@@ -99,11 +115,9 @@ class PersonResource extends Resource
             ->defaultSort('sort_order')
             ->columns([
                 SpatieMediaLibraryImageColumn::make('portrait')
-                    ->label('Foto')
+                    ->label('')
                     ->collection('portrait')
-                    ->conversion('avatar')
-                    ->circular()
-                    ->imageSize(40),
+                    ->circular(),
                 TextColumn::make('name')
                     ->label('Name')
                     ->searchable()
@@ -118,8 +132,9 @@ class PersonResource extends Resource
                     ->label('Sichtbar')
                     ->boolean(),
             ])
-            ->recordAction(EditAction::class)
-            ->recordUrl(null)
+            ->recordUrl(fn (Person $record): ?string => auth()->user()?->can('update', $record)
+                ? static::getUrl('edit', ['record' => $record])
+                : null)
             ->recordActions([
                 EditAction::make()->iconButton(),
                 DeleteAction::make()->iconButton(),
@@ -139,7 +154,9 @@ class PersonResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ManagePeople::route('/'),
+            'index' => ListPeople::route('/'),
+            'create' => CreatePerson::route('/create'),
+            'edit' => EditPerson::route('/{record}/edit'),
         ];
     }
 }

@@ -38,7 +38,7 @@ export default function AlbumsIndexPage({ albums }: AlbumsIndexProps): ReactElem
                                 href={`/galerie/${album.slug}`}
                                 className="group flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xs transition hover:-translate-y-0.5 hover:shadow-md"
                             >
-                                <div className="aspect-[16/10] w-full overflow-hidden bg-brand-100">
+                                <div className="relative aspect-[16/10] w-full overflow-hidden bg-brand-100">
                                     {album.coverUrl ? (
                                         <img
                                             src={album.coverUrl}
@@ -51,6 +51,15 @@ export default function AlbumsIndexPage({ albums }: AlbumsIndexProps): ReactElem
                                         <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-brand-600 to-brand-800 p-6 text-center text-white font-semibold">
                                             {album.title}
                                         </div>
+                                    )}
+                                    {album.photosCount > 0 && (
+                                        <span className="absolute bottom-2.5 right-2.5 inline-flex items-center gap-1.5 rounded-full bg-slate-950/75 px-2.5 py-1 text-[11px] font-bold text-white backdrop-blur-xs">
+                                            <svg className="h-3.5 w-3.5 text-brand-300 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z" />
+                                            </svg>
+                                            <span>{album.photosCount} Fotos</span>
+                                        </span>
                                     )}
                                 </div>
                                 <div className="p-5 flex-1 flex flex-col">

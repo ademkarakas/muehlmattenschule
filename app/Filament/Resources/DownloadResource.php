@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\DownloadResource\Pages\ManageDownloads;
+use App\Filament\Resources\DownloadResource\Pages\CreateDownload;
+use App\Filament\Resources\DownloadResource\Pages\EditDownload;
+use App\Filament\Resources\DownloadResource\Pages\ListDownloads;
 use App\Models\Download;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
@@ -18,6 +20,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Pages\PageRegistration;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
@@ -50,43 +53,52 @@ class DownloadResource extends Resource
     {
         return $schema
             ->components([
-                TextInput::make('title')
-                    ->label('Titel des Dokuments')
-                    ->required()
-                    ->maxLength(200),
-                Select::make('category')
-                    ->label('Bereich')
-                    ->options([
-                        'Elternbriefe' => 'Elternbriefe',
-                        'Formulare' => 'Formulare & Anträge',
-                        'Betreuung' => 'Schulkindbetreuung',
-                        'Sonstiges' => 'Sonstiges',
-                    ])
-                    ->default('Formulare')
-                    ->required(),
-                Textarea::make('description')
-                    ->label('Kurzbeschreibung (optional)')
-                    ->rows(2)
-                    ->maxLength(400)
-                    ->columnSpanFull(),
-                SpatieMediaLibraryFileUpload::make('file')
-                    ->label('Datei (PDF / Dokument)')
-                    ->collection('file')
-                    ->acceptedFileTypes([
-                        'application/pdf',
-                        'application/msword',
-                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                    ])
-                    ->maxSize(15360)
-                    ->required()
-                    ->columnSpanFull(),
-                TextInput::make('sort_order')
-                    ->label('Reihenfolge')
-                    ->numeric()
-                    ->default(0),
-                Toggle::make('is_published')
-                    ->label('Veröffentlicht')
-                    ->default(true),
+                Section::make()
+                    ->columnSpanFull()
+                    ->columns(2)
+                    ->schema([
+                        TextInput::make('title')
+                            ->label('Titel des Dokuments')
+                            ->prefixIcon(Heroicon::OutlinedDocumentText)
+                            ->required()
+                            ->maxLength(200),
+                        Select::make('category')
+                            ->label('Bereich')
+                            ->prefixIcon(Heroicon::OutlinedFolderOpen)
+                            ->options([
+                                'Elternbriefe' => 'Elternbriefe',
+                                'Formulare' => 'Formulare & Anträge',
+                                'Betreuung' => 'Schulkindbetreuung',
+                                'Sonstiges' => 'Sonstiges',
+                            ])
+                            ->native(false)
+                            ->default('Formulare')
+                            ->required(),
+                        Textarea::make('description')
+                            ->label('Kurzbeschreibung (optional)')
+                            ->rows(2)
+                            ->maxLength(400)
+                            ->columnSpanFull(),
+                        SpatieMediaLibraryFileUpload::make('file')
+                            ->label('Datei (PDF / Dokument)')
+                            ->collection('file')
+                            ->acceptedFileTypes([
+                                'application/pdf',
+                                'application/msword',
+                                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                            ])
+                            ->maxSize(15360)
+                            ->required()
+                            ->columnSpanFull(),
+                        TextInput::make('sort_order')
+                            ->label('Reihenfolge')
+                            ->prefixIcon(Heroicon::OutlinedArrowsUpDown)
+                            ->numeric()
+                            ->default(0),
+                        Toggle::make('is_published')
+                            ->label('Veröffentlicht')
+                            ->default(true),
+                    ]),
             ]);
     }
 
@@ -109,8 +121,9 @@ class DownloadResource extends Resource
                     ->label('Sichtbar')
                     ->boolean(),
             ])
-            ->recordAction(EditAction::class)
-            ->recordUrl(null)
+            ->recordUrl(fn (Download $record): ?string => auth()->user()?->can('update', $record)
+                ? static::getUrl('edit', ['record' => $record])
+                : null)
             ->recordActions([
                 EditAction::make()->iconButton(),
                 DeleteAction::make()->iconButton(),
@@ -130,7 +143,9 @@ class DownloadResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ManageDownloads::route('/'),
+            'index' => ListDownloads::route('/'),
+            'create' => CreateDownload::route('/create'),
+            'edit' => EditDownload::route('/{record}/edit'),
         ];
     }
 }

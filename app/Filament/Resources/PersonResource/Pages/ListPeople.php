@@ -8,9 +8,9 @@ use App\Filament\Resources\PersonResource;
 use App\Models\Person;
 use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
-use Filament\Resources\Pages\ManageRecords;
+use Filament\Resources\Pages\ListRecords;
 
-class ManagePeople extends ManageRecords
+class ListPeople extends ListRecords
 {
     protected static string $resource = PersonResource::class;
 
@@ -22,7 +22,7 @@ class ManagePeople extends ManageRecords
         $active = Person::query()->where('is_active', true)->count();
         $total = Person::query()->count();
 
-        return "{$active} aktive " . ($active === 1 ? 'Person' : 'Personen') . " im Schulteam ({$total} insgesamt)";
+        return "{$active} aktive ".($active === 1 ? 'Person' : 'Personen')." im Schulteam ({$total} insgesamt)";
     }
 
     /**

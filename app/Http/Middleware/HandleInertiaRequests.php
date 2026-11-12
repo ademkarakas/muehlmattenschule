@@ -79,9 +79,20 @@ class HandleInertiaRequests extends Middleware
         ];
 
         if (Schema::hasTable('posts') && Schema::hasTable('categories')) {
-            $rubriken['totalPosts'] = Post::query()->published()->count();
+            $hasPivot = Schema::hasTable('category_post');
+            $alleCat = Category::query()->where('slug', 'alle-beitraege')->first();
+
+            if ($alleCat !== null && $hasPivot) {
+                $rubriken['totalPosts'] = $alleCat->allPosts()->published()->count();
+            } else {
+                $rubriken['totalPosts'] = Post::query()->published()->count();
+            }
+
             $rubriken['categories'] = Category::query()
-                ->withCount(['posts' => fn ($q) => $q->published()])
+                ->where('slug', '!=', 'alle-beitraege')
+                ->withCount([
+                    ($hasPivot ? 'allPosts' : 'posts').' as posts_count' => fn ($q) => $q->published(),
+                ])
                 ->orderBy('name')
                 ->get(['id', 'name', 'slug', 'color'])
                 ->map(fn (Category $cat): array => [

@@ -34,6 +34,14 @@ class HomeController extends Controller
                     ? $post->album->totalPhotoCount()
                     : 0;
 
+                $firstInlineImg = null;
+                if (preg_match('#<img\b[^>]*src="(/images/school/[^"]+)"#i', (string) $post->body, $imgMatch)) {
+                    $firstInlineImg = $imgMatch[1];
+                }
+                $firstGalleryImg = is_array($post->gallery_images) && isset($post->gallery_images[0]) && is_string($post->gallery_images[0])
+                    ? $post->gallery_images[0]
+                    : null;
+
                 return [
                     'id' => $post->id,
                     'title' => $post->title,
@@ -41,9 +49,11 @@ class HomeController extends Controller
                     'excerpt' => $post->excerpt,
                     'className' => $post->class_name,
                     'isFeatured' => $post->is_featured,
-                    'publishedAt' => $post->published_at?->format('d.m.Y'),
+                    'publishedAt' => $post->published_at?->locale('de')->isoFormat('D. MMMM YYYY'),
                     'publishedAtIso' => $post->published_at?->toDateString(),
-                    'coverUrl' => $post->getFirstMediaUrl('cover', 'card') ?: $post->getFirstMediaUrl('cover') ?: null,
+                    'coverUrl' => $post->getFirstMediaUrl('cover')
+                        ?: $firstGalleryImg
+                        ?: $firstInlineImg,
                     'photosCount' => max($ownGalleryCount, $albumCount),
                     'category' => $post->category ? [
                         'name' => $post->category->name,

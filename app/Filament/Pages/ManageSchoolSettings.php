@@ -49,6 +49,19 @@ class ManageSchoolSettings extends Page
     }
 
     /**
+     * Fügt die Design-Klasse für den helltürkisen Kopfbereich und das Karten-Layout hinzu.
+     *
+     * @return array<int, string>
+     */
+    public function getPageClasses(): array
+    {
+        return [
+            ...parent::getPageClasses(),
+            'mms-settings-page',
+        ];
+    }
+
+    /**
      * Formularzustand für die Schuleinstellungen.
      *
      * @var array<string, mixed> | null

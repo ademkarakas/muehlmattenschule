@@ -36,7 +36,7 @@ export default function PostsIndexPage({
 
     return (
         <SiteLayout>
-            <div className="mx-auto max-w-6xl px-4 sm:px-6 py-7 sm:py-10">
+            <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10 py-7 sm:py-10">
                 <Breadcrumbs />
 
                 <header className="mb-6 sm:mb-8">
@@ -104,9 +104,9 @@ export default function PostsIndexPage({
                                 Für diese Auswahl wurden keine Beiträge gefunden.
                             </div>
                         ) : (
-                            <div className="grid gap-5 sm:gap-6 sm:grid-cols-2">
+                            <div className="flex flex-col gap-5 sm:gap-6">
                                 {posts.map((post) => (
-                                    <PostCard key={post.id} post={post} />
+                                    <PostCard key={post.id} post={post} layout="horizontal" />
                                 ))}
                             </div>
                         )}

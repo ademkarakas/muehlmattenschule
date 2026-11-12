@@ -8,9 +8,9 @@ use App\Filament\Resources\DownloadResource;
 use App\Models\Download;
 use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
-use Filament\Resources\Pages\ManageRecords;
+use Filament\Resources\Pages\ListRecords;
 
-class ManageDownloads extends ManageRecords
+class ListDownloads extends ListRecords
 {
     protected static string $resource = DownloadResource::class;
 

@@ -8,9 +8,9 @@ use App\Filament\Resources\CategoryResource;
 use App\Models\Category;
 use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
-use Filament\Resources\Pages\ManageRecords;
+use Filament\Resources\Pages\ListRecords;
 
-class ManageCategories extends ManageRecords
+class ListCategories extends ListRecords
 {
     protected static string $resource = CategoryResource::class;
 
@@ -21,7 +21,7 @@ class ManageCategories extends ManageRecords
     {
         $count = Category::query()->count();
 
-        return "Insgesamt {$count} " . ($count === 1 ? 'Kategorie' : 'Kategorien');
+        return "Insgesamt {$count} ".($count === 1 ? 'Kategorie' : 'Kategorien');
     }
 
     /**

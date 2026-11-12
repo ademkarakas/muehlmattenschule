@@ -7,8 +7,11 @@ namespace Tests\Feature;
 use App\Enums\UserRole;
 use App\Models\Album;
 use App\Models\Announcement;
+use App\Models\Category;
+use App\Models\Download;
 use App\Models\Event;
 use App\Models\Page;
+use App\Models\Person;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -114,6 +117,60 @@ class AdminAccessAndPoliciesTest extends TestCase
         $this->actingAs($schulleitung)->get('/admin/categories')->assertOk();
         $this->actingAs($schulleitung)->get('/admin/users')->assertOk();
         $this->actingAs($schulleitung)->get('/admin/manage-school-settings')->assertOk();
+    }
+
+    /**
+     * Prüft, dass Benutzerkonten sowie alle weiteren Verwaltungs-Ressourcen auf eigenen Seiten
+     * statt in einem Popup angelegt und bearbeitet werden.
+     */
+    public function test_user_create_and_edit_pages_render_as_full_pages(): void
+    {
+        $schulleitung = User::factory()->schulleitung()->create();
+        $lehrkraft = User::factory()->create(['role' => UserRole::Lehrkraft]);
+        $announcement = Announcement::factory()->create(['text' => 'Wichtige Schulinfo']);
+        $person = Person::query()->create([
+            'name' => 'Diana Blum',
+            'role_title' => 'Rektorin',
+            'group' => 'schulleitung',
+            'is_active' => true,
+        ]);
+        $download = Download::query()->create([
+            'title' => 'Schulwegeplan PDF',
+            'category' => 'Formulare',
+            'is_published' => true,
+        ]);
+        $category = Category::factory()->create(['name' => 'Ausflüge']);
+        $event = Event::factory()->create(['title' => 'Sommerfest']);
+
+        $this->actingAs($schulleitung)->get('/admin/users/create')->assertOk();
+        $this->actingAs($schulleitung)->get("/admin/users/{$lehrkraft->id}/edit")
+            ->assertOk()
+            ->assertSee($lehrkraft->email);
+
+        $this->actingAs($schulleitung)->get('/admin/announcements/create')->assertOk();
+        $this->actingAs($schulleitung)->get("/admin/announcements/{$announcement->id}/edit")
+            ->assertOk()
+            ->assertSee('Wichtige Schulinfo');
+
+        $this->actingAs($schulleitung)->get('/admin/people/create')->assertOk();
+        $this->actingAs($schulleitung)->get("/admin/people/{$person->id}/edit")
+            ->assertOk()
+            ->assertSee('Diana Blum');
+
+        $this->actingAs($schulleitung)->get('/admin/downloads/create')->assertOk();
+        $this->actingAs($schulleitung)->get("/admin/downloads/{$download->id}/edit")
+            ->assertOk()
+            ->assertSee('Schulwegeplan PDF');
+
+        $this->actingAs($schulleitung)->get('/admin/categories/create')->assertOk();
+        $this->actingAs($schulleitung)->get("/admin/categories/{$category->id}/edit")
+            ->assertOk()
+            ->assertSee('Ausflüge');
+
+        $this->actingAs($schulleitung)->get('/admin/events/create')->assertOk();
+        $this->actingAs($schulleitung)->get("/admin/events/{$event->id}/edit")
+            ->assertOk()
+            ->assertSee('Sommerfest');
     }
 
     /**

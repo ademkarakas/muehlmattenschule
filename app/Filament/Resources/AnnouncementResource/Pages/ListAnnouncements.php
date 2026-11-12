@@ -8,9 +8,9 @@ use App\Filament\Resources\AnnouncementResource;
 use App\Models\Announcement;
 use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
-use Filament\Resources\Pages\ManageRecords;
+use Filament\Resources\Pages\ListRecords;
 
-class ManageAnnouncements extends ManageRecords
+class ListAnnouncements extends ListRecords
 {
     protected static string $resource = AnnouncementResource::class;
 
@@ -22,7 +22,7 @@ class ManageAnnouncements extends ManageRecords
         $active = Announcement::query()->where('is_active', true)->count();
         $total = Announcement::query()->count();
 
-        return "{$active} aktive " . ($active === 1 ? 'Ankündigung' : 'Ankündigungen') . " auf der Startseite ({$total} insgesamt)";
+        return "{$active} aktive ".($active === 1 ? 'Ankündigung' : 'Ankündigungen')." auf der Startseite ({$total} insgesamt)";
     }
 
     /**

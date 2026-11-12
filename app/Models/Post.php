@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\Schema;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -42,6 +44,12 @@ class Post extends Model implements HasMedia
         static::saving(function (self $post): void {
             $post->body = HtmlSanitizer::clean($post->body);
         });
+
+        static::saved(function (self $post): void {
+            if ($post->category_id !== null && Schema::hasTable('category_post')) {
+                $post->categories()->syncWithoutDetaching([$post->category_id]);
+            }
+        });
     }
 
     /**
@@ -60,13 +68,23 @@ class Post extends Model implements HasMedia
     }
 
     /**
-     * Zugehörige Kategorie des Beitrags.
+     * Zugehörige Hauptkategorie des Beitrags.
      *
      * @return BelongsTo<Category, $this>
      */
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+
+    /**
+     * Alle dem Beitrag zugeordneten Rubriken (Mehrfachzuordnung wie im Original-Archiv).
+     *
+     * @return BelongsToMany<Category, $this>
+     */
+    public function categories(): BelongsToMany
+    {
+        return $this->belongsToMany(Category::class, 'category_post');
     }
 
     /**
@@ -122,7 +140,7 @@ class Post extends Model implements HasMedia
     public function registerMediaConversions(?Media $media = null): void
     {
         $this->addMediaConversion('card')
-            ->fit(Fit::Crop, 640, 400)
+            ->fit(Fit::Max, 800, 800)
             ->format('webp')
             ->nonQueued();
 

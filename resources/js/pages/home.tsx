@@ -251,6 +251,18 @@ export default function HomePage({ posts, postsPagination, upcomingEvents, album
                             >
                                 <div className="flex items-start sm:items-center gap-3">
                                     <span
+                                        className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ring-1 ${
+                                            isImportant
+                                                ? 'bg-amber-400/25 text-amber-900 ring-amber-500/30'
+                                                : 'bg-brand-50 text-brand-700 ring-brand-500/15'
+                                        }`}
+                                        aria-hidden="true"
+                                    >
+                                        <svg className="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 110-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38c-.551.318-1.26.117-1.527-.461a20.845 20.845 0 01-1.44-4.282m3.102.069a18.03 18.03 0 01-.59-4.59c0-1.586.205-3.124.59-4.59m0 9.18a23.848 23.848 0 018.835 2.535M10.34 6.66a23.847 23.847 0 008.835-2.535m0 0A23.74 23.74 0 0018.795 3m.38 1.125a23.91 23.91 0 011.014 5.395m-1.014 8.855c-.118.38-.245.754-.38 1.125m.38-1.125a23.91 23.91 0 001.014-5.395m0-3.46c.495.413.811 1.035.811 1.73 0 .695-.316 1.317-.811 1.73m0-3.46a24.347 24.347 0 010 3.46" />
+                                        </svg>
+                                    </span>
+                                    <span
                                         className={`inline-flex shrink-0 items-center rounded-xl px-3 py-1 text-xs font-extrabold uppercase tracking-wider ${
                                             isImportant
                                                 ? 'bg-amber-400 text-slate-950'
@@ -364,9 +376,16 @@ export default function HomePage({ posts, postsPagination, upcomingEvents, album
                     {/* 1. Terminkalender-Widget mit Klassen-/Typ-Badges & iCal-Download */}
                     <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xs">
                         <div className="bg-gradient-to-r from-brand-700 to-brand-800 px-5 py-4 text-white flex items-center justify-between gap-2">
-                            <div>
-                                <h2 className="text-base font-extrabold">Nächste Termine</h2>
-                                <p className="text-xs text-brand-100">Veranstaltungen & wichtige Tage</p>
+                            <div className="flex items-center gap-3">
+                                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/15 text-white ring-1 ring-white/25" aria-hidden="true">
+                                    <svg className="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+                                    </svg>
+                                </span>
+                                <div>
+                                    <h2 className="text-base font-extrabold">Nächste Termine</h2>
+                                    <p className="text-xs text-brand-100">Veranstaltungen & wichtige Tage</p>
+                                </div>
                             </div>
                             <Link
                                 href="/termine"
@@ -418,10 +437,14 @@ export default function HomePage({ posts, postsPagination, upcomingEvents, album
                                                 <p className="mt-0.5 text-xs text-slate-500">
                                                     {event.dateFormatted} · {event.timeFormatted}
                                                 </p>
-                                                <div className="mt-1 flex flex-wrap items-center justify-between gap-2">
+                                                <div className="mt-1.5 flex flex-wrap items-center justify-between gap-2">
                                                     {event.location ? (
-                                                        <span className="text-xs font-semibold text-brand-700">
-                                                            📍 {event.location}
+                                                        <span className="inline-flex items-center gap-1 text-xs font-semibold text-brand-700">
+                                                            <svg className="h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                                                            </svg>
+                                                            <span>{event.location}</span>
                                                         </span>
                                                     ) : (
                                                         <span />
@@ -430,9 +453,12 @@ export default function HomePage({ posts, postsPagination, upcomingEvents, album
                                                         <a
                                                             href={event.icalUrl}
                                                             title="Termin im Kalender speichern (.ics)"
-                                                            className="inline-flex items-center gap-1 rounded-md bg-slate-100 px-2 py-0.5 text-[11px] font-bold text-slate-700 hover:bg-brand-100 hover:text-brand-800"
+                                                            className="inline-flex items-center gap-1 rounded-lg border border-slate-200/80 bg-slate-50 px-2 py-0.5 text-[11px] font-bold text-slate-700 transition hover:border-brand-200 hover:bg-brand-50 hover:text-brand-800"
                                                         >
-                                                            📅 .ics
+                                                            <svg className="h-3.5 w-3.5 text-brand-700 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+                                                            </svg>
+                                                            <span>.ics</span>
                                                         </a>
                                                     )}
                                                 </div>
@@ -448,7 +474,10 @@ export default function HomePage({ posts, postsPagination, upcomingEvents, album
                                 href="/termine.ics"
                                 className="font-bold text-brand-800 hover:text-brand-950 inline-flex items-center gap-1.5"
                             >
-                                <span>📅</span> Kalender exportieren (.ics)
+                                <svg className="h-4 w-4 text-brand-700 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+                                </svg>
+                                <span>Kalender exportieren (.ics)</span>
                             </a>
                             <Link href="/termine" className="font-semibold text-slate-600 hover:text-brand-800">
                                 Monatsübersicht →
@@ -460,9 +489,16 @@ export default function HomePage({ posts, postsPagination, upcomingEvents, album
                     {school.bell_schedule && school.bell_schedule.length > 0 && (
                         <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xs">
                             <div className="bg-gradient-to-r from-brand-800 to-brand-900 px-5 py-3.5 text-white flex items-center justify-between gap-2">
-                                <div>
-                                    <h2 className="text-base font-extrabold">Unterrichts- & Pausenzeiten</h2>
-                                    <p className="text-xs text-brand-100">Läuteordnung am Schulvormittag</p>
+                                <div className="flex items-center gap-3">
+                                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/15 text-white ring-1 ring-white/25" aria-hidden="true">
+                                        <svg className="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l4 2m6-2a10 10 0 11-20 0 10 10 0 0120 0z" />
+                                        </svg>
+                                    </span>
+                                    <div>
+                                        <h2 className="text-base font-extrabold">Unterrichts- & Pausenzeiten</h2>
+                                        <p className="text-xs text-brand-100">Läuteordnung am Schulvormittag</p>
+                                    </div>
                                 </div>
                                 <Link
                                     href="/unsere-schule/unterrichtszeiten"
@@ -503,34 +539,76 @@ export default function HomePage({ posts, postsPagination, upcomingEvents, album
                     {/* 3. Original-Widget „Beiträge nach Rubriken“ */}
                     <RubrikenWidget rubriken={rubriken} />
 
-                    {/* 4. Kontakt- & Sekretariats-Widget */}
-                    <div className="rounded-2xl border border-brand-200 bg-gradient-to-b from-brand-50 to-white p-5 sm:p-6 shadow-xs">
-                        <span className="text-xs font-extrabold uppercase tracking-wider text-brand-700">
-                            Schulbüro & Krankmeldung
-                        </span>
-                        <h3 className="mt-1 text-lg font-extrabold text-slate-900">Sekretariat</h3>
-                        <p className="mt-2 text-xs leading-relaxed text-slate-600">
+                    {/* 4. Kontakt- & Sekretariats-Widget im modernen Kontakt-Kartendesign */}
+                    <div className="rounded-2xl border border-brand-200 bg-gradient-to-b from-brand-50/70 to-white p-5 sm:p-6 shadow-xs">
+                        <div className="flex items-center gap-2.5">
+                            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700 ring-1 ring-brand-500/15" aria-hidden="true">
+                                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+                                </svg>
+                            </span>
+                            <div>
+                                <span className="block text-[11px] font-extrabold uppercase tracking-wider text-brand-700">
+                                    Schulbüro & Krankmeldung
+                                </span>
+                                <h3 className="text-base sm:text-lg font-extrabold text-slate-900 leading-tight">
+                                    Sekretariat
+                                </h3>
+                            </div>
+                        </div>
+
+                        <p className="mt-2.5 text-xs leading-relaxed text-slate-600">
                             Bitte melden Sie Ihr Kind im Krankheitsfall morgens vor Unterrichtsbeginn telefonisch oder
                             per E-Mail im Sekretariat ab.
                         </p>
-                        <div className="mt-4 space-y-2 text-sm">
+
+                        <div className="mt-4 space-y-2.5 text-sm">
                             <a
                                 href={phoneHref}
-                                className="block rounded-xl bg-white p-3 border border-brand-100 hover:border-brand-300 transition"
+                                className="flex items-center gap-3 rounded-2xl border border-slate-200/80 bg-white p-3 transition hover:border-brand-200 hover:bg-brand-50/30"
                             >
-                                <span className="block text-xs text-slate-500">Telefon (Direktanruf)</span>
-                                <span className="font-extrabold text-brand-800">☎ {school.phone}</span>
+                                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700 ring-1 ring-brand-500/15" aria-hidden="true">
+                                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+                                    </svg>
+                                </span>
+                                <div className="min-w-0">
+                                    <span className="block text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+                                        Telefon (Direktanruf)
+                                    </span>
+                                    <span className="font-bold text-slate-900">{school.phone}</span>
+                                </div>
                             </a>
+
                             <a
                                 href={`mailto:${school.email}`}
-                                className="block rounded-xl bg-white p-3 border border-brand-100 hover:border-brand-300 transition"
+                                className="flex items-center gap-3 rounded-2xl border border-slate-200/80 bg-white p-3 transition hover:border-brand-200 hover:bg-brand-50/30"
                             >
-                                <span className="block text-xs text-slate-500">E-Mail</span>
-                                <span className="font-bold text-brand-800 break-all">✉ {school.email}</span>
+                                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700 ring-1 ring-brand-500/15" aria-hidden="true">
+                                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                                    </svg>
+                                </span>
+                                <div className="min-w-0">
+                                    <span className="block text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+                                        E-Mail
+                                    </span>
+                                    <span className="block truncate font-bold text-slate-900">{school.email}</span>
+                                </div>
                             </a>
-                            <div className="rounded-xl bg-white p-3 border border-brand-100">
-                                <span className="block text-xs text-slate-500">Öffnungszeiten</span>
-                                <span className="font-semibold text-slate-800">{school.office_hours}</span>
+
+                            <div className="flex items-center gap-3 rounded-2xl border border-slate-200/80 bg-white p-3">
+                                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700 ring-1 ring-brand-500/15" aria-hidden="true">
+                                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l4 2m6-2a10 10 0 11-20 0 10 10 0 0120 0z" />
+                                    </svg>
+                                </span>
+                                <div className="min-w-0">
+                                    <span className="block text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+                                        Öffnungszeiten
+                                    </span>
+                                    <span className="font-semibold text-slate-800">{school.office_hours}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -579,8 +657,12 @@ export default function HomePage({ posts, postsPagination, upcomingEvents, album
                                             </div>
                                         )}
                                         {album.photosCount > 0 && (
-                                            <span className="absolute bottom-2 right-2 rounded-full bg-slate-950/75 px-2.5 py-0.5 text-[11px] font-bold text-white backdrop-blur-xs">
-                                                📷 {album.photosCount} Fotos
+                                            <span className="absolute bottom-2 right-2 inline-flex items-center gap-1.5 rounded-full bg-slate-950/75 px-2.5 py-0.5 text-[11px] font-bold text-white backdrop-blur-xs">
+                                                <svg className="h-3.5 w-3.5 text-brand-300 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z" />
+                                                </svg>
+                                                <span>{album.photosCount} Fotos</span>
                                             </span>
                                         )}
                                     </div>

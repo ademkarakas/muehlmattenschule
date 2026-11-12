@@ -325,5 +325,243 @@
     .dark .fi-header-subheading {
         color: #94a3b8 !important;
     }
+
+    /* 10. Einheitliches, modernes Karten-Design für alle Formular- & Einstellungsseiten
+           (Heller Türkis-Kopfbereich passend zur Schulfarbe #029786, 16px-Kartenradien,
+           Fokus-Ringe, dezente Abschnitts-Köpfe und schwebende Glas-Aktionsleiste) */
+    .fi-resource-create-record-page,
+    .fi-resource-edit-record-page,
+    .mms-settings-page {
+        --mms-primary: #029786;
+        --mms-primary-dark: #00695c;
+        --mms-primary-50: #e6f6f4;
+        --mms-primary-100: #c5ebe6;
+        --mms-ink: #0f1f1d;
+        --mms-muted: #526663;
+        --mms-line: #dbe7e5;
+        --mms-radius: 16px;
+        --mms-radius-sm: 10px;
+        --mms-shadow: 0 4px 12px -2px rgba(2, 105, 92, 0.07), 0 2px 6px -2px rgba(15, 31, 29, 0.04);
+        --mms-shadow-md: 0 14px 28px -10px rgba(2, 105, 92, 0.18), 0 4px 10px -4px rgba(15, 31, 29, 0.06);
+        --mms-ease: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .dark .fi-resource-create-record-page,
+    .dark .fi-resource-edit-record-page,
+    .dark .mms-settings-page {
+        --mms-primary: #36c4b2;
+        --mms-primary-dark: #70ddcd;
+        --mms-primary-50: rgba(54, 196, 178, 0.12);
+        --mms-primary-100: rgba(54, 196, 178, 0.24);
+        --mms-ink: #f1f5f9;
+        --mms-muted: #94a3b8;
+        --mms-line: rgba(255, 255, 255, 0.09);
+        --mms-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.5);
+        --mms-shadow-md: 0 14px 28px -10px rgba(0, 0, 0, 0.65);
+    }
+
+    /* Kopfbereich in frischem, hellem Türkis passend zur Markenfarbe (#029786) */
+    .fi-resource-create-record-page .fi-header,
+    .fi-resource-edit-record-page .fi-header,
+    .mms-settings-page .fi-header {
+        position: relative;
+        overflow: hidden;
+        padding: 1.5rem 1.85rem;
+        border-radius: var(--mms-radius);
+        border: 1px solid #a8e2d9;
+        background:
+            radial-gradient(120% 160% at 100% 0%, rgba(255, 255, 255, 0.78) 0%, rgba(255, 255, 255, 0) 55%),
+            linear-gradient(135deg, #e6f7f5 0%, #d2f1ec 55%, #bfeae3 100%);
+        box-shadow: var(--mms-shadow);
+    }
+
+    .fi-resource-create-record-page .fi-header::after,
+    .fi-resource-edit-record-page .fi-header::after,
+    .mms-settings-page .fi-header::after {
+        content: '';
+        position: absolute;
+        inset: auto 0 0 0;
+        height: 3px;
+        background: linear-gradient(90deg, #029786 0%, #14b8a6 55%, #36c4b2 100%);
+    }
+
+    .dark .fi-resource-create-record-page .fi-header,
+    .dark .fi-resource-edit-record-page .fi-header,
+    .dark .mms-settings-page .fi-header {
+        border-color: rgba(54, 196, 178, 0.26);
+        background:
+            radial-gradient(120% 140% at 100% 0%, rgba(54, 196, 178, 0.2) 0%, rgba(54, 196, 178, 0) 55%),
+            linear-gradient(135deg, #0d2a2a 0%, #0f3532 100%);
+    }
+
+    .fi-resource-create-record-page .fi-header-heading,
+    .fi-resource-edit-record-page .fi-header-heading,
+    .mms-settings-page .fi-header-heading {
+        font-weight: 700 !important;
+        letter-spacing: -0.02em;
+        color: #004d43 !important;
+    }
+
+    .dark .fi-resource-create-record-page .fi-header-heading,
+    .dark .fi-resource-edit-record-page .fi-header-heading,
+    .dark .mms-settings-page .fi-header-heading {
+        color: #e6f7f5 !important;
+    }
+
+    .fi-resource-create-record-page .fi-header-subheading,
+    .fi-resource-edit-record-page .fi-header-subheading,
+    .mms-settings-page .fi-header-subheading {
+        color: #1f5f56 !important;
+        font-weight: 500 !important;
+    }
+
+    .dark .fi-resource-create-record-page .fi-header-subheading,
+    .dark .fi-resource-edit-record-page .fi-header-subheading,
+    .dark .mms-settings-page .fi-header-subheading {
+        color: #9bd9d0 !important;
+    }
+
+    .fi-resource-create-record-page .fi-breadcrumbs-item-label,
+    .fi-resource-edit-record-page .fi-breadcrumbs-item-label {
+        color: #00695c !important;
+        font-weight: 600 !important;
+    }
+
+    .dark .fi-resource-create-record-page .fi-breadcrumbs-item-label,
+    .dark .fi-resource-edit-record-page .fi-breadcrumbs-item-label {
+        color: #70ddcd !important;
+    }
+
+    /* Formular-Karten (alle Sections auf Create-, Edit- und Einstellungsseiten) */
+    .fi-resource-create-record-page .fi-section,
+    .fi-resource-edit-record-page .fi-section,
+    .mms-settings-page .fi-section {
+        border-radius: var(--mms-radius) !important;
+        border: 1px solid var(--mms-line) !important;
+        box-shadow: var(--mms-shadow) !important;
+        --tw-ring-shadow: 0 0 #0000 !important;
+        transition: box-shadow 0.28s var(--mms-ease), border-color 0.28s var(--mms-ease);
+    }
+
+    .fi-resource-create-record-page .fi-section:focus-within,
+    .fi-resource-edit-record-page .fi-section:focus-within,
+    .mms-settings-page .fi-section:focus-within {
+        box-shadow: var(--mms-shadow-md) !important;
+        border-color: var(--mms-primary-100) !important;
+    }
+
+    .fi-resource-create-record-page .fi-section-header,
+    .fi-resource-edit-record-page .fi-section-header,
+    .mms-settings-page .fi-section-header {
+        padding: 1.15rem 1.5rem !important;
+        gap: 0.85rem !important;
+        align-items: center !important;
+        border-bottom: 1px solid var(--mms-line);
+    }
+
+    .fi-resource-create-record-page .fi-section-header > .fi-icon,
+    .fi-resource-edit-record-page .fi-section-header > .fi-icon,
+    .mms-settings-page .fi-section-header > .fi-icon {
+        width: 2.35rem !important;
+        height: 2.35rem !important;
+        padding: 0.5rem;
+        box-sizing: border-box;
+        border-radius: 10px;
+        color: var(--mms-primary) !important;
+        background: var(--mms-primary-50);
+        box-shadow: inset 0 0 0 1px var(--mms-primary-100);
+        flex-shrink: 0;
+    }
+
+    .fi-resource-create-record-page .fi-section-header-heading,
+    .fi-resource-edit-record-page .fi-section-header-heading,
+    .mms-settings-page .fi-section-header-heading {
+        font-size: 0.98rem !important;
+        font-weight: 700 !important;
+        letter-spacing: -0.01em;
+        color: var(--mms-ink) !important;
+    }
+
+    .fi-resource-create-record-page .fi-section-header-description,
+    .fi-resource-edit-record-page .fi-section-header-description,
+    .mms-settings-page .fi-section-header-description {
+        color: var(--mms-muted) !important;
+        font-size: 0.82rem !important;
+        line-height: 1.45 !important;
+    }
+
+    .fi-resource-create-record-page .fi-section-content,
+    .fi-resource-edit-record-page .fi-section-content,
+    .mms-settings-page .fi-section-content {
+        padding: 1.5rem !important;
+    }
+
+    /* Feldbeschriftungen */
+    .fi-resource-create-record-page .fi-fo-field-label-content,
+    .fi-resource-edit-record-page .fi-fo-field-label-content,
+    .mms-settings-page .fi-fo-field-label-content {
+        font-weight: 600 !important;
+        font-size: 0.85rem !important;
+        color: var(--mms-ink) !important;
+    }
+
+    /* Eingabefelder: weiche Radien & Türkis-Fokus-Ring */
+    .fi-resource-create-record-page .fi-input-wrp,
+    .fi-resource-edit-record-page .fi-input-wrp,
+    .mms-settings-page .fi-input-wrp {
+        border-radius: var(--mms-radius-sm) !important;
+        min-height: 2.75rem;
+        transition: box-shadow 0.18s var(--mms-ease), background-color 0.18s var(--mms-ease) !important;
+    }
+
+    .fi-resource-create-record-page .fi-input-wrp:focus-within,
+    .fi-resource-edit-record-page .fi-input-wrp:focus-within,
+    .mms-settings-page .fi-input-wrp:focus-within {
+        --tw-ring-color: var(--mms-primary) !important;
+        box-shadow: 0 0 0 1px var(--mms-primary), 0 0 0 4px var(--mms-primary-50) !important;
+    }
+
+    .fi-resource-create-record-page .fi-input-wrp-prefix .fi-icon,
+    .fi-resource-edit-record-page .fi-input-wrp-prefix .fi-icon,
+    .mms-settings-page .fi-input-wrp-prefix .fi-icon {
+        color: var(--mms-muted) !important;
+        transition: color 0.18s ease;
+    }
+
+    .fi-resource-create-record-page .fi-input-wrp:focus-within .fi-input-wrp-prefix .fi-icon,
+    .fi-resource-edit-record-page .fi-input-wrp:focus-within .fi-input-wrp-prefix .fi-icon,
+    .mms-settings-page .fi-input-wrp:focus-within .fi-input-wrp-prefix .fi-icon {
+        color: var(--mms-primary) !important;
+    }
+
+    /* Schwebende Aktionsleiste mit Glas-Effekt */
+    .fi-resource-create-record-page .fi-sc-actions.fi-sticky,
+    .fi-resource-edit-record-page .fi-sc-actions.fi-sticky {
+        border-radius: var(--mms-radius) !important;
+        border: 1px solid var(--mms-line) !important;
+        background-color: rgba(255, 255, 255, 0.9) !important;
+        backdrop-filter: blur(14px);
+        box-shadow: 0 -8px 30px -12px rgba(15, 31, 29, 0.18) !important;
+    }
+
+    .dark .fi-resource-create-record-page .fi-sc-actions.fi-sticky,
+    .dark .fi-resource-edit-record-page .fi-sc-actions.fi-sticky {
+        background-color: rgba(13, 27, 34, 0.9) !important;
+    }
+
+    .fi-resource-create-record-page .fi-sc-actions .fi-btn,
+    .fi-resource-edit-record-page .fi-sc-actions .fi-btn,
+    .mms-settings-page .fi-sc-actions .fi-btn {
+        border-radius: 9999px !important;
+        padding-inline: 1.25rem !important;
+        transition: transform 0.18s var(--mms-ease), box-shadow 0.18s var(--mms-ease) !important;
+    }
+
+    .fi-resource-create-record-page .fi-sc-actions .fi-btn.fi-color-primary:hover,
+    .fi-resource-edit-record-page .fi-sc-actions .fi-btn.fi-color-primary:hover,
+    .mms-settings-page .fi-sc-actions .fi-btn.fi-color-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 12px 24px -10px rgba(2, 151, 134, 0.55) !important;
+    }
 </style>
 

@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Filament\Resources;
 
 use App\Enums\UserRole;
-use App\Filament\Resources\UserResource\Pages\ManageUsers;
+use App\Filament\Resources\UserResource\Pages\CreateUser;
+use App\Filament\Resources\UserResource\Pages\EditUser;
+use App\Filament\Resources\UserResource\Pages\ListUsers;
 use App\Models\User;
 use BackedEnum;
 use Filament\Actions\DeleteAction;
@@ -14,6 +16,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Pages\PageRegistration;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
@@ -45,42 +48,68 @@ class UserResource extends Resource
     {
         return $schema
             ->components([
-                TextInput::make('name')
-                    ->label('Name')
-                    ->required()
-                    ->maxLength(160),
-                TextInput::make('email')
-                    ->label('E-Mail-Adresse (Anmeldename)')
-                    ->email()
-                    ->required()
-                    ->maxLength(160)
-                    ->unique(ignoreRecord: true),
-                Select::make('role')
-                    ->label('Rolle & Berechtigung')
-                    ->options(function (): array {
-                        $options = UserRole::options();
-                        if (auth()->user()?->role !== UserRole::Admin) {
-                            unset($options[UserRole::Admin->value]);
-                        }
-
-                        return $options;
-                    })
-                    ->default(UserRole::Lehrkraft->value)
-                    ->required(),
-                TextInput::make('class_name')
-                    ->label('Zugeordnete Klasse (für Lehrkräfte)')
-                    ->placeholder('z. B. Klasse 2a')
-                    ->maxLength(60),
-                TextInput::make('password')
-                    ->label('Passwort')
-                    ->password()
-                    ->revealable()
-                    ->dehydrateStateUsing(fn (?string $state): ?string => filled($state) ? Hash::make($state) : null)
-                    ->dehydrated(fn (?string $state): bool => filled($state))
-                    ->required(fn (string $operation): bool => $operation === 'create')
-                    ->rule(Password::default())
-                    ->helperText('Mindestens 12 Zeichen mit Groß-/Kleinbuchstaben, Zahl und Sonderzeichen. Beim Bearbeiten leer lassen, um das bestehende Passwort zu behalten.'),
+                Section::make()
+                    ->columnSpanFull()
+                    ->columns(2)
+                    ->schema([
+                        TextInput::make('name')
+                            ->label('Vollständiger Name')
+                            ->placeholder('z. B. Diana Blum')
+                            ->prefixIcon(Heroicon::OutlinedUser)
+                            ->required()
+                            ->maxLength(160),
+                        TextInput::make('email')
+                            ->label('E-Mail-Adresse (Anmeldename)')
+                            ->placeholder('vorname.nachname@muehlmattenschule.de')
+                            ->prefixIcon(Heroicon::OutlinedEnvelope)
+                            ->email()
+                            ->required()
+                            ->maxLength(160)
+                            ->unique(ignoreRecord: true),
+                        ...static::roleFields(),
+                        TextInput::make('password')
+                            ->label('Passwort')
+                            ->prefixIcon(Heroicon::OutlinedKey)
+                            ->password()
+                            ->revealable()
+                            ->dehydrateStateUsing(fn (?string $state): ?string => filled($state) ? Hash::make($state) : null)
+                            ->dehydrated(fn (?string $state): bool => filled($state))
+                            ->required(fn (string $operation): bool => $operation === 'create')
+                            ->rule(Password::default())
+                            ->helperText('Mindestens 12 Zeichen mit Groß-/Kleinbuchstaben, Zahl und Sonderzeichen. Beim Bearbeiten leer lassen, um das bestehende Passwort zu behalten.')
+                            ->columnSpanFull(),
+                    ]),
             ]);
+    }
+
+    /**
+     * Felder für Rolle und Klassenzuordnung.
+     *
+     * @return array<int, Select|TextInput>
+     */
+    protected static function roleFields(): array
+    {
+        return [
+            Select::make('role')
+                ->label('Rolle & Berechtigung')
+                ->prefixIcon(Heroicon::OutlinedUserGroup)
+                ->options(function (): array {
+                    $options = UserRole::options();
+                    if (auth()->user()?->role !== UserRole::Admin) {
+                        unset($options[UserRole::Admin->value]);
+                    }
+
+                    return $options;
+                })
+                ->native(false)
+                ->default(UserRole::Lehrkraft->value)
+                ->required(),
+            TextInput::make('class_name')
+                ->label('Zugeordnete Klasse (für Lehrkräfte)')
+                ->placeholder('z. B. Klasse 2a')
+                ->prefixIcon(Heroicon::OutlinedAcademicCap)
+                ->maxLength(60),
+        ];
     }
 
     /**
@@ -101,8 +130,9 @@ class UserResource extends Resource
                     ->badge()
                     ->formatStateUsing(fn (UserRole $state): string => $state->label()),
             ])
-            ->recordAction(EditAction::class)
-            ->recordUrl(null)
+            ->recordUrl(fn (User $record): ?string => auth()->user()?->can('update', $record)
+                ? static::getUrl('edit', ['record' => $record])
+                : null)
             ->recordActions([
                 EditAction::make()->iconButton(),
                 DeleteAction::make()->iconButton(),
@@ -117,7 +147,9 @@ class UserResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ManageUsers::route('/'),
+            'index' => ListUsers::route('/'),
+            'create' => CreateUser::route('/create'),
+            'edit' => EditUser::route('/{record}/edit'),
         ];
     }
 }

@@ -8,9 +8,9 @@ use App\Filament\Resources\UserResource;
 use App\Models\User;
 use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
-use Filament\Resources\Pages\ManageRecords;
+use Filament\Resources\Pages\ListRecords;
 
-class ManageUsers extends ManageRecords
+class ListUsers extends ListRecords
 {
     protected static string $resource = UserResource::class;
 
@@ -21,7 +21,7 @@ class ManageUsers extends ManageRecords
     {
         $count = User::query()->count();
 
-        return "Insgesamt {$count} " . ($count === 1 ? 'Benutzerkonto' : 'Benutzerkonten');
+        return "Insgesamt {$count} ".($count === 1 ? 'Benutzerkonto' : 'Benutzerkonten');
     }
 
     /**

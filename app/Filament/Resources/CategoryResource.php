@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\CategoryResource\Pages\ManageCategories;
+use App\Filament\Resources\CategoryResource\Pages\CreateCategory;
+use App\Filament\Resources\CategoryResource\Pages\EditCategory;
+use App\Filament\Resources\CategoryResource\Pages\ListCategories;
 use App\Models\Category;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
@@ -15,6 +17,7 @@ use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Pages\PageRegistration;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -27,6 +30,8 @@ use UnitEnum;
 class CategoryResource extends Resource
 {
     protected static ?string $model = Category::class;
+
+    protected static ?string $recordTitleAttribute = 'name';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTag;
 
@@ -47,21 +52,29 @@ class CategoryResource extends Resource
     {
         return $schema
             ->components([
-                TextInput::make('name')
-                    ->label('Bezeichnung')
-                    ->required()
-                    ->maxLength(120)
-                    ->live(onBlur: true)
-                    ->afterStateUpdated(fn (Set $set, ?string $state): mixed => $set('slug', Str::slug((string) $state))),
-                TextInput::make('slug')
-                    ->label('Kurz-URL (Slug)')
-                    ->required()
-                    ->maxLength(140)
-                    ->unique(ignoreRecord: true),
-                ColorPicker::make('color')
-                    ->label('Kennfarbe')
-                    ->default('#14b8a6')
-                    ->required(),
+                Section::make()
+                    ->columnSpanFull()
+                    ->columns(2)
+                    ->schema([
+                        TextInput::make('name')
+                            ->label('Bezeichnung')
+                            ->prefixIcon(Heroicon::OutlinedTag)
+                            ->required()
+                            ->maxLength(120)
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(fn (Set $set, ?string $state): mixed => $set('slug', Str::slug((string) $state))),
+                        TextInput::make('slug')
+                            ->label('Kurz-URL (Slug)')
+                            ->prefixIcon(Heroicon::OutlinedLink)
+                            ->required()
+                            ->maxLength(140)
+                            ->unique(ignoreRecord: true),
+                        ColorPicker::make('color')
+                            ->label('Kennfarbe')
+                            ->default('#029786')
+                            ->required()
+                            ->columnSpanFull(),
+                    ]),
             ]);
     }
 
@@ -77,7 +90,8 @@ class CategoryResource extends Resource
                 TextColumn::make('name')
                     ->label('Bezeichnung')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->weight('medium'),
                 TextColumn::make('slug')
                     ->label('Kurz-URL')
                     ->color('gray'),
@@ -86,9 +100,12 @@ class CategoryResource extends Resource
                     ->counts('posts')
                     ->sortable(),
             ])
+            ->recordUrl(fn (Category $record): ?string => auth()->user()?->can('update', $record)
+                ? static::getUrl('edit', ['record' => $record])
+                : null)
             ->recordActions([
-                EditAction::make(),
-                DeleteAction::make(),
+                EditAction::make()->iconButton(),
+                DeleteAction::make()->iconButton(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
@@ -105,7 +122,9 @@ class CategoryResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ManageCategories::route('/'),
+            'index' => ListCategories::route('/'),
+            'create' => CreateCategory::route('/create'),
+            'edit' => EditCategory::route('/{record}/edit'),
         ];
     }
 }

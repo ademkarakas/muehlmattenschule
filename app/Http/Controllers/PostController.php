@@ -27,7 +27,10 @@ class PostController extends Controller
             ->orderByDesc('published_at');
 
         if ($categorySlug !== '') {
-            $query->whereHas('category', fn ($q) => $q->where('slug', $categorySlug));
+            $query->where(function ($outer) use ($categorySlug): void {
+                $outer->whereHas('category', fn ($q) => $q->where('slug', $categorySlug))
+                    ->orWhereHas('categories', fn ($q) => $q->where('slug', $categorySlug));
+            });
         }
 
         if ($classFilter !== '') {
@@ -42,6 +45,14 @@ class PostController extends Controller
                 ? $post->album->totalPhotoCount()
                 : 0;
 
+            $firstInlineImg = null;
+            if (preg_match('#<img\b[^>]*src="(/images/school/[^"]+)"#i', (string) $post->body, $imgMatch)) {
+                $firstInlineImg = $imgMatch[1];
+            }
+            $firstGalleryImg = is_array($post->gallery_images) && isset($post->gallery_images[0]) && is_string($post->gallery_images[0])
+                ? $post->gallery_images[0]
+                : null;
+
             return [
                 'id' => $post->id,
                 'title' => $post->title,
@@ -49,9 +60,11 @@ class PostController extends Controller
                 'excerpt' => $post->excerpt,
                 'className' => $post->class_name,
                 'isFeatured' => $post->is_featured,
-                'publishedAt' => $post->published_at?->format('d.m.Y'),
+                'publishedAt' => $post->published_at?->locale('de')->isoFormat('D. MMMM YYYY'),
                 'publishedAtIso' => $post->published_at?->toDateString(),
-                'coverUrl' => $post->getFirstMediaUrl('cover', 'card') ?: $post->getFirstMediaUrl('cover') ?: null,
+                'coverUrl' => $post->getFirstMediaUrl('cover')
+                    ?: $firstGalleryImg
+                    ?: $firstInlineImg,
                 'photosCount' => max($ownGalleryCount, $albumCount),
                 'category' => $post->category ? [
                     'name' => $post->category->name,
@@ -62,6 +75,7 @@ class PostController extends Controller
         })->all();
 
         $categories = Category::query()
+            ->where('slug', '!=', 'alle-beitraege')
             ->orderBy('name')
             ->get(['name', 'slug', 'color'])
             ->all();
@@ -145,6 +159,9 @@ class PostController extends Controller
         $modifiedIso = ($post->updated_at ?? $post->published_at ?? $post->created_at)?->toIso8601String();
         $imageUrl = SeoData::absoluteUrl($coverUrl ?? '/images/school/about-main.jpg');
 
+        $isAuthenticatedStaff = request()->user() !== null;
+        $authorDisplayName = $post->author?->name ?? 'mmsadmin';
+
         return Inertia::render('posts/show', [
             'post' => [
                 'id' => $post->id,
@@ -153,9 +170,15 @@ class PostController extends Controller
                 'excerpt' => $post->excerpt,
                 'body' => $post->body,
                 'className' => $post->class_name,
-                'publishedAt' => $post->published_at?->format('d.m.Y'),
+                'publishedAt' => $post->published_at?->locale('de')->isoFormat('D. MMMM YYYY'),
                 'publishedAtIso' => $post->published_at?->toDateString(),
-                'authorName' => $post->author?->name,
+                'authorName' => $isAuthenticatedStaff ? $authorDisplayName : null,
+                'adminMeta' => $isAuthenticatedStaff ? [
+                    'authorName' => $authorDisplayName,
+                    'publishedAtFull' => $post->published_at?->format('d.m.Y H:i'),
+                    'updatedAtFull' => $post->updated_at?->format('d.m.Y H:i'),
+                    'editUrl' => "/admin/posts/{$post->id}/edit",
+                ] : null,
                 'coverUrl' => $coverUrl,
                 'category' => $post->category ? [
                     'name' => $post->category->name,
@@ -197,7 +220,7 @@ class PostController extends Controller
                         'articleSection' => $post->category?->name ?? $post->class_name ?? 'Schulleben',
                         'author' => [
                             '@type' => 'Organization',
-                            'name' => $post->author?->name ?? 'Mühlmattenschule Freiburg-Hochdorf',
+                            'name' => 'Mühlmattenschule Freiburg-Hochdorf',
                             'url' => url('/'),
                         ],
                         'publisher' => [

@@ -22,17 +22,28 @@ export function PostCard({ post, layout = 'vertical' }: PostCardProps): ReactEle
         >
             <Link
                 href={`/aktuelles/${post.slug}`}
-                className={`relative overflow-hidden bg-brand-100 shrink-0 ${
-                    isHorizontal ? 'aspect-[16/10] sm:aspect-auto sm:w-72 md:w-80' : 'aspect-[16/10] w-full'
+                className={`relative overflow-hidden bg-brand-950/90 shrink-0 ${
+                    isHorizontal
+                        ? 'aspect-[4/3] sm:aspect-auto sm:w-72 md:w-80 sm:min-h-60'
+                        : 'aspect-[4/3] w-full'
                 }`}
             >
                 {post.coverUrl ? (
-                    <img
-                        src={post.coverUrl}
-                        alt={post.title}
-                        loading="lazy"
-                        className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
-                    />
+                    <>
+                        <img
+                            src={post.coverUrl}
+                            alt=""
+                            aria-hidden="true"
+                            loading="lazy"
+                            className="absolute inset-0 h-full w-full scale-110 object-cover blur-md opacity-45"
+                        />
+                        <img
+                            src={post.coverUrl}
+                            alt=""
+                            loading="lazy"
+                            className="relative h-full w-full object-contain transition duration-300 group-hover:scale-[1.03]"
+                        />
+                    </>
                 ) : (
                     <div className="flex h-full w-full flex-col items-center justify-center bg-gradient-to-br from-brand-500 via-brand-600 to-brand-800 p-6 text-center text-white">
                         <span className="rounded-full bg-white/15 px-3 py-1 text-[11px] font-bold uppercase tracking-wider">
@@ -57,8 +68,12 @@ export function PostCard({ post, layout = 'vertical' }: PostCardProps): ReactEle
 
                 {Boolean(post.photosCount && post.photosCount > 0) && (
                     <div className="absolute bottom-3 right-3">
-                        <span className="inline-flex items-center gap-1 rounded-full bg-slate-950/75 px-2.5 py-1 text-[11px] font-bold text-white backdrop-blur-xs shadow-xs">
-                            <span aria-hidden="true">📷</span> {post.photosCount} Fotos
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-950/75 px-2.5 py-1 text-[11px] font-bold text-white backdrop-blur-xs shadow-xs">
+                            <svg className="h-3.5 w-3.5 text-brand-300 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z" />
+                            </svg>
+                            <span>{post.photosCount} Fotos</span>
                         </span>
                     </div>
                 )}
@@ -82,7 +97,11 @@ export function PostCard({ post, layout = 'vertical' }: PostCardProps): ReactEle
                         <Link href={`/aktuelles/${post.slug}`}>{post.title}</Link>
                     </h3>
                     {post.excerpt && (
-                        <p className="mt-2 line-clamp-3 text-sm sm:text-base leading-relaxed text-slate-600 break-words">
+                        <p
+                            className={`mt-2 text-sm sm:text-base leading-relaxed text-slate-600 break-words ${
+                                isHorizontal ? 'line-clamp-5' : 'line-clamp-4'
+                            }`}
+                        >
                             {post.excerpt}
                         </p>
                     )}

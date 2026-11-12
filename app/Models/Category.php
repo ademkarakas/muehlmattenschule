@@ -7,6 +7,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[Fillable(['name', 'slug', 'color'])]
@@ -15,12 +16,22 @@ class Category extends Model
     use HasFactory;
 
     /**
-     * Beiträge in dieser Kategorie.
+     * Beiträge mit dieser Kategorie als Hauptkategorie.
      *
      * @return HasMany<Post, $this>
      */
     public function posts(): HasMany
     {
         return $this->hasMany(Post::class);
+    }
+
+    /**
+     * Alle Beiträge in dieser Rubrik (inkl. Mehrfachzuordnung über category_post).
+     *
+     * @return BelongsToMany<Post, $this>
+     */
+    public function allPosts(): BelongsToMany
+    {
+        return $this->belongsToMany(Post::class, 'category_post');
     }
 }

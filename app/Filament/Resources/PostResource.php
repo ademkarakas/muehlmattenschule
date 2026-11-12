@@ -221,8 +221,15 @@ class PostResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('author.name')
                     ->label('Verfasser')
-                    ->placeholder('—')
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->placeholder('mmsadmin')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
+                TextColumn::make('published_at')
+                    ->label('Veröffentlicht am')
+                    ->dateTime('d.m.Y H:i')
+                    ->sortable()
+                    ->toggleable(),
             ])
             ->recordUrl(fn (Post $record): ?string => auth()->user()?->can('update', $record)
                 ? static::getUrl('edit', ['record' => $record])

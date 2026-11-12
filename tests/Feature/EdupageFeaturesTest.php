@@ -11,6 +11,7 @@ use App\Models\Download;
 use App\Models\Event;
 use App\Models\Page;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
@@ -224,6 +225,49 @@ class EdupageFeaturesTest extends TestCase
                 ->component('posts/show')
                 ->has('post.galleryPhotos', 2)
                 ->where('post.linkedAlbum.photosCount', 3)
+            );
+    }
+
+    /**
+     * Prüft, dass der Verfassername für normale Besucher ausgeblendet ist,
+     * angemeldeten Administratoren jedoch vollständig mit Zeitstempel angezeigt wird.
+     */
+    public function test_post_author_is_hidden_for_guests_but_visible_for_authenticated_staff(): void
+    {
+        $admin = User::factory()->admin()->create([
+            'name' => 'mmsadmin',
+        ]);
+
+        $post = Post::factory()->create([
+            'title' => 'Der Vorstand des Fördervereins stellt sich vor',
+            'slug' => 'der-vorstand-des-foerdervereins-stellt-sich-vor',
+            'body' => '<p>Am 16. November 2023 wurden unsere beiden Vorstände Nils Henkel und Fabian Baumann feierlich verabschiedet.</p>'
+                .'<p>v.l.n.r: Jan Gläser, Stephanie Nowak, Giuseppe Pastore, Verena Prestel, Florian Gutgsell, Ali Nemer</p>',
+            'author_id' => $admin->id,
+            'status' => PublishStatus::Published,
+            'published_at' => '2024-04-23 19:57:20',
+        ]);
+
+        // Öffentlicher Gast sieht das deutsche Datum, aber keinen Verfassernamen
+        $this->get("/aktuelles/{$post->slug}")
+            ->assertOk()
+            ->assertInertia(fn (Assert $page): Assert => $page
+                ->component('posts/show')
+                ->where('post.publishedAt', '23. April 2024')
+                ->where('post.authorName', null)
+                ->where('post.adminMeta', null)
+            );
+
+        // Angemeldeter Administrator sieht Verfasser und Zeitstempel
+        $this->actingAs($admin)
+            ->get("/aktuelles/{$post->slug}")
+            ->assertOk()
+            ->assertInertia(fn (Assert $page): Assert => $page
+                ->component('posts/show')
+                ->where('post.publishedAt', '23. April 2024')
+                ->where('post.authorName', 'mmsadmin')
+                ->where('post.adminMeta.authorName', 'mmsadmin')
+                ->where('post.adminMeta.publishedAtFull', '23.04.2024 19:57')
             );
     }
 }

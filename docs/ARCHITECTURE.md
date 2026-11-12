@@ -81,6 +81,7 @@ docs/                     ROADMAP, HANDOFF, ARCHITECTURE
 - Tailwind tema değişkenleri (`resources/css/app.css`): `brand-50 … brand-900` (ana `brand-500 = #029786`, koyu `brand-600 = #007f70`, `brand-700 = #00695c`, `brand-800 = #00544a`, `brand-900 = #003d36`), vurgu `accent = #F59E0B`.
 - Font: sistem fontu / yerel barındırılan font (Google Fonts **yok** – DSGVO).
 - Mobil öncelikli, WCAG AA kontrast, `A- / A / A+` erişilebilirlik yazı boyutu ölçekleme desteği.
+- **Admin paneli (`/admin`) form standardı:** Kayıt oluşturma ve düzenleme işlemleri popup/modal içinde **değil**, her zaman müstakil sayfalarda (`List*`, `Create*`, `Edit*`) açılır; yalnızca silme onayı küçük bir modal olarak kalır. Tüm oluşturma/düzenleme ve ayar (`ManageSchoolSettings`) sayfaları `resources/views/filament/admin-theme.blade.php` (Bölüm 10) içindeki açık turkuaz üst başlık (`#e6f7f5` → `#bfeae3` + `#029786` alt çizgi) ve yuvarlatılmış modern kart tasarımını paylaşır.
 
 ## 8. Yasal (DSGVO)
 - Albüm yayınlamak için `consent_confirmed = true` zorunlu.

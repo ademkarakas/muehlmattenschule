@@ -20,6 +20,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Pages\PageRegistration;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
@@ -52,50 +53,63 @@ class EventResource extends Resource
     {
         return $schema
             ->components([
-                TextInput::make('title')
-                    ->label('Veranstaltung / Termin')
-                    ->required()
-                    ->maxLength(200)
-                    ->columnSpanFull(),
-                DateTimePicker::make('starts_at')
-                    ->label('Beginn')
-                    ->seconds(false)
-                    ->required(),
-                DateTimePicker::make('ends_at')
-                    ->label('Ende (optional)')
-                    ->seconds(false),
-                Toggle::make('all_day')
-                    ->label('Ganztägiger Termin')
-                    ->default(false),
-                Toggle::make('is_published')
-                    ->label('Auf der Startseite („Nächste Termine“) & im Kalender anzeigen')
-                    ->helperText('Kommende Termine ab dem heutigen Datum werden automatisch rechts auf der Startseite unter „Nächste Termine“ sowie im Schulkalender angezeigt.')
-                    ->default(true),
-                TextInput::make('location')
-                    ->label('Ort (optional)')
-                    ->placeholder('z. B. Schulhof, Musikraum')
-                    ->maxLength(180),
-                TextInput::make('class_name')
-                    ->label('Klasse / Zielgruppe (optional)')
-                    ->placeholder('z. B. Alle Klassen, Klasse 1 & 2, Elternbeirat')
-                    ->maxLength(50),
-                Select::make('category')
-                    ->label('Termin-Art')
-                    ->options([
-                        'Termin' => 'Termin',
-                        'Schulfest' => 'Schulfest & Feier',
-                        'Sportfest' => 'Sport & Wettbewerb',
-                        'Projekttag' => 'Projekttag',
-                        'Exkursion' => 'Ausflug / Exkursion',
-                        'Gremien' => 'Elternbeirat / Gremien',
-                        'Ferien' => 'Ferien / schulfrei',
-                    ])
-                    ->default('Termin')
-                    ->required(),
-                Textarea::make('description')
-                    ->label('Kurzbeschreibung (optional)')
-                    ->rows(3)
-                    ->columnSpanFull(),
+                Section::make()
+                    ->columnSpanFull()
+                    ->columns(2)
+                    ->schema([
+                        TextInput::make('title')
+                            ->label('Veranstaltung / Termin')
+                            ->prefixIcon(Heroicon::OutlinedCalendarDays)
+                            ->required()
+                            ->maxLength(200)
+                            ->columnSpanFull(),
+                        DateTimePicker::make('starts_at')
+                            ->label('Beginn')
+                            ->prefixIcon(Heroicon::OutlinedClock)
+                            ->seconds(false)
+                            ->required(),
+                        DateTimePicker::make('ends_at')
+                            ->label('Ende (optional)')
+                            ->prefixIcon(Heroicon::OutlinedClock)
+                            ->seconds(false),
+                        Toggle::make('all_day')
+                            ->label('Ganztägiger Termin')
+                            ->default(false),
+                        Toggle::make('is_published')
+                            ->label('Auf der Startseite („Nächste Termine“) & im Kalender anzeigen')
+                            ->helperText('Kommende Termine ab dem heutigen Datum werden automatisch rechts auf der Startseite unter „Nächste Termine“ sowie im Schulkalender angezeigt.')
+                            ->default(true),
+                        TextInput::make('location')
+                            ->label('Ort (optional)')
+                            ->placeholder('z. B. Schulhof, Musikraum')
+                            ->prefixIcon(Heroicon::OutlinedMapPin)
+                            ->maxLength(180),
+                        TextInput::make('class_name')
+                            ->label('Klasse / Zielgruppe (optional)')
+                            ->placeholder('z. B. Alle Klassen, Klasse 1 & 2, Elternbeirat')
+                            ->prefixIcon(Heroicon::OutlinedAcademicCap)
+                            ->maxLength(50),
+                        Select::make('category')
+                            ->label('Termin-Art')
+                            ->prefixIcon(Heroicon::OutlinedTag)
+                            ->options([
+                                'Termin' => 'Termin',
+                                'Schulfest' => 'Schulfest & Feier',
+                                'Sportfest' => 'Sport & Wettbewerb',
+                                'Projekttag' => 'Projekttag',
+                                'Exkursion' => 'Ausflug / Exkursion',
+                                'Gremien' => 'Elternbeirat / Gremien',
+                                'Ferien' => 'Ferien / schulfrei',
+                            ])
+                            ->native(false)
+                            ->default('Termin')
+                            ->required()
+                            ->columnSpanFull(),
+                        Textarea::make('description')
+                            ->label('Kurzbeschreibung (optional)')
+                            ->rows(3)
+                            ->columnSpanFull(),
+                    ]),
             ]);
     }
 

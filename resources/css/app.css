@@ -84,6 +84,22 @@
     @apply mt-4 mb-1.5 text-base sm:text-lg font-bold text-slate-900 leading-snug;
 }
 
+.prose-school h4 {
+    @apply mt-3 mb-1 text-sm sm:text-base font-bold text-slate-900 leading-snug;
+}
+
+.prose-school figure {
+    @apply my-5 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50/70 p-2 sm:p-3;
+}
+
+.prose-school figure img {
+    @apply my-0 mx-auto rounded-xl;
+}
+
+.prose-school figcaption {
+    @apply mt-2 text-center text-xs sm:text-sm font-medium text-slate-600;
+}
+
 .prose-school p {
     @apply mt-2.5 first:mt-0 leading-relaxed text-slate-800;
 }

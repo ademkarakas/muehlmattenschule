@@ -29,9 +29,15 @@ export function RubrikenWidget({
             className="rounded-2xl bg-white p-5 sm:p-6 shadow-xs border border-slate-200/80"
         >
             <div className="flex items-center justify-between gap-2 pb-3 border-b border-slate-100">
-                <h2 className="text-base sm:text-lg font-extrabold text-brand-900 flex items-center gap-2">
-                    <span aria-hidden="true" className="text-brand-600">
-                        🏷️
+                <h2 className="text-base sm:text-lg font-extrabold text-brand-900 flex items-center gap-2.5">
+                    <span
+                        aria-hidden="true"
+                        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700 ring-1 ring-brand-500/15"
+                    >
+                        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 6h.008v.008H6V6z" />
+                        </svg>
                     </span>
                     <span>Beiträge nach Rubriken</span>
                 </h2>
