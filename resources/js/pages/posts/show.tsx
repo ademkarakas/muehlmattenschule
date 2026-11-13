@@ -1,5 +1,6 @@
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { PhotoLightbox, type LightboxImageItem } from '@/components/photo-lightbox';
+import { Reveal } from '@/components/reveal';
 import { SiteLayout } from '@/layouts/site-layout';
 import type { CategorySummary, GalleryPhotoItem } from '@/types/school';
 import { Link } from '@inertiajs/react';
@@ -105,21 +106,24 @@ export default function PostShowPage({ post }: PostShowProps): ReactElement {
                 </header>
 
                 {post.coverUrl && !hasInlineImages && (
-                    <div className="mt-5 sm:mt-6 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50">
+                    <Reveal variant="zoom-in" className="mt-5 sm:mt-6 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50">
                         <img
                             src={post.coverUrl}
                             alt=""
                             decoding="async"
                             className="mx-auto max-h-[560px] w-auto max-w-full object-contain"
                         />
-                    </div>
+                    </Reveal>
                 )}
 
                 {post.body.trim() !== '' && (
-                    <div
+                    <Reveal
+                        variant="fade-up"
+                        delay={60}
                         className="prose-school mt-6 sm:mt-8 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 md:p-8 shadow-2xs space-y-4 text-sm sm:text-base leading-relaxed text-slate-800"
-                        dangerouslySetInnerHTML={{ __html: post.body }}
-                    />
+                    >
+                        <div dangerouslySetInnerHTML={{ __html: post.body }} />
+                    </Reveal>
                 )}
 
                 {galleryPhotos.length > 0 && (

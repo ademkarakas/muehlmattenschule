@@ -1,4 +1,5 @@
 import { PostCard } from '@/components/post-card';
+import { Reveal } from '@/components/reveal';
 import { RubrikenWidget } from '@/components/rubriken-widget';
 import { SiteLayout } from '@/layouts/site-layout';
 import type { AlbumCardItem, PostCardItem, SharedInertiaProps, UpcomingEventItem } from '@/types/school';
@@ -118,7 +119,7 @@ export default function HomePage({ posts, postsPagination, upcomingEvents, album
             <section className="relative overflow-hidden bg-gradient-to-br from-[#dff7f4] via-[#edfcf9] to-[#d0f2ee] border-b border-brand-300/70 shadow-xs text-ink">
                 <div className="relative mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10 py-8 sm:py-12 lg:py-16 grid gap-6 sm:gap-8 lg:grid-cols-12 items-center">
                     {/* Linke Seite: Willkommenstext im Logo-Türkis-Farbton */}
-                    <div className="lg:col-span-6 flex flex-col justify-center">
+                    <Reveal variant="fade-up" duration={600} className="lg:col-span-6 flex flex-col justify-center">
                         <div className="inline-flex items-center gap-2 self-start rounded-full border border-brand-300 bg-white/90 px-3.5 py-1.5 text-xs font-bold tracking-wide text-brand-900 shadow-2xs">
                             <span className="inline-block h-2 w-2 rounded-full bg-brand-500" aria-hidden="true" />
                             <span>Grundschule Freiburg-Hochdorf & Benzhausen</span>
@@ -147,10 +148,10 @@ export default function HomePage({ posts, postsPagination, upcomingEvents, album
                                 Unsere Schule kennenlernen
                             </Link>
                         </div>
-                    </div>
+                    </Reveal>
 
                     {/* Rechte Seite: Echtes Foto des Schulgebäudes der Mühlmattenschule mit weißem Passepartout-Rahmen */}
-                    <div className="lg:col-span-6">
+                    <Reveal variant="zoom-in" delay={100} duration={650} className="lg:col-span-6">
                         <div
                             onTouchStart={handleHeroTouchStart}
                             onTouchEnd={handleHeroTouchEnd}
@@ -228,13 +229,15 @@ export default function HomePage({ posts, postsPagination, upcomingEvents, album
                                 ))}
                             </div>
                         </div>
-                    </div>
+                    </Reveal>
                 </div>
             </section>
 
             {/* Aktive Ankündigungen aus dem Admin-Panel (/admin/announcements) */}
             {announcements.length > 0 && (
-                <section
+                <Reveal
+                    as="section"
+                    variant="fade-up"
                     aria-label="Aktuelle Ankündigungen"
                     className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10 pt-6 sm:pt-8 space-y-3"
                 >
@@ -291,7 +294,7 @@ export default function HomePage({ posts, postsPagination, upcomingEvents, album
                             </div>
                         );
                     })}
-                </section>
+                </Reveal>
             )}
 
             {/* Hauptbereich im EduPage-Portal-Layout (1 Beitrag pro Zeile links, Pausen/Kalender/Rubriken/Kontakt rechts) */}
@@ -321,8 +324,10 @@ export default function HomePage({ posts, postsPagination, upcomingEvents, album
                         </div>
                     ) : (
                         <div className="flex flex-col gap-5 sm:gap-6">
-                            {posts.map((post) => (
-                                <PostCard key={post.id} post={post} layout="horizontal" />
+                            {posts.map((post, index) => (
+                                <Reveal key={post.id} variant="fade-up" delay={Math.min(index, 3) * 65}>
+                                    <PostCard post={post} layout="horizontal" />
+                                </Reveal>
                             ))}
                         </div>
                     )}
@@ -374,22 +379,28 @@ export default function HomePage({ posts, postsPagination, upcomingEvents, album
                 {/* Rechte Spalte (4/12): EduPage-Sidebar-Widgets (Kalender, Pausen, Beiträge nach Rubriken, Sekretariat) */}
                 <aside className="lg:col-span-4 space-y-6">
                     {/* 1. Terminkalender-Widget mit Klassen-/Typ-Badges & iCal-Download */}
-                    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xs">
-                        <div className="bg-gradient-to-r from-brand-700 to-brand-800 px-5 py-4 text-white flex items-center justify-between gap-2">
-                            <div className="flex items-center gap-3">
-                                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/15 text-white ring-1 ring-white/25" aria-hidden="true">
-                                    <svg className="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
+                    <Reveal
+                        as="section"
+                        variant="fade-up"
+                        delay={60}
+                        aria-label="Nächste Termine"
+                        className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-xs"
+                    >
+                        <div className="flex items-center justify-between gap-2 border-b border-slate-100 px-5 pt-5 pb-3 sm:px-6 sm:pt-6">
+                            <h2 className="flex min-w-0 items-center gap-2.5 text-base font-extrabold text-brand-900 sm:text-lg">
+                                <span
+                                    aria-hidden="true"
+                                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700 ring-1 ring-brand-500/15"
+                                >
+                                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
                                     </svg>
                                 </span>
-                                <div>
-                                    <h2 className="text-base font-extrabold">Nächste Termine</h2>
-                                    <p className="text-xs text-brand-100">Veranstaltungen & wichtige Tage</p>
-                                </div>
-                            </div>
+                                <span className="truncate">Nächste Termine</span>
+                            </h2>
                             <Link
                                 href="/termine"
-                                className="inline-flex min-h-9 items-center rounded-lg bg-white/15 px-3 py-1.5 text-xs font-bold text-white hover:bg-white/25"
+                                className="shrink-0 rounded-full bg-brand-50 px-2.5 py-1 text-xs font-bold text-brand-800 transition hover:bg-brand-100"
                             >
                                 Alle →
                             </Link>
@@ -483,11 +494,14 @@ export default function HomePage({ posts, postsPagination, upcomingEvents, album
                                 Monatsübersicht →
                             </Link>
                         </div>
-                    </div>
+                    </Reveal>
 
                     {/* 2. EduPage-Widget „Unterrichts- & Pausenzeiten“ im Stil von „Beiträge nach Rubriken“ */}
                     {school.bell_schedule && school.bell_schedule.length > 0 && (
-                        <section
+                        <Reveal
+                            as="section"
+                            variant="fade-up"
+                            delay={120}
                             aria-label="Unterrichts- & Pausenzeiten"
                             className="rounded-2xl bg-white p-5 sm:p-6 shadow-xs border border-slate-200/80"
                         >
@@ -555,14 +569,16 @@ export default function HomePage({ posts, postsPagination, upcomingEvents, album
                                     );
                                 })}
                             </ul>
-                        </section>
+                        </Reveal>
                     )}
 
                     {/* 3. Original-Widget „Beiträge nach Rubriken“ */}
-                    <RubrikenWidget rubriken={rubriken} />
+                    <Reveal variant="fade-up" delay={150}>
+                        <RubrikenWidget rubriken={rubriken} />
+                    </Reveal>
 
                     {/* 4. Kontakt- & Sekretariats-Widget im modernen Kontakt-Kartendesign */}
-                    <div className="rounded-2xl border border-brand-200 bg-gradient-to-b from-brand-50/70 to-white p-5 sm:p-6 shadow-xs">
+                    <Reveal variant="fade-up" delay={180} className="rounded-2xl border border-slate-200/80 bg-white p-5 sm:p-6 shadow-xs">
                         <div className="flex items-center gap-2.5">
                             <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700 ring-1 ring-brand-500/15" aria-hidden="true">
                                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
@@ -633,14 +649,14 @@ export default function HomePage({ posts, postsPagination, upcomingEvents, album
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </Reveal>
                 </aside>
             </div>
 
             {/* Fotogalerie-Vorschau */}
             {albums.length > 0 && (
                 <section className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10 pb-8">
-                    <div className="rounded-2xl sm:rounded-3xl border border-slate-200 bg-white p-4 sm:p-8 shadow-xs">
+                    <Reveal variant="fade-up" className="rounded-2xl sm:rounded-3xl border border-slate-200 bg-white p-4 sm:p-8 shadow-xs">
                         <div className="flex flex-wrap items-end justify-between gap-3 sm:gap-4 mb-5 sm:mb-6">
                             <div>
                                 <span className="text-xs font-extrabold uppercase tracking-wider text-brand-700">
@@ -659,12 +675,12 @@ export default function HomePage({ posts, postsPagination, upcomingEvents, album
                         </div>
 
                         <div className="grid grid-cols-2 gap-3.5 sm:gap-5 lg:grid-cols-4">
-                            {albums.map((album) => (
-                                <Link
-                                    key={album.id}
-                                    href={`/galerie/${album.slug}`}
-                                    className="group overflow-hidden rounded-2xl border border-slate-200 bg-surface transition hover:-translate-y-1 hover:border-brand-300 hover:shadow-md"
-                                >
+                            {albums.map((album, index) => (
+                                <Reveal key={album.id} variant="zoom-in" delay={Math.min(index, 3) * 70}>
+                                    <Link
+                                        href={`/galerie/${album.slug}`}
+                                        className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-surface transition hover:-translate-y-1 hover:border-brand-300 hover:shadow-md"
+                                    >
                                     <div className="relative aspect-[4/3] w-full overflow-hidden bg-brand-100">
                                         {album.coverUrl ? (
                                             <img
@@ -702,9 +718,10 @@ export default function HomePage({ posts, postsPagination, upcomingEvents, album
                                         </p>
                                     </div>
                                 </Link>
+                                </Reveal>
                             ))}
                         </div>
-                    </div>
+                    </Reveal>
                 </section>
             )}
         </SiteLayout>

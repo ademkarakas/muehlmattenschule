@@ -52,7 +52,8 @@ class CategoryResource extends Resource
     {
         return $schema
             ->components([
-                Section::make()
+                Section::make('Kategorie-Angaben')
+                    ->icon(Heroicon::OutlinedTag)
                     ->columnSpanFull()
                     ->columns(2)
                     ->schema([
@@ -103,6 +104,10 @@ class CategoryResource extends Resource
             ->recordUrl(fn (Category $record): ?string => auth()->user()?->can('update', $record)
                 ? static::getUrl('edit', ['record' => $record])
                 : null)
+            ->searchPlaceholder('Kategoriename suchen...')
+            ->emptyStateIcon(Heroicon::OutlinedTag)
+            ->emptyStateHeading('Keine Kategorien gefunden')
+            ->emptyStateDescription('Legen Sie eine neue Rubrik für Schulbeiträge an.')
             ->recordActions([
                 EditAction::make()->iconButton(),
                 DeleteAction::make()->iconButton(),

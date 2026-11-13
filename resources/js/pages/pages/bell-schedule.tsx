@@ -1,4 +1,5 @@
 import { Breadcrumbs } from '@/components/breadcrumbs';
+import { Reveal } from '@/components/reveal';
 import { SiteLayout } from '@/layouts/site-layout';
 import type { BellScheduleItem, SharedInertiaProps } from '@/types/school';
 import { Link, usePage } from '@inertiajs/react';
@@ -76,7 +77,9 @@ export default function BellSchedulePage(): ReactElement {
                 </header>
 
                 <div className="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                    <section
+                    <Reveal
+                        as="section"
+                        variant="fade-up"
                         aria-label="Tagesablauf und Läuteordnung"
                         className="lg:col-span-8 rounded-2xl bg-white p-5 sm:p-7 shadow-xs border border-slate-200/80"
                     >
@@ -136,10 +139,10 @@ export default function BellSchedulePage(): ReactElement {
                                 })}
                             </ul>
                         )}
-                    </section>
+                    </Reveal>
 
                     <aside className="lg:col-span-4 space-y-5">
-                        <div className="rounded-2xl bg-white p-5 sm:p-6 shadow-xs border border-slate-200/80">
+                        <Reveal variant="fade-up" delay={100} className="rounded-2xl bg-white p-5 sm:p-6 shadow-xs border border-slate-200/80">
                             <h2 className="text-base font-extrabold text-brand-900">Hinweise für Eltern</h2>
                             <ul className="mt-3 space-y-2.5 text-xs sm:text-sm text-slate-600 leading-relaxed">
                                 <li className="flex items-start gap-2">
@@ -179,7 +182,7 @@ export default function BellSchedulePage(): ReactElement {
                                     ← Zurück zur Startseite
                                 </Link>
                             </div>
-                        </div>
+                        </Reveal>
                     </aside>
                 </div>
             </div>

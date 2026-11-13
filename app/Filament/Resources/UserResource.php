@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Resources;
 
 use App\Enums\UserRole;
+use App\Filament\AvatarProviders\LocalInitialsAvatarProvider;
 use App\Filament\Resources\UserResource\Pages\CreateUser;
 use App\Filament\Resources\UserResource\Pages\EditUser;
 use App\Filament\Resources\UserResource\Pages\ListUsers;
@@ -19,6 +20,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Hash;
@@ -48,7 +50,8 @@ class UserResource extends Resource
     {
         return $schema
             ->components([
-                Section::make()
+                Section::make('Benutzerkonto & Zugangsdaten')
+                    ->icon(Heroicon::OutlinedUsers)
                     ->columnSpanFull()
                     ->columns(2)
                     ->schema([
@@ -119,12 +122,18 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
+                ImageColumn::make('avatar')
+                    ->label('')
+                    ->state(fn (User $record): string => app(LocalInitialsAvatarProvider::class)->get($record))
+                    ->square()
+                    ->imageSize(36)
+                    ->grow(false),
                 TextColumn::make('name')
                     ->label('Name')
                     ->searchable()
                     ->sortable()
                     ->weight('medium')
-                    ->description(fn (User $record): string => $record->email),
+                    ->description(fn (User $record): string => collect([$record->email, $record->class_name])->filter()->implode(' · ')),
                 TextColumn::make('role')
                     ->label('Rolle')
                     ->badge()
@@ -133,6 +142,10 @@ class UserResource extends Resource
             ->recordUrl(fn (User $record): ?string => auth()->user()?->can('update', $record)
                 ? static::getUrl('edit', ['record' => $record])
                 : null)
+            ->searchPlaceholder('Name, E-Mail oder Klasse suchen...')
+            ->emptyStateIcon(Heroicon::OutlinedUsers)
+            ->emptyStateHeading('Keine Benutzerkonten gefunden')
+            ->emptyStateDescription('Legen Sie ein neues Konto für Schulleitung, Sekretariat oder Lehrkräfte an.')
             ->recordActions([
                 EditAction::make()->iconButton(),
                 DeleteAction::make()->iconButton(),

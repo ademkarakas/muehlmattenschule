@@ -1,4 +1,5 @@
 import { Breadcrumbs } from '@/components/breadcrumbs';
+import { Reveal } from '@/components/reveal';
 import { SiteLayout } from '@/layouts/site-layout';
 import type { SharedInertiaProps } from '@/types/school';
 import { usePage } from '@inertiajs/react';
@@ -31,7 +32,7 @@ export default function DatenschutzPage(): ReactElement {
                     </p>
                 </header>
 
-                <div className="rounded-2xl sm:rounded-3xl border border-slate-200 bg-white p-5 sm:p-6 md:p-10 space-y-7 sm:space-y-8 text-sm leading-relaxed text-slate-700 shadow-xs break-words hyphens-auto">
+                <Reveal variant="fade-up" className="rounded-2xl sm:rounded-3xl border border-slate-200 bg-white p-5 sm:p-6 md:p-10 space-y-7 sm:space-y-8 text-sm leading-relaxed text-slate-700 shadow-xs break-words hyphens-auto">
                     {/* 1. Verantwortliche Stelle */}
                     <section className="space-y-2">
                         <h2 className="text-base sm:text-lg font-extrabold text-slate-900">
@@ -354,7 +355,7 @@ export default function DatenschutzPage(): ReactElement {
                             </p>
                         </div>
                     </section>
-                </div>
+                </Reveal>
             </div>
         </SiteLayout>
     );

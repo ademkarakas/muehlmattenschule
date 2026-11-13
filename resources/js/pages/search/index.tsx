@@ -1,3 +1,4 @@
+import { Reveal } from '@/components/reveal';
 import { SearchIcon } from '@/components/search-icon';
 import { SiteLayout } from '@/layouts/site-layout';
 import { Link, router } from '@inertiajs/react';
@@ -111,7 +112,7 @@ export default function SearchIndex({ query, totalCount, results }: SearchPagePr
                 </div>
 
                 {query !== '' && (
-                    <div className="mt-8 space-y-8">
+                    <Reveal variant="fade-up" className="mt-8 space-y-8">
                         <p className="text-sm sm:text-base font-semibold text-slate-600">
                             {totalCount === 0
                                 ? `Keine Treffer für „${query}“ gefunden.`
@@ -297,7 +298,7 @@ export default function SearchIndex({ query, totalCount, results }: SearchPagePr
                                 </div>
                             </section>
                         )}
-                    </div>
+                    </Reveal>
                 )}
             </div>
         </SiteLayout>

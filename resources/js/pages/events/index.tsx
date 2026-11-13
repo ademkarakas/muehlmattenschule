@@ -1,4 +1,5 @@
 import { Breadcrumbs } from '@/components/breadcrumbs';
+import { Reveal } from '@/components/reveal';
 import { SiteLayout } from '@/layouts/site-layout';
 import type { UpcomingEventItem } from '@/types/school';
 import type { ReactElement } from 'react';
@@ -59,8 +60,8 @@ export default function EventsIndexPage({ events }: EventsIndexProps): ReactElem
                     </div>
                 ) : (
                     <div className="space-y-6 sm:space-y-8">
-                        {Object.entries(grouped).map(([month, monthEvents]) => (
-                            <section key={month}>
+                        {Object.entries(grouped).map(([month, monthEvents], groupIndex) => (
+                            <Reveal key={month} as="section" variant="fade-up" delay={Math.min(groupIndex, 3) * 60}>
                                 <div className="mb-3 flex items-center gap-2.5">
                                     <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700 ring-1 ring-brand-500/15" aria-hidden="true">
                                         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
@@ -150,7 +151,7 @@ export default function EventsIndexPage({ events }: EventsIndexProps): ReactElem
                                         );
                                     })}
                                 </div>
-                            </section>
+                            </Reveal>
                         ))}
                     </div>
                 )}

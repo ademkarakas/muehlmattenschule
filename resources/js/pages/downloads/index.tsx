@@ -1,4 +1,5 @@
 import { Breadcrumbs } from '@/components/breadcrumbs';
+import { Reveal } from '@/components/reveal';
 import { SiteLayout } from '@/layouts/site-layout';
 import type { ReactElement } from 'react';
 
@@ -37,7 +38,7 @@ export default function DownloadsIndexPage({ downloads }: DownloadsIndexProps): 
                         Aktuell sind noch keine Dokumente hinterlegt.
                     </div>
                 ) : (
-                    <div className="divide-y divide-slate-200 rounded-2xl border border-slate-200 bg-white shadow-xs">
+                    <Reveal variant="fade-up" className="divide-y divide-slate-200 rounded-2xl border border-slate-200 bg-white shadow-xs">
                         {downloads.map((item) => (
                             <div
                                 key={item.id}
@@ -79,7 +80,7 @@ export default function DownloadsIndexPage({ downloads }: DownloadsIndexProps): 
                                 )}
                             </div>
                         ))}
-                    </div>
+                    </Reveal>
                 )}
             </div>
         </SiteLayout>

@@ -11,12 +11,16 @@ use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
+use Filament\Support\Enums\Width;
+use Filament\Support\Icons\Heroicon;
 
 class EditAlbum extends EditRecord
 {
     use HasCenteredStickyFormActions;
 
     protected static string $resource = AlbumResource::class;
+
+    protected Width|string|null $maxContentWidth = Width::FiveExtraLarge;
 
     /**
      * Seitentitel mit dem Namen des Fotoalbums.
@@ -42,6 +46,26 @@ class EditAlbum extends EditRecord
             $album->class_name,
             $album->event_date?->format('d.m.Y'),
         ])->filter()->implode(' · ');
+    }
+
+    /**
+     * Kopfzeilen-Aktionen: „← Zurück“ und „Auf Website ansehen“.
+     *
+     * @return array<Action>
+     */
+    protected function getHeaderActions(): array
+    {
+        /** @var Album $album */
+        $album = $this->getRecord();
+
+        return [
+            $this->getBackToListHeaderAction(),
+            Action::make('preview')
+                ->label('Auf Website ansehen')
+                ->icon(Heroicon::OutlinedArrowTopRightOnSquare)
+                ->color('gray')
+                ->url('/galerie/'.$album->slug, shouldOpenInNewTab: true),
+        ];
     }
 
     /**

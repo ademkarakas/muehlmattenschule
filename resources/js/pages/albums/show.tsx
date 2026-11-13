@@ -1,5 +1,6 @@
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { PhotoLightbox } from '@/components/photo-lightbox';
+import { Reveal } from '@/components/reveal';
 import { SiteLayout } from '@/layouts/site-layout';
 import { Link } from '@inertiajs/react';
 import { useState, type ReactElement } from 'react';
@@ -76,21 +77,22 @@ export default function AlbumShowPage({ album }: AlbumShowProps): ReactElement {
                 ) : (
                     <div className="grid grid-cols-2 gap-2.5 sm:gap-4 md:grid-cols-3 lg:grid-cols-4">
                         {album.photos.map((photo, index) => (
-                            <button
-                                key={photo.id}
-                                type="button"
-                                onClick={() => setActiveIndex(index)}
-                                className="group relative overflow-hidden rounded-xl sm:rounded-2xl border border-slate-200 bg-white aspect-[4/3] shadow-2xs transition hover:-translate-y-0.5 hover:border-brand-400 hover:shadow-md focus:outline-2 focus:outline-brand-600 cursor-pointer"
-                            >
-                                <img
-                                    src={photo.thumbUrl}
-                                    alt={`${photo.alt} (${index + 1})`}
-                                    loading="lazy"
-                                    decoding="async"
-                                    className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
-                                />
-                                <div className="pointer-events-none absolute inset-0 bg-slate-950/0 transition group-hover:bg-slate-950/15" />
-                            </button>
+                            <Reveal key={photo.id} variant="zoom-in" delay={Math.min(index, 7) * 45}>
+                                <button
+                                    type="button"
+                                    onClick={() => setActiveIndex(index)}
+                                    className="group relative block w-full overflow-hidden rounded-xl sm:rounded-2xl border border-slate-200 bg-white aspect-[4/3] shadow-2xs transition hover:-translate-y-0.5 hover:border-brand-400 hover:shadow-md focus:outline-2 focus:outline-brand-600 cursor-pointer"
+                                >
+                                    <img
+                                        src={photo.thumbUrl}
+                                        alt={`${photo.alt} (${index + 1})`}
+                                        loading="lazy"
+                                        decoding="async"
+                                        className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                                    />
+                                    <div className="pointer-events-none absolute inset-0 bg-slate-950/0 transition group-hover:bg-slate-950/15" />
+                                </button>
+                            </Reveal>
                         ))}
                     </div>
                 )}

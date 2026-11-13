@@ -167,10 +167,58 @@ class AdminAccessAndPoliciesTest extends TestCase
             ->assertOk()
             ->assertSee('Ausflüge');
 
-        $this->actingAs($schulleitung)->get('/admin/events/create')->assertOk();
+        $this->actingAs($schulleitung)->get('/admin/events/create')
+            ->assertOk()
+            ->assertSee('Termindaten')
+            ->assertSee('Zurück');
         $this->actingAs($schulleitung)->get("/admin/events/{$event->id}/edit")
             ->assertOk()
-            ->assertSee('Sommerfest');
+            ->assertSee('Sommerfest')
+            ->assertSee('Zurück');
+
+        $post = Post::factory()->create(['title' => 'Projektwoche im Frühling']);
+        $album = Album::factory()->create(['title' => 'Sportfest Album']);
+        $page = Page::query()->create([
+            'title' => 'Unser Leitbild',
+            'slug' => 'unser-leitbild',
+            'section' => 'unsere-schule',
+            'menu_order' => 1,
+            'status' => 'published',
+            'content' => [],
+        ]);
+
+        $this->actingAs($schulleitung)->get('/admin/posts/create')
+            ->assertOk()
+            ->assertSee('Neuer Beitrag')
+            ->assertSee('Beitragsinhalt')
+            ->assertSee('Zurück');
+        $this->actingAs($schulleitung)->get("/admin/posts/{$post->id}/edit")
+            ->assertOk()
+            ->assertSee('Projektwoche im Frühling')
+            ->assertSee('Auf Website ansehen')
+            ->assertSee('Zurück');
+
+        $this->actingAs($schulleitung)->get('/admin/albums/create')
+            ->assertOk()
+            ->assertSee('Neues Fotoalbum')
+            ->assertSee('Album-Angaben')
+            ->assertSee('Zurück');
+        $this->actingAs($schulleitung)->get("/admin/albums/{$album->id}/edit")
+            ->assertOk()
+            ->assertSee('Sportfest Album')
+            ->assertSee('Auf Website ansehen')
+            ->assertSee('Zurück');
+
+        $this->actingAs($schulleitung)->get('/admin/pages/create')
+            ->assertOk()
+            ->assertSee('Neue Schulseite')
+            ->assertSee('Seiten-Einstellungen')
+            ->assertSee('Zurück');
+        $this->actingAs($schulleitung)->get("/admin/pages/{$page->id}/edit")
+            ->assertOk()
+            ->assertSee('Unser Leitbild')
+            ->assertSee('Auf Website ansehen')
+            ->assertSee('Zurück');
     }
 
     /**

@@ -53,7 +53,8 @@ class DownloadResource extends Resource
     {
         return $schema
             ->components([
-                Section::make()
+                Section::make('Dokument & Datei-Upload')
+                    ->icon(Heroicon::OutlinedArrowDownTray)
                     ->columnSpanFull()
                     ->columns(2)
                     ->schema([
@@ -124,6 +125,10 @@ class DownloadResource extends Resource
             ->recordUrl(fn (Download $record): ?string => auth()->user()?->can('update', $record)
                 ? static::getUrl('edit', ['record' => $record])
                 : null)
+            ->searchPlaceholder('Dokumenttitel suchen...')
+            ->emptyStateIcon(Heroicon::OutlinedArrowDownTray)
+            ->emptyStateHeading('Keine Downloads gefunden')
+            ->emptyStateDescription('Laden Sie über „Neu“ einen Elternbrief oder ein Formular hoch.')
             ->recordActions([
                 EditAction::make()->iconButton(),
                 DeleteAction::make()->iconButton(),

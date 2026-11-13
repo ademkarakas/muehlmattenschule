@@ -58,39 +58,47 @@ class PageResource extends Resource
         return $schema
             ->components([
                 Section::make('Seiten-Einstellungen')
+                    ->icon(Heroicon::OutlinedDocumentText)
                     ->schema([
                         TextInput::make('title')
                             ->label('Seitentitel')
+                            ->prefixIcon(Heroicon::OutlinedDocumentText)
                             ->required()
                             ->maxLength(200)
                             ->live(onBlur: true)
                             ->afterStateUpdated(fn (Set $set, ?string $state): mixed => $set('slug', Str::slug((string) $state))),
                         TextInput::make('slug')
                             ->label('Kurz-URL (Slug)')
+                            ->prefixIcon(Heroicon::OutlinedLink)
                             ->required()
                             ->maxLength(220)
                             ->unique(ignoreRecord: true),
                         Select::make('section')
                             ->label('Menübereich')
+                            ->prefixIcon(Heroicon::OutlinedFolderOpen)
                             ->options([
                                 'unsere-schule' => 'Unsere Schule',
                                 'konzepte-projekte' => 'Konzepte & Projekte',
                                 'angebote' => 'Angebote & Betreuung',
                                 'schulleben' => 'Schulleben (Übersicht)',
                             ])
+                            ->native(false)
                             ->default('unsere-schule')
                             ->required(),
                         TextInput::make('menu_group')
                             ->label('Untergruppe im Menü (optional)')
                             ->placeholder('z. B. Profil & Menschen, Gremien & Partner')
+                            ->prefixIcon(Heroicon::OutlinedTag)
                             ->maxLength(100),
                         TextInput::make('menu_order')
                             ->label('Reihenfolge im Menü')
+                            ->prefixIcon(Heroicon::OutlinedArrowsUpDown)
                             ->numeric()
                             ->default(1),
                         Select::make('status')
                             ->label('Status')
                             ->options(PublishStatus::options())
+                            ->native(false)
                             ->default(PublishStatus::Published->value)
                             ->required(),
                         Textarea::make('summary')
@@ -102,6 +110,7 @@ class PageResource extends Resource
                     ->columns(2),
 
                 Section::make('Seiteninhalt (Baukasten)')
+                    ->icon(Heroicon::OutlinedSquares2x2)
                     ->schema([
                         Builder::make('content')
                             ->label('Inhaltsblöcke')
@@ -236,6 +245,13 @@ class PageResource extends Resource
                     ->formatStateUsing(fn (PublishStatus $state): string => $state->label())
                     ->color(fn (PublishStatus $state): string => $state === PublishStatus::Published ? 'success' : 'gray'),
             ])
+            ->recordUrl(fn (Page $record): ?string => auth()->user()?->can('update', $record)
+                ? static::getUrl('edit', ['record' => $record])
+                : null)
+            ->searchPlaceholder('Seitentitel suchen...')
+            ->emptyStateIcon(Heroicon::OutlinedDocumentText)
+            ->emptyStateHeading('Keine Schulseiten gefunden')
+            ->emptyStateDescription('Legen Sie eine neue feste Schulseite im Menü an.')
             ->recordActions([
                 Action::make('preview')
                     ->label('Auf Website ansehen')

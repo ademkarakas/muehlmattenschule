@@ -61,6 +61,7 @@ class AlbumResource extends Resource
         return $schema
             ->components([
                 Section::make('Erstellt von')
+                    ->icon(Heroicon::OutlinedInformationCircle)
                     ->schema([
                         TextEntry::make('author_info')
                             ->hiddenLabel()
@@ -70,23 +71,28 @@ class AlbumResource extends Resource
                     ])
                     ->visibleOn('edit'),
                 Section::make('Album-Angaben')
+                    ->icon(Heroicon::OutlinedPhoto)
                     ->schema([
                         TextInput::make('title')
                             ->label('Titel des Fotoalbums')
+                            ->prefixIcon(Heroicon::OutlinedPhoto)
                             ->required()
                             ->maxLength(200)
                             ->live(onBlur: true)
                             ->afterStateUpdated(fn (Set $set, ?string $state): mixed => $set('slug', Str::slug((string) $state))),
                         TextInput::make('slug')
                             ->label('Kurz-URL (Slug)')
+                            ->prefixIcon(Heroicon::OutlinedLink)
                             ->required()
                             ->maxLength(220)
                             ->unique(ignoreRecord: true),
                         DatePicker::make('event_date')
                             ->label('Datum der Aktivität')
+                            ->prefixIcon(Heroicon::OutlinedCalendarDays)
                             ->default(now()),
                         TextInput::make('class_name')
                             ->label('Klasse (optional, z. B. Klasse 2a)')
+                            ->prefixIcon(Heroicon::OutlinedAcademicCap)
                             ->default(fn (): ?string => auth()->user()?->class_name)
                             ->maxLength(60),
                         Textarea::make('description')
@@ -97,6 +103,7 @@ class AlbumResource extends Resource
                     ->columns(2),
 
                 Section::make('Fotos hochladen & DSGVO-Freigabe')
+                    ->icon(Heroicon::OutlinedShieldCheck)
                     ->schema([
                         SpatieMediaLibraryFileUpload::make('photos')
                             ->label('Fotos (Mehrfachauswahl & Sortierung per Ziehen möglich)')
@@ -176,6 +183,10 @@ class AlbumResource extends Resource
             ->recordUrl(fn (Album $record): ?string => auth()->user()?->can('update', $record)
                 ? static::getUrl('edit', ['record' => $record])
                 : null)
+            ->searchPlaceholder('Albumtitel suchen...')
+            ->emptyStateIcon(Heroicon::OutlinedPhoto)
+            ->emptyStateHeading('Keine Fotoalben gefunden')
+            ->emptyStateDescription('Legen Sie ein neues Fotoalbum mit DSGVO-Freigabe an.')
             ->filters([
                 SelectFilter::make('status')
                     ->label('Status')

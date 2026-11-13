@@ -53,7 +53,8 @@ class EventResource extends Resource
     {
         return $schema
             ->components([
-                Section::make()
+                Section::make('Termindaten')
+                    ->icon(Heroicon::OutlinedCalendarDays)
                     ->columnSpanFull()
                     ->columns(2)
                     ->schema([
@@ -144,6 +145,10 @@ class EventResource extends Resource
             ->recordUrl(fn (Event $record): ?string => auth()->user()?->can('update', $record)
                 ? static::getUrl('edit', ['record' => $record])
                 : null)
+            ->searchPlaceholder('Termin, Ort oder Klasse suchen...')
+            ->emptyStateIcon(Heroicon::OutlinedCalendarDays)
+            ->emptyStateHeading('Keine Termine gefunden')
+            ->emptyStateDescription('Legen Sie über „Neu“ einen neuen Schultermin oder ein Ereignis an.')
             ->recordActions([
                 EditAction::make()->iconButton(),
                 DeleteAction::make()->iconButton(),

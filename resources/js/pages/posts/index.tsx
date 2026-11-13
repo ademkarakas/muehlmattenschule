@@ -1,5 +1,6 @@
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { PostCard } from '@/components/post-card';
+import { Reveal } from '@/components/reveal';
 import { RubrikenWidget } from '@/components/rubriken-widget';
 import { SiteLayout } from '@/layouts/site-layout';
 import type { CategorySummary, PostCardItem, SharedInertiaProps } from '@/types/school';
@@ -105,8 +106,10 @@ export default function PostsIndexPage({
                             </div>
                         ) : (
                             <div className="flex flex-col gap-5 sm:gap-6">
-                                {posts.map((post) => (
-                                    <PostCard key={post.id} post={post} layout="horizontal" />
+                                {posts.map((post, index) => (
+                                    <Reveal key={post.id} variant="fade-up" delay={Math.min(index, 4) * 65}>
+                                        <PostCard post={post} layout="horizontal" />
+                                    </Reveal>
                                 ))}
                             </div>
                         )}
@@ -140,11 +143,13 @@ export default function PostsIndexPage({
                     </div>
 
                     <aside className="lg:col-span-4 space-y-6">
-                        <RubrikenWidget
-                            rubriken={rubriken}
-                            activeCategory={activeCategory}
-                            activeClass={activeClass}
-                        />
+                        <Reveal variant="fade-up" delay={80}>
+                            <RubrikenWidget
+                                rubriken={rubriken}
+                                activeCategory={activeCategory}
+                                activeClass={activeClass}
+                            />
+                        </Reveal>
                     </aside>
                 </div>
             </div>

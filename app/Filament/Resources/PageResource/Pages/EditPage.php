@@ -11,12 +11,16 @@ use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
+use Filament\Support\Enums\Width;
+use Filament\Support\Icons\Heroicon;
 
 class EditPage extends EditRecord
 {
     use HasCenteredStickyFormActions;
 
     protected static string $resource = PageResource::class;
+
+    protected Width|string|null $maxContentWidth = Width::FiveExtraLarge;
 
     /**
      * Seitentitel mit dem Namen der Schulseite.
@@ -42,6 +46,26 @@ class EditPage extends EditRecord
             $page->section,
             "/seiten/{$page->slug}",
         ])->filter()->implode(' · ');
+    }
+
+    /**
+     * Kopfzeilen-Aktionen: „← Zurück“ und „Auf Website ansehen“.
+     *
+     * @return array<Action>
+     */
+    protected function getHeaderActions(): array
+    {
+        /** @var Page $page */
+        $page = $this->getRecord();
+
+        return [
+            $this->getBackToListHeaderAction(),
+            Action::make('preview')
+                ->label('Auf Website ansehen')
+                ->icon(Heroicon::OutlinedArrowTopRightOnSquare)
+                ->color('gray')
+                ->url('/'.$page->section.'/'.$page->slug, shouldOpenInNewTab: true),
+        ];
     }
 
     /**

@@ -7,12 +7,31 @@ namespace App\Filament\Resources\PostResource\Pages;
 use App\Filament\Concerns\HasCenteredStickyFormActions;
 use App\Filament\Resources\PostResource;
 use Filament\Resources\Pages\CreateRecord;
+use Filament\Support\Enums\Width;
 
 class CreatePost extends CreateRecord
 {
     use HasCenteredStickyFormActions;
 
     protected static string $resource = PostResource::class;
+
+    protected Width|string|null $maxContentWidth = Width::FiveExtraLarge;
+
+    /**
+     * Seitentitel des Formulars.
+     */
+    public function getTitle(): string
+    {
+        return 'Neuer Beitrag';
+    }
+
+    /**
+     * Kurze Erklärung unter dem Seitentitel.
+     */
+    public function getSubheading(): ?string
+    {
+        return 'Verfassen Sie einen neuen Bericht oder eine aktuelle Mitteilung für die Schulwebsite.';
+    }
 
     /**
      * Setzt den aktuell angemeldeten Benutzer automatisch als Verfasser des Beitrags.

@@ -54,7 +54,8 @@ class PersonResource extends Resource
     {
         return $schema
             ->components([
-                Section::make()
+                Section::make('Personendaten & Zuordnung')
+                    ->icon(Heroicon::OutlinedUserGroup)
                     ->columnSpanFull()
                     ->columns(2)
                     ->schema([
@@ -135,6 +136,10 @@ class PersonResource extends Resource
             ->recordUrl(fn (Person $record): ?string => auth()->user()?->can('update', $record)
                 ? static::getUrl('edit', ['record' => $record])
                 : null)
+            ->searchPlaceholder('Name oder Funktion suchen...')
+            ->emptyStateIcon(Heroicon::OutlinedUserGroup)
+            ->emptyStateHeading('Keine Personen gefunden')
+            ->emptyStateDescription('Legen Sie ein neues Teammitglied des Kollegiums oder der Schulleitung an.')
             ->recordActions([
                 EditAction::make()->iconButton(),
                 DeleteAction::make()->iconButton(),

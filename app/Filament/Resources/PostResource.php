@@ -70,11 +70,13 @@ class PostResource extends Resource
                         // Hauptspalte: Inhalt des Beitrags
                         Group::make()
                             ->schema([
-                                Section::make()
+                                Section::make('Beitragsinhalt')
+                                    ->icon(Heroicon::OutlinedNewspaper)
                                     ->schema([
                                         TextInput::make('title')
                                             ->label('Überschrift')
                                             ->placeholder('z. B. Ausflug der 4. Klassen zum Mundenhof')
+                                            ->prefixIcon(Heroicon::OutlinedNewspaper)
                                             ->required()
                                             ->maxLength(200)
                                             ->extraInputAttributes(['class' => 'text-lg font-semibold'])
@@ -234,6 +236,10 @@ class PostResource extends Resource
             ->recordUrl(fn (Post $record): ?string => auth()->user()?->can('update', $record)
                 ? static::getUrl('edit', ['record' => $record])
                 : null)
+            ->searchPlaceholder('Überschrift oder Verfasser suchen...')
+            ->emptyStateIcon(Heroicon::OutlinedNewspaper)
+            ->emptyStateHeading('Keine Beiträge gefunden')
+            ->emptyStateDescription('Erstellen Sie einen neuen Beitrag oder passen Sie Ihre Such- und Filterkriterien an.')
             ->filters([
                 TernaryFilter::make('is_featured')
                     ->label('Auf der Startseite'),

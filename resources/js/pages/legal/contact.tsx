@@ -1,4 +1,5 @@
 import { Breadcrumbs } from "@/components/breadcrumbs";
+import { Reveal } from "@/components/reveal";
 import { SiteLayout } from "@/layouts/site-layout";
 import type { SharedInertiaProps } from "@/types/school";
 import { usePage } from "@inertiajs/react";
@@ -34,28 +35,60 @@ export default function ContactPage(): ReactElement {
                 <Breadcrumbs />
 
                 {/* Hero Header */}
-                <header className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-600 via-brand-500 to-[#06b09d] p-6 sm:p-9 text-white shadow-md">
+                <header className="relative overflow-hidden rounded-3xl border border-slate-200/90 bg-gradient-to-br from-white via-slate-50/60 to-brand-50/40 p-6 sm:p-9 shadow-xs">
                     <div className="relative z-10 max-w-3xl">
-                        <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white">
-                            Kontakt & Schulbüro
+                        <div className="inline-flex items-center gap-2 rounded-full border border-brand-200/70 bg-brand-50/80 px-3 py-1 text-xs font-semibold text-brand-700">
+                            <svg
+                                className="h-3.5 w-3.5"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                aria-hidden="true"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M12 6v6l4 2m6-2a10 10 0 11-20 0 10 10 0 0120 0z"
+                                />
+                            </svg>
+                            <span>Schulbüro &amp; Erreichbarkeit</span>
+                        </div>
+
+                        <h1 className="mt-3 text-2xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
+                            Kontakt &amp; Schulbüro
                         </h1>
 
-                        <p className="mt-2.5 text-sm sm:text-base text-white/90 leading-relaxed">
-                            Haben Sie Fragen zur Schulanmeldung, zum Schulalltag
-                            oder möchten Sie das Sekretariat erreichen? Wir
-                            stehen Ihnen gerne zur Seite.
+                        <p className="mt-3 text-sm sm:text-base text-slate-600 leading-relaxed">
+                            Am{" "}
+                            <strong className="font-semibold text-slate-900">
+                                Montag
+                            </strong>
+                            ,{" "}
+                            <strong className="font-semibold text-slate-900">
+                                Mittwoch
+                            </strong>{" "}
+                            und{" "}
+                            <strong className="font-semibold text-slate-900">
+                                Freitag
+                            </strong>{" "}
+                            erreichen Sie uns zwischen{" "}
+                            <span className="inline-flex items-center rounded-lg bg-brand-50 px-2 py-0.5 font-bold text-brand-800 ring-1 ring-brand-500/20">
+                                07:30 – 12:00 Uhr
+                            </span>
+                            .
                         </p>
                     </div>
 
-                    {/* Dekorative Hintergrund-Formen */}
-                    <div className="pointer-events-none absolute -right-16 -top-16 h-72 w-72 rounded-full bg-white/10 blur-2xl" />
-                    <div className="pointer-events-none absolute -bottom-16 right-24 h-64 w-64 rounded-full bg-emerald-200/15 blur-2xl" />
+                    {/* Dezente Hintergrund-Akzente */}
+                    <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-brand-100/45 blur-3xl" />
+                    <div className="pointer-events-none absolute -bottom-24 right-24 h-56 w-56 rounded-full bg-emerald-100/40 blur-3xl" />
                 </header>
 
                 {/* 2-Spaltiger Hauptbereich: Links Schulsekretariat (Öffnungszeiten & Kontakt), Rechts Wegbeschreibung */}
                 <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
                     {/* Linke Spalte: Schulsekretariat – Öffnungszeiten & Kontaktdaten */}
-                    <div className="overflow-hidden rounded-3xl border border-slate-200/90 bg-white shadow-xs">
+                    <Reveal variant="fade-up" className="overflow-hidden rounded-3xl border border-slate-200/90 bg-white shadow-xs">
                         {/* Sekretariat Header / Ansprechpartnerin */}
                         <div className="p-6 sm:p-7 border-b border-slate-100 bg-gradient-to-br from-slate-50/80 via-white to-brand-50/20">
                             <div className="flex items-center gap-4">
@@ -80,64 +113,9 @@ export default function ContactPage(): ReactElement {
                             </div>
                         </div>
 
-                        <div className="p-6 sm:p-7 space-y-6">
-                            {/* Öffnungs- & Sprechzeiten */}
-                            <div>
-                                <div className="flex items-center gap-2.5">
-                                    <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-brand-50 text-brand-700 ring-1 ring-brand-500/15">
-                                        <svg
-                                            className="h-4 w-4"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            stroke="currentColor"
-                                            strokeWidth="1.8"
-                                            aria-hidden="true"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                d="M12 6v6l4 2m6-2a10 10 0 11-20 0 10 10 0 0120 0z"
-                                            />
-                                        </svg>
-                                    </span>
-                                    <h3 className="text-sm font-bold uppercase tracking-wider text-slate-700">
-                                        Öffnungs- & Sprechzeiten
-                                    </h3>
-                                </div>
-
-                                <div className="mt-3.5 rounded-2xl border border-brand-200/70 bg-gradient-to-br from-brand-50/60 via-white to-emerald-50/40 p-4 sm:p-5 shadow-2xs">
-                                    <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
-                                        Am{" "}
-                                        <strong className="font-semibold text-slate-900">
-                                            Montag
-                                        </strong>
-                                        ,{" "}
-                                        <strong className="font-semibold text-slate-900">
-                                            Mittwoch
-                                        </strong>{" "}
-                                        und{" "}
-                                        <strong className="font-semibold text-slate-900">
-                                            Freitag
-                                        </strong>{" "}
-                                        erreichen Sie uns zwischen{" "}
-                                        <strong className="font-bold text-emerald-900">
-                                            07:30 – 12:00 Uhr
-                                        </strong>
-                                        .
-                                    </p>
-                                </div>
-
-                                <p className="mt-2.5 text-[11px] text-slate-500 italic leading-relaxed">
-                                    Außerhalb der Sprechzeiten erreichen Sie uns
-                                    jederzeit per E-Mail oder über den
-                                    schulischen Anrufbeantworter. In den
-                                    Schulferien von Baden-Württemberg ist das
-                                    Sekretariat geschlossen.
-                                </p>
-                            </div>
-
+                        <div className="p-6 sm:p-7">
                             {/* Kontaktdaten */}
-                            <div className="pt-5 border-t border-slate-100">
+                            <div>
                                 <div className="flex items-center gap-2.5 mb-3.5">
                                     <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-brand-50 text-brand-700 ring-1 ring-brand-500/15">
                                         <svg
@@ -470,10 +448,10 @@ export default function ContactPage(): ReactElement {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </Reveal>
 
                     {/* Rechte Spalte: Lage, Campusfoto, Wegbeschreibung & Karten */}
-                    <div className="overflow-hidden rounded-3xl border border-slate-200/90 bg-white shadow-xs">
+                    <Reveal variant="fade-up" delay={100} className="overflow-hidden rounded-3xl border border-slate-200/90 bg-white shadow-xs">
                         <div className="relative h-48 sm:h-56 w-full overflow-hidden bg-slate-900">
                             <img
                                 src="/images/school/gebaeude-wide.jpg"
@@ -706,7 +684,7 @@ export default function ContactPage(): ReactElement {
                                 </a>
                             </div>
                         </div>
-                    </div>
+                    </Reveal>
                 </div>
             </div>
         </SiteLayout>

@@ -1,4 +1,5 @@
 import { Breadcrumbs } from '@/components/breadcrumbs';
+import { Reveal } from '@/components/reveal';
 import { SiteLayout } from '@/layouts/site-layout';
 import type { SharedInertiaProps } from '@/types/school';
 import { usePage } from '@inertiajs/react';
@@ -20,7 +21,7 @@ export default function ImpressumPage(): ReactElement {
                     Impressum
                 </h1>
 
-                <div className="mt-5 sm:mt-6 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 md:p-8 space-y-5 text-sm leading-relaxed text-slate-700 break-words">
+                <Reveal variant="fade-up" className="mt-5 sm:mt-6 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 md:p-8 space-y-5 text-sm leading-relaxed text-slate-700 break-words">
                     <p>
                         Dies ist der offizielle Internetauftritt der Grundschule Mühlmattenschule. Er stellt
                         Informationen aus allen Bereichen des Schullebens dar. Alle Seiten und Inhalte dieser
@@ -119,7 +120,7 @@ export default function ImpressumPage(): ReactElement {
                             Ottmannstraße 22, 79100 Freiburg im Breisgau
                         </p>
                     </section>
-                </div>
+                </Reveal>
             </div>
         </SiteLayout>
     );

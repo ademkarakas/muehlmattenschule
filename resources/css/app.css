@@ -138,3 +138,55 @@
 .prose-school pre {
     @apply my-4 overflow-x-auto rounded-xl bg-slate-900 p-4 text-xs text-slate-100;
 }
+
+/*
+ * Sanfte, GPU-beschleunigte Scroll-Reveal-Übergänge (ohne Layout-Shifts).
+ * Respektiert automatisch die System-Einstellung „Bewegung reduzieren“.
+ */
+.reveal-item {
+    opacity: 0;
+    will-change: opacity, transform;
+    transition-property: opacity, transform;
+    transition-duration: var(--reveal-duration, 600ms);
+    transition-delay: var(--reveal-delay, 0ms);
+    transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal-item[data-variant='fade-up'] {
+    transform: translate3d(0, 20px, 0);
+}
+
+.reveal-item[data-variant='fade-down'] {
+    transform: translate3d(0, -16px, 0);
+}
+
+.reveal-item[data-variant='fade-left'] {
+    transform: translate3d(20px, 0, 0);
+}
+
+.reveal-item[data-variant='fade-right'] {
+    transform: translate3d(-20px, 0, 0);
+}
+
+.reveal-item[data-variant='zoom-in'] {
+    transform: scale(0.96);
+}
+
+.reveal-item[data-variant='fade'] {
+    transform: none;
+}
+
+.reveal-item[data-visible='true'] {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    will-change: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .reveal-item {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+        will-change: auto !important;
+    }
+}

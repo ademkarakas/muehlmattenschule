@@ -45,6 +45,7 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogoHeight('2.5rem')
             ->favicon(asset('images/logo.png'))
             ->sidebarCollapsibleOnDesktop()
+            ->unsavedChangesAlerts()
             ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
             ->colors([
                 'primary' => Color::hex('#029786'),

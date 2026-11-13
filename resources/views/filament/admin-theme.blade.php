@@ -1,15 +1,77 @@
 <style>
     /* ==========================================================================
-       Mühlmattenschule – Modernes Filament 5 Admin-Design (Deep Turquoise Theme)
+       Mühlmattenschule – Einheitliches Filament 5 Design-System (#029786)
+       Inspiriert von SupportCallSystem.Frontend (Listen-, Erstellen- & Bearbeiten-Seiten)
        ========================================================================== */
 
-    /* 1. Body & Arbeitsbereich: Sanftes Schiefergrau für klaren Karten-Kontrast */
+    /* 1. Globale Design-Tokens (Light & Dark Mode) & Arbeitsbereich */
     .fi-body {
+        --mms-primary: #029786;
+        --mms-primary-dark: #00695c;
+        --mms-primary-50: #e6f6f4;
+        --mms-primary-100: #c5ebe6;
+        --mms-ink: #0f172a;
+        --mms-muted: #526663;
+        --mms-subtle: #64748b;
+        --mms-surface: #ffffff;
+        --mms-surface-header: #f8fafc;
+        --mms-row-hover: #f0fdfa;
+        --mms-line: #e2e8f0;
+        --mms-card-border: #dbe7e5;
+        --mms-radius: 16px;
+        --mms-radius-md: 12px;
+        --mms-radius-sm: 10px;
+        --mms-shadow: 0 4px 12px -2px rgba(2, 105, 92, 0.07), 0 2px 6px -2px rgba(15, 23, 42, 0.04);
+        --mms-shadow-md: 0 14px 28px -10px rgba(2, 105, 92, 0.18), 0 4px 10px -4px rgba(15, 23, 42, 0.06);
+        --mms-ease: cubic-bezier(0.16, 1, 0.3, 1);
+
         background-color: #f1f5f9 !important;
     }
 
     .dark .fi-body {
+        --mms-primary: #36c4b2;
+        --mms-primary-dark: #70ddcd;
+        --mms-primary-50: rgba(54, 196, 178, 0.12);
+        --mms-primary-100: rgba(54, 196, 178, 0.24);
+        --mms-ink: #f1f5f9;
+        --mms-muted: #94a3b8;
+        --mms-subtle: #94a3b8;
+        --mms-surface: #0f2027;
+        --mms-surface-header: #132830;
+        --mms-row-hover: rgba(54, 196, 178, 0.08);
+        --mms-line: rgba(255, 255, 255, 0.09);
+        --mms-card-border: rgba(255, 255, 255, 0.1);
+        --mms-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.5);
+        --mms-shadow-md: 0 14px 28px -10px rgba(0, 0, 0, 0.65);
+
         background-color: #091318 !important;
+    }
+
+    /* Sanfte Seiten-Einblendung analog zu .page-enter */
+    @keyframes mms-page-enter {
+        from {
+            opacity: 0;
+            transform: translateY(4px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .fi-main .fi-page {
+        animation: mms-page-enter 0.2s var(--mms-ease);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .fi-main .fi-page,
+        .fi-sidebar-item-btn,
+        .fi-btn,
+        .fi-section,
+        .fi-wi-stats-overview-stat {
+            animation: none !important;
+            transition: none !important;
+        }
     }
 
     /* 2. Topbar (Header): Klares, modernes Glas-Finish mit feiner Trennlinie */
@@ -292,15 +354,18 @@
         flex-shrink: 0;
     }
 
-    /* 6. Dashboard KPI-Karten & Tabellen-Veredelung */
+    /* 6. Dashboard KPI-Karten */
     .fi-wi-stats-overview-stat {
+        border-radius: var(--mms-radius) !important;
+        border: 1px solid var(--mms-card-border) !important;
         border-top: 3px solid #029786 !important;
+        box-shadow: var(--mms-shadow) !important;
         transition: transform 0.15s ease, box-shadow 0.15s ease !important;
     }
 
     .fi-wi-stats-overview-stat:hover {
         transform: translateY(-2px);
-        box-shadow: 0 10px 20px -8px rgba(15, 23, 42, 0.1) !important;
+        box-shadow: var(--mms-shadow-md) !important;
     }
 
     /* 7. Dialoge (z. B. „Löschen bestätigen“) exakt mittig auf dem Bildschirm */
@@ -308,65 +373,12 @@
         grid-template-rows: 1fr auto 1fr !important;
     }
 
-    /* 8. Aktionsleiste (Speichern · Abbrechen · Löschen) */
-    .fi-sc-actions.fi-sticky {
-        border-radius: 0.75rem;
-    }
-
-    /* 9. Dezent-solide Zwischenüberschriften unter dem Seitentitel (Anzahl & Kurzbeschreibung) */
-    .fi-header-subheading {
-        color: #64748b !important;
-        font-size: 0.875rem !important;
-        font-weight: 500 !important;
-        margin-top: 0.25rem !important;
-        line-height: 1.4 !important;
-    }
-
-    .dark .fi-header-subheading {
-        color: #94a3b8 !important;
-    }
-
-    /* 10. Einheitliches, modernes Karten-Design für alle Formular- & Einstellungsseiten
-           (Heller Türkis-Kopfbereich passend zur Schulfarbe #029786, 16px-Kartenradien,
-           Fokus-Ringe, dezente Abschnitts-Köpfe und schwebende Glas-Aktionsleiste) */
-    .fi-resource-create-record-page,
-    .fi-resource-edit-record-page,
-    .mms-settings-page {
-        --mms-primary: #029786;
-        --mms-primary-dark: #00695c;
-        --mms-primary-50: #e6f6f4;
-        --mms-primary-100: #c5ebe6;
-        --mms-ink: #0f1f1d;
-        --mms-muted: #526663;
-        --mms-line: #dbe7e5;
-        --mms-radius: 16px;
-        --mms-radius-sm: 10px;
-        --mms-shadow: 0 4px 12px -2px rgba(2, 105, 92, 0.07), 0 2px 6px -2px rgba(15, 31, 29, 0.04);
-        --mms-shadow-md: 0 14px 28px -10px rgba(2, 105, 92, 0.18), 0 4px 10px -4px rgba(15, 31, 29, 0.06);
-        --mms-ease: cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .dark .fi-resource-create-record-page,
-    .dark .fi-resource-edit-record-page,
-    .dark .mms-settings-page {
-        --mms-primary: #36c4b2;
-        --mms-primary-dark: #70ddcd;
-        --mms-primary-50: rgba(54, 196, 178, 0.12);
-        --mms-primary-100: rgba(54, 196, 178, 0.24);
-        --mms-ink: #f1f5f9;
-        --mms-muted: #94a3b8;
-        --mms-line: rgba(255, 255, 255, 0.09);
-        --mms-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.5);
-        --mms-shadow-md: 0 14px 28px -10px rgba(0, 0, 0, 0.65);
-    }
-
-    /* Kopfbereich in frischem, hellem Türkis passend zur Markenfarbe (#029786) */
-    .fi-resource-create-record-page .fi-header,
-    .fi-resource-edit-record-page .fi-header,
-    .mms-settings-page .fi-header {
+    /* 8. Einheitlicher Kopfbereich (.fi-header) für ALLE Admin-Seiten
+          (Listen, Hinzufügen, Bearbeiten, Dashboard, Schuleinstellungen, Profil) */
+    .fi-main .fi-header {
         position: relative;
         overflow: hidden;
-        padding: 1.5rem 1.85rem;
+        padding: 1.35rem 1.75rem;
         border-radius: var(--mms-radius);
         border: 1px solid #a8e2d9;
         background:
@@ -375,9 +387,7 @@
         box-shadow: var(--mms-shadow);
     }
 
-    .fi-resource-create-record-page .fi-header::after,
-    .fi-resource-edit-record-page .fi-header::after,
-    .mms-settings-page .fi-header::after {
+    .fi-main .fi-header::after {
         content: '';
         position: absolute;
         inset: auto 0 0 0;
@@ -385,86 +395,155 @@
         background: linear-gradient(90deg, #029786 0%, #14b8a6 55%, #36c4b2 100%);
     }
 
-    .dark .fi-resource-create-record-page .fi-header,
-    .dark .fi-resource-edit-record-page .fi-header,
-    .dark .mms-settings-page .fi-header {
+    .dark .fi-main .fi-header {
         border-color: rgba(54, 196, 178, 0.26);
         background:
             radial-gradient(120% 140% at 100% 0%, rgba(54, 196, 178, 0.2) 0%, rgba(54, 196, 178, 0) 55%),
             linear-gradient(135deg, #0d2a2a 0%, #0f3532 100%);
     }
 
-    .fi-resource-create-record-page .fi-header-heading,
-    .fi-resource-edit-record-page .fi-header-heading,
-    .mms-settings-page .fi-header-heading {
+    .fi-main .fi-header-heading {
         font-weight: 700 !important;
         letter-spacing: -0.02em;
         color: #004d43 !important;
     }
 
-    .dark .fi-resource-create-record-page .fi-header-heading,
-    .dark .fi-resource-edit-record-page .fi-header-heading,
-    .dark .mms-settings-page .fi-header-heading {
+    .dark .fi-main .fi-header-heading {
         color: #e6f7f5 !important;
     }
 
-    .fi-resource-create-record-page .fi-header-subheading,
-    .fi-resource-edit-record-page .fi-header-subheading,
-    .mms-settings-page .fi-header-subheading {
+    .fi-main .fi-header-subheading {
         color: #1f5f56 !important;
+        font-size: 0.875rem !important;
         font-weight: 500 !important;
+        margin-top: 0.25rem !important;
+        line-height: 1.4 !important;
     }
 
-    .dark .fi-resource-create-record-page .fi-header-subheading,
-    .dark .fi-resource-edit-record-page .fi-header-subheading,
-    .dark .mms-settings-page .fi-header-subheading {
+    .dark .fi-main .fi-header-subheading {
         color: #9bd9d0 !important;
     }
 
-    .fi-resource-create-record-page .fi-breadcrumbs-item-label,
-    .fi-resource-edit-record-page .fi-breadcrumbs-item-label {
+    .fi-main .fi-breadcrumbs-item-label {
         color: #00695c !important;
         font-weight: 600 !important;
     }
 
-    .dark .fi-resource-create-record-page .fi-breadcrumbs-item-label,
-    .dark .fi-resource-edit-record-page .fi-breadcrumbs-item-label {
+    .dark .fi-main .fi-breadcrumbs-item-label {
         color: #70ddcd !important;
     }
 
-    /* Formular-Karten (alle Sections auf Create-, Edit- und Einstellungsseiten) */
-    .fi-resource-create-record-page .fi-section,
-    .fi-resource-edit-record-page .fi-section,
-    .mms-settings-page .fi-section {
-        border-radius: var(--mms-radius) !important;
-        border: 1px solid var(--mms-line) !important;
-        box-shadow: var(--mms-shadow) !important;
-        --tw-ring-shadow: 0 0 #0000 !important;
-        transition: box-shadow 0.28s var(--mms-ease), border-color 0.28s var(--mms-ease);
+    /* Kopfzeilen-Buttons (+ Neu, ← Zurück, Auf Website ansehen) im Pill-Design */
+    .fi-main .fi-header .fi-ac-btn-action,
+    .fi-main .fi-header .fi-btn {
+        border-radius: 9999px !important;
+        padding-inline: 1.15rem !important;
+        font-weight: 600 !important;
+        transition: transform 0.16s var(--mms-ease), box-shadow 0.16s var(--mms-ease) !important;
     }
 
-    .fi-resource-create-record-page .fi-section:focus-within,
-    .fi-resource-edit-record-page .fi-section:focus-within,
-    .mms-settings-page .fi-section:focus-within {
+    .fi-main .fi-header .fi-btn.fi-color-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 20px -8px rgba(2, 151, 134, 0.55) !important;
+    }
+
+    /* 9. SupportCallSystem.Frontend Listen- & Tabellen-Design (.content-container Stil)
+          Such-/Filterleiste + Tabelle + Paginierung in einer einheitlichen Karte */
+    .fi-ta-ctn {
+        border-radius: var(--mms-radius) !important;
+        border: 1px solid var(--mms-card-border) !important;
+        background-color: var(--mms-surface) !important;
+        box-shadow: var(--mms-shadow) !important;
+        overflow: hidden !important;
+        --tw-ring-shadow: 0 0 #0000 !important;
+    }
+
+    .fi-ta-header-toolbar {
+        padding: 0.9rem 1.25rem !important;
+        background-color: var(--mms-surface) !important;
+        border-bottom: 1px solid var(--mms-line) !important;
+    }
+
+    /* Tabellen-Spaltenköpfe (th) in Uppercase + #f8fafc wie in SupportCallSystem.Frontend */
+    .fi-ta-table thead tr,
+    .fi-ta-header-cell {
+        background-color: var(--mms-surface-header) !important;
+    }
+
+    .fi-ta-header-cell {
+        padding-top: 0.75rem !important;
+        padding-bottom: 0.75rem !important;
+        border-bottom: 1px solid var(--mms-line) !important;
+    }
+
+    .fi-ta-header-cell-label {
+        font-size: 0.75rem !important;
+        font-weight: 600 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.05em !important;
+        color: var(--mms-subtle) !important;
+    }
+
+    /* Tabellen-Zeilen: sanfter Hover & klickbare Zeilen */
+    .fi-ta-row {
+        transition: background-color 0.14s ease !important;
+    }
+
+    .fi-ta-row:hover {
+        background-color: var(--mms-row-hover) !important;
+    }
+
+    /* Abgerundete Vorschaubilder & Avatare in Listen (10px Radius wie .name-avatar) */
+    .fi-ta-image img {
+        border-radius: 10px !important;
+        object-fit: cover;
+    }
+
+    /* Badges in Tabellen & Formularen als harmonische Pills */
+    .fi-badge {
+        border-radius: 9999px !important;
+        padding-inline: 0.65rem !important;
+        font-weight: 600 !important;
+    }
+
+    /* Paginierungs-Fußzeile */
+    .fi-pagination {
+        background-color: var(--mms-surface-header) !important;
+        border-top: 1px solid var(--mms-line) !important;
+        padding: 0.75rem 1.25rem !important;
+    }
+
+    /* 10. Einheitliches Formular-Karten-Design (.form-card & .form-card-header Stil)
+           für alle Hinzufügen-, Bearbeiten-, Einstellungs- und Profilseiten */
+    .fi-section {
+        border-radius: var(--mms-radius) !important;
+        border: 1px solid var(--mms-card-border) !important;
+        background-color: var(--mms-surface) !important;
+        box-shadow: var(--mms-shadow) !important;
+        overflow: hidden;
+        --tw-ring-shadow: 0 0 #0000 !important;
+        transition: box-shadow 0.25s var(--mms-ease), border-color 0.25s var(--mms-ease);
+    }
+
+    .fi-section:focus-within {
         box-shadow: var(--mms-shadow-md) !important;
         border-color: var(--mms-primary-100) !important;
     }
 
-    .fi-resource-create-record-page .fi-section-header,
-    .fi-resource-edit-record-page .fi-section-header,
-    .mms-settings-page .fi-section-header {
-        padding: 1.15rem 1.5rem !important;
-        gap: 0.85rem !important;
+    /* Karten-Kopfzeile analog zu .form-card-header in SupportCallSystem.Frontend */
+    .fi-section-header {
+        padding: 1rem 1.4rem !important;
+        gap: 0.75rem !important;
         align-items: center !important;
-        border-bottom: 1px solid var(--mms-line);
+        background-color: var(--mms-surface-header) !important;
+        border-bottom: 1px solid var(--mms-line) !important;
     }
 
-    .fi-resource-create-record-page .fi-section-header > .fi-icon,
-    .fi-resource-edit-record-page .fi-section-header > .fi-icon,
-    .mms-settings-page .fi-section-header > .fi-icon {
-        width: 2.35rem !important;
-        height: 2.35rem !important;
-        padding: 0.5rem;
+    .fi-section-header > .fi-icon,
+    .fi-section-header-icon {
+        width: 2.25rem !important;
+        height: 2.25rem !important;
+        padding: 0.45rem;
         box-sizing: border-box;
         border-radius: 10px;
         color: var(--mms-primary) !important;
@@ -473,95 +552,112 @@
         flex-shrink: 0;
     }
 
-    .fi-resource-create-record-page .fi-section-header-heading,
-    .fi-resource-edit-record-page .fi-section-header-heading,
-    .mms-settings-page .fi-section-header-heading {
-        font-size: 0.98rem !important;
+    .fi-section-header-heading {
+        font-size: 0.95rem !important;
         font-weight: 700 !important;
         letter-spacing: -0.01em;
         color: var(--mms-ink) !important;
     }
 
-    .fi-resource-create-record-page .fi-section-header-description,
-    .fi-resource-edit-record-page .fi-section-header-description,
-    .mms-settings-page .fi-section-header-description {
+    .fi-section-header-description {
         color: var(--mms-muted) !important;
-        font-size: 0.82rem !important;
+        font-size: 0.8rem !important;
         line-height: 1.45 !important;
     }
 
-    .fi-resource-create-record-page .fi-section-content,
-    .fi-resource-edit-record-page .fi-section-content,
-    .mms-settings-page .fi-section-content {
+    .fi-section-content {
         padding: 1.5rem !important;
     }
 
-    /* Feldbeschriftungen */
-    .fi-resource-create-record-page .fi-fo-field-label-content,
-    .fi-resource-edit-record-page .fi-fo-field-label-content,
-    .mms-settings-page .fi-fo-field-label-content {
+    /* Tabs (z. B. in Schuleinstellungen) im selben Karten-Design */
+    .fi-fo-tabs {
+        border-radius: var(--mms-radius) !important;
+        border: 1px solid var(--mms-card-border) !important;
+        box-shadow: var(--mms-shadow) !important;
+        overflow: hidden;
+    }
+
+    /* Feldbeschriftungen & Pflichtfeld-Sternchen */
+    .fi-fo-field-label-content {
         font-weight: 600 !important;
-        font-size: 0.85rem !important;
+        font-size: 0.84rem !important;
         color: var(--mms-ink) !important;
     }
 
-    /* Eingabefelder: weiche Radien & Türkis-Fokus-Ring */
-    .fi-resource-create-record-page .fi-input-wrp,
-    .fi-resource-edit-record-page .fi-input-wrp,
-    .mms-settings-page .fi-input-wrp {
-        border-radius: var(--mms-radius-sm) !important;
-        min-height: 2.75rem;
-        transition: box-shadow 0.18s var(--mms-ease), background-color 0.18s var(--mms-ease) !important;
+    .fi-fo-field-label-required-mark {
+        color: #ef4444 !important;
+        font-weight: 700 !important;
     }
 
-    .fi-resource-create-record-page .fi-input-wrp:focus-within,
-    .fi-resource-edit-record-page .fi-input-wrp:focus-within,
-    .mms-settings-page .fi-input-wrp:focus-within {
+    /* Eingabefelder & Suchfelder: weiche Radien (10px), 44px Touch-Höhe & Türkis-Fokus-Ring */
+    .fi-input-wrp {
+        border-radius: var(--mms-radius-sm) !important;
+        min-height: 2.75rem;
+        transition: box-shadow 0.18s var(--mms-ease), border-color 0.18s var(--mms-ease), background-color 0.18s var(--mms-ease) !important;
+    }
+
+    .fi-input-wrp:focus-within {
         --tw-ring-color: var(--mms-primary) !important;
         box-shadow: 0 0 0 1px var(--mms-primary), 0 0 0 4px var(--mms-primary-50) !important;
     }
 
-    .fi-resource-create-record-page .fi-input-wrp-prefix .fi-icon,
-    .fi-resource-edit-record-page .fi-input-wrp-prefix .fi-icon,
-    .mms-settings-page .fi-input-wrp-prefix .fi-icon {
+    .fi-input-wrp-prefix .fi-icon {
         color: var(--mms-muted) !important;
         transition: color 0.18s ease;
     }
 
-    .fi-resource-create-record-page .fi-input-wrp:focus-within .fi-input-wrp-prefix .fi-icon,
-    .fi-resource-edit-record-page .fi-input-wrp:focus-within .fi-input-wrp-prefix .fi-icon,
-    .mms-settings-page .fi-input-wrp:focus-within .fi-input-wrp-prefix .fi-icon {
+    .fi-input-wrp:focus-within .fi-input-wrp-prefix .fi-icon {
         color: var(--mms-primary) !important;
     }
 
-    /* Schwebende Aktionsleiste mit Glas-Effekt */
-    .fi-resource-create-record-page .fi-sc-actions.fi-sticky,
-    .fi-resource-edit-record-page .fi-sc-actions.fi-sticky {
+    /* 11. Schwebende Aktionsleiste (Speichern · Abbrechen · Löschen) mit Glas-Effekt */
+    .fi-sc-actions.fi-sticky {
         border-radius: var(--mms-radius) !important;
-        border: 1px solid var(--mms-line) !important;
-        background-color: rgba(255, 255, 255, 0.9) !important;
+        border: 1px solid var(--mms-card-border) !important;
+        background-color: rgba(255, 255, 255, 0.92) !important;
         backdrop-filter: blur(14px);
+        padding: 0.75rem 1.25rem !important;
         box-shadow: 0 -8px 30px -12px rgba(15, 31, 29, 0.18) !important;
     }
 
-    .dark .fi-resource-create-record-page .fi-sc-actions.fi-sticky,
-    .dark .fi-resource-edit-record-page .fi-sc-actions.fi-sticky {
-        background-color: rgba(13, 27, 34, 0.9) !important;
+    .dark .fi-sc-actions.fi-sticky {
+        background-color: rgba(13, 27, 34, 0.92) !important;
     }
 
-    .fi-resource-create-record-page .fi-sc-actions .fi-btn,
-    .fi-resource-edit-record-page .fi-sc-actions .fi-btn,
-    .mms-settings-page .fi-sc-actions .fi-btn {
+    .fi-sc-actions .fi-btn {
         border-radius: 9999px !important;
         padding-inline: 1.25rem !important;
+        min-height: 2.6rem;
+        font-weight: 600 !important;
         transition: transform 0.18s var(--mms-ease), box-shadow 0.18s var(--mms-ease) !important;
     }
 
-    .fi-resource-create-record-page .fi-sc-actions .fi-btn.fi-color-primary:hover,
-    .fi-resource-edit-record-page .fi-sc-actions .fi-btn.fi-color-primary:hover,
-    .mms-settings-page .fi-sc-actions .fi-btn.fi-color-primary:hover {
+    .fi-sc-actions .fi-btn.fi-color-primary:hover {
         transform: translateY(-1px);
         box-shadow: 0 12px 24px -10px rgba(2, 151, 134, 0.55) !important;
     }
-</style>
 
+    /* 12. Mobile Optimierung (< 768px) analog zu SupportCallSystem.Frontend */
+    @media (max-width: 768px) {
+        .fi-main .fi-header {
+            padding: 1.15rem 1.2rem;
+        }
+
+        .fi-main .fi-header .fi-ac {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .fi-main .fi-header .fi-btn {
+            flex: 1 1 auto;
+            justify-content: center;
+            min-height: 2.75rem;
+        }
+
+        .fi-section-content {
+            padding: 1.15rem !important;
+        }
+    }
+</style>

@@ -1,4 +1,5 @@
 import { Breadcrumbs } from '@/components/breadcrumbs';
+import { Reveal } from '@/components/reveal';
 import { SiteLayout } from '@/layouts/site-layout';
 import type { AlbumCardItem } from '@/types/school';
 import { Link } from '@inertiajs/react';
@@ -32,12 +33,12 @@ export default function AlbumsIndexPage({ albums }: AlbumsIndexProps): ReactElem
                     </div>
                 ) : (
                     <div className="grid gap-5 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                        {albums.map((album) => (
-                            <Link
-                                key={album.id}
-                                href={`/galerie/${album.slug}`}
-                                className="group flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xs transition hover:-translate-y-0.5 hover:shadow-md"
-                            >
+                        {albums.map((album, index) => (
+                            <Reveal key={album.id} variant="zoom-in" delay={Math.min(index, 5) * 60}>
+                                <Link
+                                    href={`/galerie/${album.slug}`}
+                                    className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xs transition hover:-translate-y-0.5 hover:shadow-md"
+                                >
                                 <div className="relative aspect-[16/10] w-full overflow-hidden bg-brand-100">
                                     {album.coverUrl ? (
                                         <img
@@ -83,6 +84,7 @@ export default function AlbumsIndexPage({ albums }: AlbumsIndexProps): ReactElem
                                     )}
                                 </div>
                             </Link>
+                            </Reveal>
                         ))}
                     </div>
                 )}

@@ -3,6 +3,7 @@ import {
     PhotoLightbox,
     type LightboxImageItem,
 } from "@/components/photo-lightbox";
+import { Reveal } from "@/components/reveal";
 import { SiteLayout } from "@/layouts/site-layout";
 import type { PersonItem } from "@/types/school";
 import { useState, type ReactElement } from "react";
@@ -132,10 +133,11 @@ export default function PageShow({
 
                 <div className="space-y-6 sm:space-y-8">
                     {page.content.map((block, index) => {
-                        if (
-                            block.type === "image_banner" &&
-                            block.data.image_url
-                        ) {
+                        const content = (() => {
+                            if (
+                                block.type === "image_banner" &&
+                                block.data.image_url
+                            ) {
                             const bannerUrl = block.data.image_url;
                             return (
                                 <figure
@@ -666,6 +668,21 @@ export default function PageShow({
                         }
 
                         return null;
+                        })();
+
+                        if (!content) {
+                            return null;
+                        }
+
+                        return (
+                            <Reveal
+                                key={index}
+                                variant={block.type === "image_banner" ? "zoom-in" : "fade-up"}
+                                delay={Math.min(index, 2) * 50}
+                            >
+                                {content}
+                            </Reveal>
+                        );
                     })}
                 </div>
 

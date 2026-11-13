@@ -54,7 +54,8 @@ class AnnouncementResource extends Resource
     {
         return $schema
             ->components([
-                Section::make()
+                Section::make('Mitteilung & Anzeigezeitraum')
+                    ->icon(Heroicon::OutlinedMegaphone)
                     ->columnSpanFull()
                     ->columns(2)
                     ->schema([
@@ -124,6 +125,10 @@ class AnnouncementResource extends Resource
             ->recordUrl(fn (Announcement $record): ?string => auth()->user()?->can('update', $record)
                 ? static::getUrl('edit', ['record' => $record])
                 : null)
+            ->searchPlaceholder('Mitteilungstext suchen...')
+            ->emptyStateIcon(Heroicon::OutlinedMegaphone)
+            ->emptyStateHeading('Keine Ankündigungen gefunden')
+            ->emptyStateDescription('Erstellen Sie eine neue Ankündigung für das obere Hinweisbanner der Startseite.')
             ->recordActions([
                 EditAction::make()->iconButton(),
                 DeleteAction::make()->iconButton(),

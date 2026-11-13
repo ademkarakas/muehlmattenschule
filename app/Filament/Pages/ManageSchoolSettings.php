@@ -94,6 +94,11 @@ class ManageSchoolSettings extends Page
         $isActive = (bool) ($this->data['maintenance_active'] ?? false);
 
         return [
+            Action::make('backToDashboard')
+                ->label('Zurück')
+                ->color('gray')
+                ->icon(Heroicon::OutlinedArrowLeft)
+                ->url(Dashboard::getUrl()),
             Action::make('previewMaintenancePage')
                 ->label('Wartungsseite ansehen')
                 ->color('gray')

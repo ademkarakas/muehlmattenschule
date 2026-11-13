@@ -17,14 +17,20 @@ export function PostCard({ post, layout = 'vertical' }: PostCardProps): ReactEle
     return (
         <article
             className={`group overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-xs transition duration-200 hover:-translate-y-0.5 hover:border-brand-400 hover:shadow-md ${
-                isHorizontal ? 'flex flex-col sm:flex-row' : 'flex flex-col'
+                isHorizontal ? 'flex flex-col sm:flex-row sm:h-72' : 'flex flex-col'
             }`}
         >
             <Link
                 href={`/aktuelles/${post.slug}`}
-                className={`relative overflow-hidden bg-brand-950/90 shrink-0 ${
+                className={`relative overflow-hidden shrink-0 ${
+                    post.coverUrl
+                        ? 'bg-brand-950/90'
+                        : 'bg-brand-50 border-b border-brand-100/90 sm:border-b-0'
+                } ${
                     isHorizontal
-                        ? 'aspect-[4/3] sm:aspect-auto sm:w-72 md:w-80 sm:min-h-60'
+                        ? `aspect-[4/3] sm:aspect-auto sm:h-full sm:w-72 md:w-80${
+                              !post.coverUrl ? ' sm:border-r sm:border-brand-100/90' : ''
+                          }`
                         : 'aspect-[4/3] w-full'
                 }`}
             >
@@ -45,17 +51,19 @@ export function PostCard({ post, layout = 'vertical' }: PostCardProps): ReactEle
                         />
                     </>
                 ) : (
-                    <div className="flex h-full w-full flex-col items-center justify-center bg-gradient-to-br from-brand-500 via-brand-600 to-brand-800 p-6 text-center text-white">
-                        <span className="rounded-full bg-white/15 px-3 py-1 text-[11px] font-bold uppercase tracking-wider">
+                    <div className="flex h-full w-full flex-col items-center justify-center bg-gradient-to-br from-brand-50 via-brand-100/80 to-[#cceee8] p-6 text-center text-brand-900">
+                        <span className="rounded-full border border-brand-200/90 bg-white/90 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-brand-800 shadow-2xs">
                             Mühlmattenschule
                         </span>
-                        <span className="mt-2 line-clamp-2 text-base font-bold leading-snug">{post.title}</span>
+                        <span className="mt-2.5 line-clamp-2 text-base font-extrabold leading-snug text-brand-900">
+                            {post.title}
+                        </span>
                     </div>
                 )}
 
                 <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
                     {post.category && (
-                        <span className="rounded-full bg-white/95 px-3 py-1 text-xs font-bold text-brand-800 shadow-xs">
+                        <span className="rounded-full bg-white/95 px-3 py-1 text-xs font-bold text-brand-800 ring-1 ring-brand-200/70 shadow-xs">
                             {post.category.name}
                         </span>
                     )}
@@ -80,17 +88,17 @@ export function PostCard({ post, layout = 'vertical' }: PostCardProps): ReactEle
             </Link>
 
             <div className="flex flex-1 flex-col justify-between p-4 sm:p-6 min-w-0">
-                <div>
+                <div className="min-w-0">
                     {post.publishedAt && (
                         <time
                             dateTime={post.publishedAtIso ?? undefined}
-                            className="text-xs font-bold text-brand-700"
+                            className="block text-xs font-bold text-brand-700"
                         >
                             {post.publishedAt}
                         </time>
                     )}
                     <h3
-                        className={`mt-1.5 font-extrabold leading-snug text-slate-900 group-hover:text-brand-700 break-words hyphens-auto ${
+                        className={`mt-1.5 font-extrabold leading-snug text-slate-900 group-hover:text-brand-700 break-words hyphens-auto line-clamp-2 ${
                             isHorizontal ? 'text-lg sm:text-2xl' : 'text-base sm:text-lg'
                         }`}
                     >
@@ -99,7 +107,7 @@ export function PostCard({ post, layout = 'vertical' }: PostCardProps): ReactEle
                     {post.excerpt && (
                         <p
                             className={`mt-2 text-sm sm:text-base leading-relaxed text-slate-600 break-words ${
-                                isHorizontal ? 'line-clamp-5' : 'line-clamp-4'
+                                isHorizontal ? 'line-clamp-3' : 'line-clamp-4'
                             }`}
                         >
                             {post.excerpt}
@@ -107,7 +115,7 @@ export function PostCard({ post, layout = 'vertical' }: PostCardProps): ReactEle
                     )}
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+                <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between">
                     <Link
                         href={`/aktuelles/${post.slug}`}
                         className="inline-flex min-h-9 items-center gap-1.5 py-1 text-xs font-extrabold uppercase tracking-wide text-brand-700 hover:text-brand-900"
