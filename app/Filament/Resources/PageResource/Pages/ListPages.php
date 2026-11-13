@@ -21,7 +21,7 @@ class ListPages extends ListRecords
     {
         $count = Page::query()->count();
 
-        return "Insgesamt {$count} " . ($count === 1 ? 'redaktionelle Schulseite' : 'redaktionelle Schulseiten');
+        return "Insgesamt {$count} ".($count === 1 ? 'redaktionelle Schulseite' : 'redaktionelle Schulseiten');
     }
 
     /**

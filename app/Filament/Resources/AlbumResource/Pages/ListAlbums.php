@@ -21,7 +21,7 @@ class ListAlbums extends ListRecords
     {
         $count = Album::query()->count();
 
-        return "Insgesamt {$count} " . ($count === 1 ? 'Fotoalbum' : 'Fotoalben');
+        return "Insgesamt {$count} ".($count === 1 ? 'Fotoalbum' : 'Fotoalben');
     }
 
     /**

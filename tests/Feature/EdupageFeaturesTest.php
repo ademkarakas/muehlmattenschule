@@ -270,4 +270,23 @@ class EdupageFeaturesTest extends TestCase
                 ->where('post.adminMeta.publishedAtFull', '23.04.2024 19:57')
             );
     }
+
+    /**
+     * Prüft, dass die Detailseite für Unterrichts- & Pausenzeiten erreichbar ist
+     * und die 404-Fehlerseite den Startseiten-Link mit target="_top" rendert.
+     */
+    public function test_bell_schedule_page_is_accessible_and_404_startpage_link_escapes_frames(): void
+    {
+        $this->get('/unsere-schule/unterrichtszeiten')
+            ->assertOk()
+            ->assertInertia(fn (Assert $page): Assert => $page
+                ->component('pages/bell-schedule')
+                ->has('school.bell_schedule')
+            );
+
+        $this->get('/diese-seite-gibt-es-nicht-404')
+            ->assertNotFound()
+            ->assertSee('target="_top"', false)
+            ->assertSee('Zur Startseite', false);
+    }
 }

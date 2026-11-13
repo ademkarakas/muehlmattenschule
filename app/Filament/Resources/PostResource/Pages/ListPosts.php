@@ -21,7 +21,7 @@ class ListPosts extends ListRecords
     {
         $count = Post::query()->count();
 
-        return "Insgesamt {$count} " . ($count === 1 ? 'Beitrag' : 'Beiträge');
+        return "Insgesamt {$count} ".($count === 1 ? 'Beitrag' : 'Beiträge');
     }
 
     /**

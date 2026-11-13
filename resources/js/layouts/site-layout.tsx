@@ -3,7 +3,7 @@ import { SearchIcon } from '@/components/search-icon';
 import { SeoHead } from '@/components/seo-head';
 import type { NavigationPageLink, SharedInertiaProps } from '@/types/school';
 import { Link, router, usePage } from '@inertiajs/react';
-import { useEffect, useState, type FormEvent, type ReactElement, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type FormEvent, type ReactElement, type ReactNode } from 'react';
 
 export interface SiteLayoutProps {
     children: ReactNode;
@@ -30,6 +30,178 @@ function groupNavigationLinks(items: NavigationPageLink[]): Array<{ group: strin
     }));
 }
 
+interface DesktopNavDropdownProps {
+    label: string;
+    active: boolean;
+    groups: Array<{ group: string | null; links: NavigationPageLink[] }>;
+    fallbackSection: string;
+    currentPath: string;
+    wideOnMultiGroup?: boolean;
+}
+
+/**
+ * Barrierefreies Desktop-Dropdown-Menü für die Hauptnavigation mit Hover-, Klick- und
+ * Tastatursteuerung (Escape / Outside-Click) sowie farblich hervorgehobenen Gruppenüberschriften.
+ */
+function DesktopNavDropdown({
+    label,
+    active,
+    groups,
+    fallbackSection,
+    currentPath,
+    wideOnMultiGroup = false,
+}: DesktopNavDropdownProps): ReactElement {
+    const [isOpen, setIsOpen] = useState(false);
+    const containerRef = useRef<HTMLLIElement | null>(null);
+    const triggerRef = useRef<HTMLButtonElement | null>(null);
+    const closeTimerRef = useRef<number | null>(null);
+
+    const clearCloseTimer = (): void => {
+        if (closeTimerRef.current !== null) {
+            window.clearTimeout(closeTimerRef.current);
+            closeTimerRef.current = null;
+        }
+    };
+
+    const openMenu = (): void => {
+        clearCloseTimer();
+        setIsOpen(true);
+    };
+
+    const scheduleCloseMenu = (): void => {
+        clearCloseTimer();
+        closeTimerRef.current = window.setTimeout(() => {
+            setIsOpen(false);
+        }, 120);
+    };
+
+    useEffect(() => {
+        setIsOpen(false);
+    }, [currentPath]);
+
+    useEffect(() => {
+        if (!isOpen) {
+            return;
+        }
+
+        const handlePointerDown = (event: PointerEvent): void => {
+            if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+                setIsOpen(false);
+            }
+        };
+
+        const handleKeyDown = (event: KeyboardEvent): void => {
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                setIsOpen(false);
+                triggerRef.current?.focus();
+            }
+        };
+
+        document.addEventListener('pointerdown', handlePointerDown);
+        document.addEventListener('keydown', handleKeyDown);
+        return () => {
+            document.removeEventListener('pointerdown', handlePointerDown);
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [isOpen]);
+
+    useEffect(() => () => clearCloseTimer(), []);
+
+    const panelWidthClass = wideOnMultiGroup && groups.length > 1
+        ? 'w-[36rem] grid grid-cols-2 gap-4'
+        : groups.length > 1
+            ? 'w-80 space-y-3'
+            : 'w-72';
+
+    return (
+        <li
+            ref={containerRef}
+            className="relative"
+            onMouseEnter={openMenu}
+            onMouseLeave={scheduleCloseMenu}
+        >
+            <button
+                ref={triggerRef}
+                type="button"
+                aria-haspopup="true"
+                aria-expanded={isOpen}
+                onClick={() => {
+                    clearCloseTimer();
+                    setIsOpen((prev) => !prev);
+                }}
+                className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 cursor-pointer transition-all duration-150 ${
+                    active
+                        ? 'bg-white text-brand-800 font-bold shadow-sm'
+                        : isOpen
+                            ? 'bg-white/20 text-white'
+                            : 'text-white/95 hover:bg-white/15 hover:text-white'
+                }`}
+            >
+                <span>{label}</span>
+                <svg
+                    aria-hidden="true"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    className={`h-4 w-4 shrink-0 transition-transform duration-150 ${isOpen ? 'rotate-180' : ''}`}
+                >
+                    <path
+                        fillRule="evenodd"
+                        d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                        clipRule="evenodd"
+                    />
+                </svg>
+            </button>
+            <div
+                className={`transition-all duration-150 origin-top-left absolute left-0 top-full pt-2 z-40 ${
+                    isOpen ? 'visible opacity-100 translate-y-0' : 'invisible opacity-0 -translate-y-1 pointer-events-none'
+                }`}
+            >
+                <div className={`rounded-2xl bg-white p-3.5 text-slate-800 shadow-2xl ring-1 ring-slate-900/10 ${panelWidthClass}`}>
+                    {groups.map((groupEntry, idx) => (
+                        <div key={groupEntry.group ?? idx}>
+                            {groupEntry.group && (
+                                <p className="mb-2 rounded-r-lg border-l-3 border-brand-500 bg-brand-50/90 px-2.5 py-1 text-[11px] font-extrabold uppercase tracking-wider text-brand-700">
+                                    {groupEntry.group}
+                                </p>
+                            )}
+                            <ul className="space-y-0.5">
+                                {groupEntry.links.map((item) => {
+                                    const sec = item.section ?? fallbackSection;
+                                    const itemHref = `/${sec}/${item.slug}`;
+                                    const itemActive = currentPath === itemHref;
+                                    return (
+                                        <li key={item.slug}>
+                                            <Link
+                                                href={itemHref}
+                                                aria-current={itemActive ? 'page' : undefined}
+                                                onClick={() => setIsOpen(false)}
+                                                className={`flex items-center justify-between gap-2 rounded-xl px-3 py-2 text-sm transition ${
+                                                    itemActive
+                                                        ? 'bg-brand-600 text-white font-bold shadow-xs'
+                                                        : 'font-medium text-slate-700 hover:bg-brand-50 hover:text-brand-800'
+                                                }`}
+                                            >
+                                                <span>{item.title}</span>
+                                                {itemActive && (
+                                                    <span
+                                                        aria-hidden="true"
+                                                        className="h-1.5 w-1.5 shrink-0 rounded-full bg-white"
+                                                    />
+                                                )}
+                                            </Link>
+                                        </li>
+                                    );
+                                })}
+                            </ul>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </li>
+    );
+}
+
 /**
  * EduPage-inspiriertes Seitenlayout der Mühlmattenschule im originalen Logo-Türkis (#029786)
  * mit Barrierefreiheits-Schriftgrößenumschalter (A- / A / A+), Suche (/suche),
@@ -40,6 +212,7 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
     const page = usePage<SharedInertiaProps>();
     const { school, navigationPages, maintenancePreview } = page.props;
     const currentUrl = page.url;
+    const currentPath = currentUrl.split('?')[0];
     const [mobileOpen, setMobileOpen] = useState(false);
     const [fontScale, setFontScale] = useState<FontScale>('normal');
     const [headerSearchQuery, setHeaderSearchQuery] = useState('');
@@ -195,44 +368,44 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                 </div>
             )}
 
-            {/* Oberer Kopfbereich im EduPage-Portalstil */}
-            <header className="sticky top-0 z-40 shadow-sm">
-                <div className="bg-white border-b border-slate-200/80">
-                    <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10 py-2.5 sm:py-3.5 flex items-center justify-between gap-3 sm:gap-6">
-                        <Link href="/" className="flex items-center gap-3 sm:gap-4 group min-w-0">
+            {/* Oberer Kopfbereich im modernen Portalstil */}
+            <header className="sticky top-0 z-40 shadow-[0_2px_16px_-4px_rgba(2,151,134,0.12)]">
+                <div className="bg-white/95 backdrop-blur-md border-b border-slate-200/80">
+                    <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10 py-2.5 sm:py-3 flex items-center justify-between gap-3 sm:gap-6">
+                        <Link href="/" className="flex items-center gap-3 sm:gap-3.5 group min-w-0">
                             <img
                                 src="/images/logo.png"
                                 alt={`Logo ${school.name}`}
                                 width={52}
                                 height={52}
-                                className="h-11 w-11 sm:h-13 sm:w-13 shrink-0 rounded-2xl shadow-xs transition group-hover:scale-105 object-contain"
+                                className="h-11 w-11 sm:h-12 sm:w-12 shrink-0 rounded-2xl bg-white p-0.5 ring-1 ring-slate-200/80 shadow-xs transition duration-200 group-hover:scale-105 object-contain"
                             />
                             <div className="min-w-0">
-                                <span className="block truncate text-lg sm:text-2xl md:text-[26px] font-extrabold tracking-tight text-brand-900 leading-tight">
+                                <span className="block truncate text-lg sm:text-2xl font-extrabold tracking-tight text-brand-900 leading-tight">
                                     {school.name}
                                 </span>
-                                <span className="block truncate text-xs sm:text-sm font-medium text-brand-700">
+                                <span className="block truncate text-xs sm:text-[13px] font-semibold text-brand-700">
                                     {school.subtitle}
                                 </span>
                             </div>
                         </Link>
 
                         <div className="flex items-center gap-2 lg:gap-3 text-xs sm:text-sm shrink-0">
-                            {/* Barrierefreie Schriftgrößen-Auswahl (wie auf ghsfreiburg.edupage.org) */}
+                            {/* Barrierefreie Schriftgrößen-Auswahl */}
                             <div
                                 role="group"
                                 aria-label="Schriftgröße anpassen"
-                                className="hidden lg:flex items-center rounded-xl border border-brand-200 bg-brand-50/70 p-1"
+                                className="hidden lg:flex items-center gap-0.5 rounded-full bg-slate-100/90 p-1 ring-1 ring-slate-200/80"
                             >
                                 <button
                                     type="button"
                                     onClick={() => updateFontScale('normal')}
                                     aria-pressed={fontScale === 'normal'}
                                     title="Normale Schriftgröße"
-                                    className={`rounded-lg px-2.5 py-1.5 text-xs font-extrabold cursor-pointer transition ${
+                                    className={`rounded-full px-2.5 py-1.5 text-xs font-extrabold cursor-pointer transition-all ${
                                         fontScale === 'normal'
-                                            ? 'bg-brand-600 text-white shadow-2xs'
-                                            : 'text-brand-800 hover:bg-brand-100'
+                                            ? 'bg-white text-brand-700 shadow-xs ring-1 ring-brand-500/20'
+                                            : 'text-slate-600 hover:text-brand-800 hover:bg-white/60'
                                     }`}
                                 >
                                     A
@@ -242,10 +415,10 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                                     onClick={() => updateFontScale('lg')}
                                     aria-pressed={fontScale === 'lg'}
                                     title="Große Schriftgröße"
-                                    className={`rounded-lg px-2.5 py-1.5 text-xs font-extrabold cursor-pointer transition ${
+                                    className={`rounded-full px-2.5 py-1.5 text-xs font-extrabold cursor-pointer transition-all ${
                                         fontScale === 'lg'
-                                            ? 'bg-brand-600 text-white shadow-2xs'
-                                            : 'text-brand-800 hover:bg-brand-100'
+                                            ? 'bg-white text-brand-700 shadow-xs ring-1 ring-brand-500/20'
+                                            : 'text-slate-600 hover:text-brand-800 hover:bg-white/60'
                                     }`}
                                 >
                                     A+
@@ -255,10 +428,10 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                                     onClick={() => updateFontScale('xl')}
                                     aria-pressed={fontScale === 'xl'}
                                     title="Sehr große Schriftgröße"
-                                    className={`rounded-lg px-2.5 py-1.5 text-xs font-extrabold cursor-pointer transition ${
+                                    className={`rounded-full px-2.5 py-1.5 text-xs font-extrabold cursor-pointer transition-all ${
                                         fontScale === 'xl'
-                                            ? 'bg-brand-600 text-white shadow-2xs'
-                                            : 'text-brand-800 hover:bg-brand-100'
+                                            ? 'bg-white text-brand-700 shadow-xs ring-1 ring-brand-500/20'
+                                            : 'text-slate-600 hover:text-brand-800 hover:bg-white/60'
                                     }`}
                                 >
                                     A++
@@ -269,7 +442,7 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                                 onSubmit={handleHeaderSearch}
                                 role="search"
                                 aria-label="Schulportal durchsuchen"
-                                className="relative hidden md:flex w-56 lg:w-64 xl:w-80 2xl:w-[26rem] items-center"
+                                className="relative hidden md:flex w-56 lg:w-64 xl:w-80 2xl:w-[25rem] items-center"
                             >
                                 <label htmlFor="header-search-input" className="sr-only">
                                     Schulportal durchsuchen
@@ -280,22 +453,22 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                                     value={headerSearchQuery}
                                     onChange={(e) => setHeaderSearchQuery(e.target.value)}
                                     placeholder="Schulportal durchsuchen…"
-                                    className="h-11 w-full rounded-xl border border-brand-200 bg-brand-50/70 pl-4 pr-11 text-sm font-medium text-brand-950 placeholder:text-brand-700/60 transition focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+                                    className="h-10.5 w-full rounded-full border border-slate-200/90 bg-slate-100/80 pl-4 pr-11 text-sm font-medium text-slate-900 placeholder:text-slate-500 transition-all focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-brand-500/12"
                                 />
                                 <button
                                     type="submit"
                                     aria-label="Suche starten"
                                     title="Suchen"
-                                    className="absolute right-1.5 flex h-8 w-8 items-center justify-center rounded-lg bg-transparent text-brand-800/60 hover:text-brand-900 cursor-pointer transition"
+                                    className="absolute right-1.5 flex h-8 w-8 items-center justify-center rounded-full bg-transparent text-slate-500 hover:bg-brand-50 hover:text-brand-700 cursor-pointer transition"
                                 >
-                                    <SearchIcon className="h-4.5 w-4.5" />
+                                    <SearchIcon className="h-4 w-4" />
                                 </button>
                             </form>
 
                             <Link
                                 href="/suche"
                                 aria-label="Suche öffnen"
-                                className="flex md:hidden h-11 w-11 items-center justify-center rounded-xl bg-transparent text-brand-800/65 hover:text-brand-900 active:bg-brand-50/50 transition"
+                                className="flex md:hidden h-11 w-11 items-center justify-center rounded-full bg-slate-100/80 text-slate-700 hover:bg-brand-50 hover:text-brand-800 transition"
                             >
                                 <SearchIcon className="h-5 w-5" />
                             </Link>
@@ -303,9 +476,12 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                             <a
                                 href="/admin"
                                 rel="nofollow"
-                                className="hidden lg:flex min-h-11 shrink-0 items-center rounded-xl bg-gradient-to-r from-brand-600 to-brand-800 px-4 py-2.5 text-sm font-bold text-white shadow-xs hover:from-brand-700 hover:to-brand-900"
+                                className="hidden lg:inline-flex min-h-10.5 shrink-0 items-center gap-2 rounded-full bg-brand-600 px-4 py-2 text-sm font-bold text-white shadow-xs transition-all hover:bg-brand-700 hover:shadow-sm"
                             >
-                                Anmelden / Verwaltung
+                                <svg className="h-4 w-4 shrink-0 text-brand-100" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.9" aria-hidden="true">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                                </svg>
+                                <span>Anmelden / Verwaltung</span>
                             </a>
 
                             <button
@@ -314,7 +490,7 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                                 aria-expanded={mobileOpen}
                                 aria-controls="mobile-navigation-panel"
                                 aria-label={mobileOpen ? 'Hauptmenü schließen' : 'Hauptmenü öffnen'}
-                                className="inline-flex lg:hidden min-h-11 items-center gap-2 rounded-xl border border-brand-200 bg-brand-50 px-3.5 py-2 text-sm font-bold text-brand-800 active:bg-brand-100 cursor-pointer"
+                                className="inline-flex lg:hidden min-h-11 items-center gap-2 rounded-full border border-brand-200 bg-brand-50 px-3.5 py-2 text-sm font-bold text-brand-800 active:bg-brand-100 cursor-pointer"
                             >
                                 <span>{mobileOpen ? 'Schließen' : 'Menü'}</span>
                                 {mobileOpen ? (
@@ -331,19 +507,21 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                     </div>
                 </div>
 
-                {/* Türkise, breite EduPage-Menüleiste im Original-Logo-Farbton (#029786) */}
+                {/* Moderne türkise Navigationsleiste mit Pill-Tabs im Original-Logo-Farbton (#029786) */}
                 <nav
                     aria-label="Hauptnavigation"
-                    className="bg-gradient-to-r from-brand-700 via-brand-600 to-brand-800 text-white"
+                    className="bg-gradient-to-r from-brand-700 via-brand-600 to-brand-700 text-white border-t border-white/10"
                 >
                     <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
-                        <ul className="hidden lg:flex items-center justify-between text-[14.5px] xl:text-[15px] font-bold tracking-wide">
+                        <ul className="hidden lg:flex items-center justify-between gap-1 py-2 text-[14px] xl:text-[14.5px] font-semibold tracking-wide">
                             <li>
                                 <Link
                                     href="/"
                                     aria-current={isActive('/') ? 'page' : undefined}
-                                    className={`block px-4 py-3.5 transition ${
-                                        isActive('/') ? 'bg-white/20 shadow-inner' : 'hover:bg-white/15'
+                                    className={`block rounded-full px-3.5 py-2 transition-all duration-150 ${
+                                        isActive('/')
+                                            ? 'bg-white text-brand-800 font-bold shadow-sm'
+                                            : 'text-white/95 hover:bg-white/15 hover:text-white'
                                     }`}
                                 >
                                     Startseite
@@ -353,8 +531,10 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                                 <Link
                                     href="/aktuelles"
                                     aria-current={isActive('/aktuelles') ? 'page' : undefined}
-                                    className={`block px-4 py-3.5 transition ${
-                                        isActive('/aktuelles') ? 'bg-white/20 shadow-inner' : 'hover:bg-white/15'
+                                    className={`block rounded-full px-3.5 py-2 transition-all duration-150 ${
+                                        isActive('/aktuelles')
+                                            ? 'bg-white text-brand-800 font-bold shadow-sm'
+                                            : 'text-white/95 hover:bg-white/15 hover:text-white'
                                     }`}
                                 >
                                     Aktuelles
@@ -362,159 +542,44 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                             </li>
 
                             {navigationPages.unsereSchule.length > 0 && (
-                                <li className="relative group">
-                                    <button
-                                        type="button"
-                                        aria-haspopup="true"
-                                        className={`flex items-center gap-1.5 px-4 py-3.5 cursor-pointer transition ${
-                                            isActive('/unsere-schule')
-                                                ? 'bg-white/20 shadow-inner'
-                                                : 'group-hover:bg-white/15 group-focus-within:bg-white/15'
-                                        }`}
-                                    >
-                                        Unsere Schule <span aria-hidden="true" className="text-xs">▾</span>
-                                    </button>
-                                    <div
-                                        className={`invisible opacity-0 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 transition-all duration-150 absolute left-0 top-full z-40 rounded-b-2xl bg-white p-3 text-slate-800 shadow-xl border border-slate-200 ${
-                                            unsereSchuleGroups.length > 1 ? 'w-[34rem] grid grid-cols-2 gap-3' : 'w-72'
-                                        }`}
-                                    >
-                                        {unsereSchuleGroups.map((groupEntry, idx) => (
-                                            <div key={groupEntry.group ?? idx}>
-                                                {groupEntry.group && (
-                                                    <p className="px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-wider text-brand-700 border-b border-brand-100 mb-1">
-                                                        {groupEntry.group}
-                                                    </p>
-                                                )}
-                                                <ul className="space-y-0.5">
-                                                    {groupEntry.links.map((item) => {
-                                                        const itemHref = resolvePageHref(item, 'unsere-schule');
-                                                        const itemActive = currentUrl === itemHref;
-                                                        return (
-                                                            <li key={item.slug}>
-                                                                <Link
-                                                                    href={itemHref}
-                                                                    aria-current={itemActive ? 'page' : undefined}
-                                                                    className={`block rounded-xl px-3 py-2 text-sm font-semibold transition ${
-                                                                        itemActive
-                                                                            ? 'bg-brand-50 text-brand-800 font-bold'
-                                                                            : 'hover:bg-brand-50 hover:text-brand-700'
-                                                                    }`}
-                                                                >
-                                                                    {item.title}
-                                                                </Link>
-                                                            </li>
-                                                        );
-                                                    })}
-                                                </ul>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </li>
+                                <DesktopNavDropdown
+                                    label="Unsere Schule"
+                                    active={isActive('/unsere-schule')}
+                                    groups={unsereSchuleGroups}
+                                    fallbackSection="unsere-schule"
+                                    currentPath={currentPath}
+                                    wideOnMultiGroup
+                                />
                             )}
 
                             {konzepteLinks.length > 0 && (
-                                <li className="relative group">
-                                    <button
-                                        type="button"
-                                        aria-haspopup="true"
-                                        className={`flex items-center gap-1.5 px-4 py-3.5 cursor-pointer transition ${
-                                            isActive('/konzepte-projekte')
-                                                ? 'bg-white/20 shadow-inner'
-                                                : 'group-hover:bg-white/15 group-focus-within:bg-white/15'
-                                        }`}
-                                    >
-                                        Konzepte & Projekte <span aria-hidden="true" className="text-xs">▾</span>
-                                    </button>
-                                    <div className="invisible opacity-0 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 transition-all duration-150 absolute left-0 top-full z-40 w-76 rounded-b-2xl bg-white p-3 text-slate-800 shadow-xl border border-slate-200 space-y-2">
-                                        {konzepteGroups.map((groupEntry, idx) => (
-                                            <div key={groupEntry.group ?? idx}>
-                                                {groupEntry.group && (
-                                                    <p className="px-3 py-1 text-[11px] font-extrabold uppercase tracking-wider text-brand-700 border-b border-brand-100 mb-1">
-                                                        {groupEntry.group}
-                                                    </p>
-                                                )}
-                                                <ul className="space-y-0.5">
-                                                    {groupEntry.links.map((item) => {
-                                                        const itemHref = resolvePageHref(item, 'konzepte-projekte');
-                                                        const itemActive = currentUrl === itemHref;
-                                                        return (
-                                                            <li key={item.slug}>
-                                                                <Link
-                                                                    href={itemHref}
-                                                                    aria-current={itemActive ? 'page' : undefined}
-                                                                    className={`block rounded-xl px-3 py-2 text-sm font-semibold transition ${
-                                                                        itemActive
-                                                                            ? 'bg-brand-50 text-brand-800 font-bold'
-                                                                            : 'hover:bg-brand-50 hover:text-brand-700'
-                                                                    }`}
-                                                                >
-                                                                    {item.title}
-                                                                </Link>
-                                                            </li>
-                                                        );
-                                                    })}
-                                                </ul>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </li>
+                                <DesktopNavDropdown
+                                    label="Konzepte & Projekte"
+                                    active={isActive('/konzepte-projekte')}
+                                    groups={konzepteGroups}
+                                    fallbackSection="konzepte-projekte"
+                                    currentPath={currentPath}
+                                />
                             )}
 
                             {angeboteLinks.length > 0 && (
-                                <li className="relative group">
-                                    <button
-                                        type="button"
-                                        aria-haspopup="true"
-                                        className={`flex items-center gap-1.5 px-4 py-3.5 cursor-pointer transition ${
-                                            isActive('/angebote') || isActive('/schulleben')
-                                                ? 'bg-white/20 shadow-inner'
-                                                : 'group-hover:bg-white/15 group-focus-within:bg-white/15'
-                                        }`}
-                                    >
-                                        Angebote & Betreuung <span aria-hidden="true" className="text-xs">▾</span>
-                                    </button>
-                                    <div className="invisible opacity-0 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 transition-all duration-150 absolute left-0 top-full z-40 w-80 rounded-b-2xl bg-white p-3 text-slate-800 shadow-xl border border-slate-200 space-y-2">
-                                        {angeboteGroups.map((groupEntry, idx) => (
-                                            <div key={groupEntry.group ?? idx}>
-                                                {groupEntry.group && (
-                                                    <p className="px-3 py-1 text-[11px] font-extrabold uppercase tracking-wider text-brand-700 border-b border-brand-100 mb-1">
-                                                        {groupEntry.group}
-                                                    </p>
-                                                )}
-                                                <ul className="space-y-0.5">
-                                                    {groupEntry.links.map((item) => {
-                                                        const itemHref = resolvePageHref(item, 'angebote');
-                                                        const itemActive = currentUrl === itemHref;
-                                                        return (
-                                                            <li key={item.slug}>
-                                                                <Link
-                                                                    href={itemHref}
-                                                                    aria-current={itemActive ? 'page' : undefined}
-                                                                    className={`block rounded-xl px-3 py-2 text-sm font-semibold transition ${
-                                                                        itemActive
-                                                                            ? 'bg-brand-50 text-brand-800 font-bold'
-                                                                            : 'hover:bg-brand-50 hover:text-brand-700'
-                                                                    }`}
-                                                                >
-                                                                    {item.title}
-                                                                </Link>
-                                                            </li>
-                                                        );
-                                                    })}
-                                                </ul>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </li>
+                                <DesktopNavDropdown
+                                    label="Angebote & Betreuung"
+                                    active={isActive('/angebote') || isActive('/schulleben')}
+                                    groups={angeboteGroups}
+                                    fallbackSection="angebote"
+                                    currentPath={currentPath}
+                                />
                             )}
 
                             <li>
                                 <Link
                                     href="/termine"
                                     aria-current={isActive('/termine') ? 'page' : undefined}
-                                    className={`block px-4 py-3.5 transition ${
-                                        isActive('/termine') ? 'bg-white/20 shadow-inner' : 'hover:bg-white/15'
+                                    className={`block rounded-full px-3.5 py-2 transition-all duration-150 ${
+                                        isActive('/termine')
+                                            ? 'bg-white text-brand-800 font-bold shadow-sm'
+                                            : 'text-white/95 hover:bg-white/15 hover:text-white'
                                     }`}
                                 >
                                     Termine
@@ -524,8 +589,10 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                                 <Link
                                     href="/galerie"
                                     aria-current={isActive('/galerie') ? 'page' : undefined}
-                                    className={`block px-4 py-3.5 transition ${
-                                        isActive('/galerie') ? 'bg-white/20 shadow-inner' : 'hover:bg-white/15'
+                                    className={`block rounded-full px-3.5 py-2 transition-all duration-150 ${
+                                        isActive('/galerie')
+                                            ? 'bg-white text-brand-800 font-bold shadow-sm'
+                                            : 'text-white/95 hover:bg-white/15 hover:text-white'
                                     }`}
                                 >
                                     Fotogalerie
@@ -535,8 +602,10 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                                 <Link
                                     href="/downloads"
                                     aria-current={isActive('/downloads') ? 'page' : undefined}
-                                    className={`block px-4 py-3.5 transition ${
-                                        isActive('/downloads') ? 'bg-white/20 shadow-inner' : 'hover:bg-white/15'
+                                    className={`block rounded-full px-3.5 py-2 transition-all duration-150 ${
+                                        isActive('/downloads')
+                                            ? 'bg-white text-brand-800 font-bold shadow-sm'
+                                            : 'text-white/95 hover:bg-white/15 hover:text-white'
                                     }`}
                                 >
                                     Downloads
@@ -546,8 +615,10 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                                 <Link
                                     href="/kontakt"
                                     aria-current={isActive('/kontakt') ? 'page' : undefined}
-                                    className={`block px-4 py-3.5 transition ${
-                                        isActive('/kontakt') ? 'bg-white/20 shadow-inner' : 'hover:bg-white/15'
+                                    className={`block rounded-full px-3.5 py-2 transition-all duration-150 ${
+                                        isActive('/kontakt')
+                                            ? 'bg-white text-brand-800 font-bold shadow-sm'
+                                            : 'text-white/95 hover:bg-white/15 hover:text-white'
                                     }`}
                                 >
                                     Kontakt

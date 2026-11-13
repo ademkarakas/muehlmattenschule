@@ -72,7 +72,7 @@ export default function SearchIndex({ query, totalCount, results }: SearchPagePr
 
     return (
         <SiteLayout>
-            <div className="mx-auto max-w-5xl px-4 sm:px-6 py-8 sm:py-12">
+            <div className="mx-auto max-w-6xl px-4 sm:px-6 py-7 sm:py-10">
                 <div className="rounded-3xl bg-gradient-to-br from-brand-700 via-brand-600 to-brand-800 p-6 sm:p-10 text-white shadow-md">
                     <span className="inline-flex items-center rounded-full bg-white/20 px-3 py-1 text-xs font-bold uppercase tracking-wider">
                         Suchfunktion

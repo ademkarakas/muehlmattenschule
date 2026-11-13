@@ -485,55 +485,77 @@ export default function HomePage({ posts, postsPagination, upcomingEvents, album
                         </div>
                     </div>
 
-                    {/* 2. EduPage-Widget „Unterrichts- & Pausenzeiten“ (Pausen / Läuteordnung) */}
+                    {/* 2. EduPage-Widget „Unterrichts- & Pausenzeiten“ im Stil von „Beiträge nach Rubriken“ */}
                     {school.bell_schedule && school.bell_schedule.length > 0 && (
-                        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xs">
-                            <div className="bg-gradient-to-r from-brand-800 to-brand-900 px-5 py-3.5 text-white flex items-center justify-between gap-2">
-                                <div className="flex items-center gap-3">
-                                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/15 text-white ring-1 ring-white/25" aria-hidden="true">
-                                        <svg className="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
+                        <section
+                            aria-label="Unterrichts- & Pausenzeiten"
+                            className="rounded-2xl bg-white p-5 sm:p-6 shadow-xs border border-slate-200/80"
+                        >
+                            <div className="flex items-center justify-between gap-2 pb-3 border-b border-slate-100">
+                                <h2 className="text-base sm:text-lg font-extrabold text-brand-900 flex items-center gap-2.5 min-w-0">
+                                    <span
+                                        aria-hidden="true"
+                                        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700 ring-1 ring-brand-500/15"
+                                    >
+                                        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l4 2m6-2a10 10 0 11-20 0 10 10 0 0120 0z" />
                                         </svg>
                                     </span>
-                                    <div>
-                                        <h2 className="text-base font-extrabold">Unterrichts- & Pausenzeiten</h2>
-                                        <p className="text-xs text-brand-100">Läuteordnung am Schulvormittag</p>
-                                    </div>
-                                </div>
+                                    <span className="truncate">Unterrichts- &amp; Pausenzeiten</span>
+                                </h2>
                                 <Link
                                     href="/unsere-schule/unterrichtszeiten"
-                                    className="inline-flex min-h-8 items-center rounded-lg bg-white/15 px-2.5 py-1 text-xs font-bold text-white hover:bg-white/25"
+                                    className="shrink-0 rounded-full bg-brand-50 px-2.5 py-1 text-xs font-bold text-brand-800 transition hover:bg-brand-100"
                                 >
                                     Details →
                                 </Link>
                             </div>
-                            <ul className="divide-y divide-slate-100 p-3.5 text-xs">
+
+                            <ul className="mt-3 space-y-1.5 text-xs sm:text-sm">
                                 {school.bell_schedule.map((slot, idx) => {
                                     const isBreak = slot.type === 'break' || Boolean(slot.is_break);
+                                    const isBetreuung = slot.type === 'betreuung';
+
+                                    const rowClasses = isBreak
+                                        ? 'bg-amber-50/75 text-amber-950 ring-1 ring-amber-200/70'
+                                        : isBetreuung
+                                          ? 'bg-slate-50/80 text-slate-700'
+                                          : 'text-slate-700 hover:bg-brand-50/60 hover:text-brand-900';
+
+                                    const dotClasses = isBreak
+                                        ? 'bg-amber-500'
+                                        : isBetreuung
+                                          ? 'bg-slate-400'
+                                          : 'bg-brand-500';
+
+                                    const timeClasses = isBreak
+                                        ? 'bg-amber-100/80 text-amber-950'
+                                        : isBetreuung
+                                          ? 'bg-slate-200/70 text-slate-700'
+                                          : 'bg-slate-100 text-slate-700';
+
                                     return (
                                         <li
                                             key={idx}
-                                            className={`flex items-center justify-between gap-2 rounded-lg px-2.5 py-2 ${
-                                                isBreak
-                                                    ? 'bg-amber-50/90 font-bold text-amber-950'
-                                                    : 'text-slate-700'
-                                            }`}
+                                            className={`flex items-center justify-between gap-2.5 rounded-xl px-3 py-2 transition ${rowClasses}`}
                                         >
-                                            <span className="flex items-center gap-2">
+                                            <span className="flex items-center gap-2.5 min-w-0">
                                                 <span
-                                                    className={`inline-block h-2 w-2 rounded-full ${
-                                                        isBreak ? 'bg-amber-500' : 'bg-brand-500'
-                                                    }`}
+                                                    className={`h-2 w-2 shrink-0 rounded-full ${dotClasses}`}
                                                     aria-hidden="true"
                                                 />
-                                                <span className="font-bold">{slot.label}</span>
+                                                <span className="font-semibold truncate">{slot.label}</span>
                                             </span>
-                                            <span className="font-mono font-semibold text-slate-800">{slot.time}</span>
+                                            <span
+                                                className={`shrink-0 rounded-lg px-2 py-0.5 font-mono text-[11px] sm:text-xs font-bold tabular-nums ${timeClasses}`}
+                                            >
+                                                {slot.time}
+                                            </span>
                                         </li>
                                     );
                                 })}
                             </ul>
-                        </div>
+                        </section>
                     )}
 
                     {/* 3. Original-Widget „Beiträge nach Rubriken“ */}

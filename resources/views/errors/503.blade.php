@@ -133,7 +133,7 @@
                                             Sekretariat & Krankmeldung
                                         </h3>
                                         <p class="mt-1 text-xs text-slate-600 leading-relaxed">
-                                            Frau Vennebusch · Öffnungszeiten: <strong>{{ $info['office_hours'] }}</strong>
+                                            Frau Kremer · Öffnungszeiten: <strong>{{ $info['office_hours'] }}</strong>
                                         </p>
                                         <p class="mt-1 inline-flex items-center gap-1.5 text-xs text-slate-600">
                                             <svg class="h-3.5 w-3.5 text-brand-700 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true">

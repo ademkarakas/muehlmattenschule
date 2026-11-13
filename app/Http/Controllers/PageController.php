@@ -190,6 +190,27 @@ class PageController extends Controller
     }
 
     /**
+     * Zeigt die Detailseite für die Unterrichts- und Pausenzeiten (Läuteordnung).
+     */
+    public function bellSchedule(): Response
+    {
+        $school = SeoData::schoolSettings();
+
+        return Inertia::render('pages/bell-schedule', [
+            'seo' => SeoData::make([
+                'title' => 'Unterrichts- & Pausenzeiten',
+                'description' => "Läuteordnung, Unterrichtsstunden, Pausenzeiten und Betreuungszeiten der {$school['name']} ({$school['subtitle']}).",
+                'canonicalPath' => '/unsere-schule/unterrichtszeiten',
+                'breadcrumbs' => [
+                    ['label' => 'Startseite', 'href' => '/'],
+                    ['label' => 'Unsere Schule', 'href' => null],
+                    ['label' => 'Unterrichts- & Pausenzeiten', 'href' => null],
+                ],
+            ]),
+        ]);
+    }
+
+    /**
      * Zeigt das Impressum.
      */
     public function impressum(): Response

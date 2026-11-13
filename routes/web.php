@@ -30,6 +30,7 @@ Route::middleware('throttle:public-web')->group(function (): void {
     Route::get('/kontakt', [PageController::class, 'contact'])->name('contact');
     Route::get('/impressum', [PageController::class, 'impressum'])->name('impressum');
     Route::get('/datenschutz', [PageController::class, 'datenschutz'])->name('datenschutz');
+    Route::get('/unsere-schule/unterrichtszeiten', [PageController::class, 'bellSchedule'])->name('pages.bell-schedule');
 
     Route::get('/{section}/{slug}', [PageController::class, 'show'])
         ->whereIn('section', ['unsere-schule', 'konzepte-projekte', 'angebote', 'schulleben'])

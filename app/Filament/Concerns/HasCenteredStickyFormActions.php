@@ -27,4 +27,3 @@ trait HasCenteredStickyFormActions
         return true;
     }
 }
-

@@ -39,4 +39,3 @@ class ListEvents extends ListRecords
         ];
     }
 }
-

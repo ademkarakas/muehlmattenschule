@@ -77,15 +77,15 @@
 }
 
 .prose-school h2 {
-    @apply mt-6 mb-2 text-lg sm:text-xl font-extrabold text-brand-900 leading-snug;
+    @apply mt-6 mb-2.5 border-b border-brand-100 pb-1.5 text-lg sm:text-xl font-extrabold text-brand-700 leading-snug;
 }
 
 .prose-school h3 {
-    @apply mt-4 mb-1.5 text-base sm:text-lg font-bold text-slate-900 leading-snug;
+    @apply mt-4 mb-1.5 text-base sm:text-lg font-bold text-brand-800 leading-snug;
 }
 
 .prose-school h4 {
-    @apply mt-3 mb-1 text-sm sm:text-base font-bold text-slate-900 leading-snug;
+    @apply mt-3 mb-1 text-sm sm:text-base font-bold text-brand-700 leading-snug;
 }
 
 .prose-school figure {

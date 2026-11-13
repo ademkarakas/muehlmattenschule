@@ -20,7 +20,7 @@ export interface DownloadsIndexProps {
 export default function DownloadsIndexPage({ downloads }: DownloadsIndexProps): ReactElement {
     return (
         <SiteLayout>
-            <div className="mx-auto max-w-5xl px-4 sm:px-6 py-7 sm:py-10">
+            <div className="mx-auto max-w-6xl px-4 sm:px-6 py-7 sm:py-10">
                 <Breadcrumbs />
 
                 <header className="mb-6 sm:mb-8">

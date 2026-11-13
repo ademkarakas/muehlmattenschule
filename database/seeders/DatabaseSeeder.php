@@ -67,7 +67,7 @@ class DatabaseSeeder extends Seeder
         User::query()->updateOrCreate(
             ['email' => 'sekretariat@muehlmattenschule.de'],
             [
-                'name' => 'Mechthild Vennebusch (Sekretariat)',
+                'name' => 'Stefanie Kremer (Sekretariat)',
                 'role' => UserRole::Sekretariat,
                 'password' => Hash::make($isProd ? (string) env('INITIAL_OFFICE_PASSWORD', Str::password(24)) : 'Sekretariat!2026'),
                 'email_verified_at' => now(),
@@ -77,9 +77,9 @@ class DatabaseSeeder extends Seeder
         $lehrkraft2b = User::query()->updateOrCreate(
             ['email' => 'klasse2a@muehlmattenschule.de'],
             [
-                'name' => 'Frau Jakoby (Klasse 2b)',
+                'name' => 'Melanie Jakoby (Klasse 3b)',
                 'role' => UserRole::Lehrkraft,
-                'class_name' => 'Klasse 2b',
+                'class_name' => 'Klasse 3b',
                 'password' => Hash::make($isProd ? (string) env('INITIAL_TEACHER_PASSWORD', Str::password(24)) : 'Lehrkraft!2026'),
                 'email_verified_at' => now(),
             ],
@@ -514,7 +514,7 @@ class DatabaseSeeder extends Seeder
             ],
         );
 
-        // --- Komplette reale Personenliste von muehlmattenschule.de ---
+        // --- Komplette reale Personenliste der Mühlmattenschule ---
         $staffList = [
             [
                 'name' => 'Diana Blum',
@@ -528,132 +528,141 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Sabine Caputo',
                 'role_title' => 'Konrektorin',
-                'class_name' => null,
+                'class_name' => 'Klasse 2a · Bienenklasse',
                 'email' => 'Konrektorat.MMSVN@freiburger-schulen.bwl.de',
                 'group' => PersonGroup::Schulleitung,
                 'sort_order' => 2,
                 'portrait' => 'teacher-caputo.jpg',
             ],
             [
-                'name' => 'Mechthild Vennebusch',
+                'name' => 'Stefanie Kremer',
                 'role_title' => 'Schulsekretärin',
                 'class_name' => 'Mo, Mi, Fr 7:30 – 12:00 Uhr',
                 'email' => 'sekretariat.mmsvn@freiburger-schulen.bwl.de',
                 'group' => PersonGroup::Verwaltung,
                 'sort_order' => 3,
-                'portrait' => 'teacher-vennebusch.jpg',
+                'portrait' => null,
             ],
             [
-                'name' => 'Frau Bett',
-                'role_title' => 'Klassenlehrerin',
-                'class_name' => 'Klasse 1a',
+                'name' => 'Reinhard Frei',
+                'role_title' => 'Hausmeister',
+                'class_name' => null,
+                'email' => null,
+                'group' => PersonGroup::Verwaltung,
+                'sort_order' => 4,
+                'portrait' => null,
+            ],
+            [
+                'name' => 'Raimund Früh',
+                'role_title' => 'Klassenlehrer & BiSS-Ansprechperson',
+                'class_name' => 'Klasse 1a · Chamäleonklasse',
                 'email' => null,
                 'group' => PersonGroup::Kollegium,
                 'sort_order' => 10,
                 'portrait' => null,
             ],
             [
-                'name' => 'Frau Götten',
+                'name' => 'Elisabeth Borgas',
                 'role_title' => 'Klassenlehrerin',
-                'class_name' => 'Klasse 1b',
+                'class_name' => 'Klasse 1a · Chamäleonklasse',
                 'email' => null,
                 'group' => PersonGroup::Kollegium,
                 'sort_order' => 11,
                 'portrait' => null,
             ],
             [
-                'name' => 'Frau Eder',
+                'name' => 'Elvira Piess',
                 'role_title' => 'Klassenlehrerin',
-                'class_name' => 'Klasse 2a',
+                'class_name' => 'Klasse 1b · Igelklasse',
                 'email' => null,
                 'group' => PersonGroup::Kollegium,
                 'sort_order' => 12,
                 'portrait' => null,
             ],
             [
-                'name' => 'Frau Jakoby',
+                'name' => 'Saskia Jungfleisch',
                 'role_title' => 'Klassenlehrerin',
-                'class_name' => 'Klasse 2b',
+                'class_name' => 'Klasse 1c · Otterklasse',
                 'email' => null,
                 'group' => PersonGroup::Kollegium,
                 'sort_order' => 13,
                 'portrait' => null,
             ],
             [
-                'name' => 'Frau Bürger',
+                'name' => 'Daniela Bayer',
                 'role_title' => 'Klassenlehrerin',
-                'class_name' => 'Klasse 3a',
+                'class_name' => 'Klasse 2a · Bienenklasse',
                 'email' => null,
                 'group' => PersonGroup::Kollegium,
                 'sort_order' => 14,
                 'portrait' => null,
             ],
             [
-                'name' => 'Frau Piess',
+                'name' => 'Alexa Götten',
                 'role_title' => 'Klassenlehrerin',
-                'class_name' => 'Klasse 3b',
+                'class_name' => 'Klasse 2b · Koalaklasse',
                 'email' => null,
                 'group' => PersonGroup::Kollegium,
                 'sort_order' => 15,
                 'portrait' => null,
             ],
             [
-                'name' => 'Frau Huber',
+                'name' => 'Britta Sterzik',
                 'role_title' => 'Klassenlehrerin',
-                'class_name' => 'Klasse 3c',
+                'class_name' => 'Klasse 3a · Erdmännchenklasse',
                 'email' => null,
                 'group' => PersonGroup::Kollegium,
                 'sort_order' => 16,
                 'portrait' => null,
             ],
             [
-                'name' => 'Frau Garrido',
+                'name' => 'Melanie Jakoby',
                 'role_title' => 'Klassenlehrerin',
-                'class_name' => 'Klasse 4a',
+                'class_name' => 'Klasse 3b · Pinguinklasse',
                 'email' => null,
                 'group' => PersonGroup::Kollegium,
                 'sort_order' => 17,
                 'portrait' => null,
             ],
             [
-                'name' => 'Frau Sterzik',
+                'name' => 'Jutta Garrido',
                 'role_title' => 'Klassenlehrerin',
-                'class_name' => 'Klasse 4b',
+                'class_name' => 'Klasse 3c · Eisbärenklasse',
                 'email' => null,
                 'group' => PersonGroup::Kollegium,
                 'sort_order' => 18,
                 'portrait' => null,
             ],
             [
-                'name' => 'Herr Früh',
-                'role_title' => 'Klassenlehrer & BiSS-Ansprechperson',
-                'class_name' => 'Klasse 4c',
+                'name' => 'Marion Huber',
+                'role_title' => 'Klassenlehrerin',
+                'class_name' => 'Klasse 4a · Elefantenklasse',
                 'email' => null,
                 'group' => PersonGroup::Kollegium,
                 'sort_order' => 19,
                 'portrait' => null,
             ],
             [
-                'name' => 'Frau Pfattner',
-                'role_title' => 'Fachlehrerin',
-                'class_name' => null,
+                'name' => 'Katja Bürger',
+                'role_title' => 'Klassenlehrerin',
+                'class_name' => 'Klasse 4a · Elefantenklasse',
                 'email' => null,
                 'group' => PersonGroup::Kollegium,
                 'sort_order' => 20,
                 'portrait' => null,
             ],
             [
-                'name' => 'Frau Wastell',
-                'role_title' => 'Fachlehrerin',
-                'class_name' => null,
+                'name' => 'Nina Neumann',
+                'role_title' => 'Klassenlehrerin',
+                'class_name' => 'Klasse 4b · Fuchsklasse',
                 'email' => null,
                 'group' => PersonGroup::Kollegium,
                 'sort_order' => 21,
                 'portrait' => null,
             ],
             [
-                'name' => 'Frau Neumann',
-                'role_title' => 'Fachlehrerin',
+                'name' => 'Ira May',
+                'role_title' => 'Referendarin',
                 'class_name' => null,
                 'email' => null,
                 'group' => PersonGroup::Kollegium,
@@ -661,7 +670,7 @@ class DatabaseSeeder extends Seeder
                 'portrait' => null,
             ],
             [
-                'name' => 'Frau Marquardt',
+                'name' => 'Julia Marquardt',
                 'role_title' => 'Fachlehrerin',
                 'class_name' => null,
                 'email' => null,
@@ -670,7 +679,7 @@ class DatabaseSeeder extends Seeder
                 'portrait' => null,
             ],
             [
-                'name' => 'Frau Borgas',
+                'name' => 'Verena Röber',
                 'role_title' => 'Fachlehrerin',
                 'class_name' => null,
                 'email' => null,
@@ -679,9 +688,9 @@ class DatabaseSeeder extends Seeder
                 'portrait' => null,
             ],
             [
-                'name' => 'Frau Dingler',
-                'role_title' => 'Sonderpädagogin',
-                'class_name' => 'Außenklasse',
+                'name' => 'Luica Graab',
+                'role_title' => 'Fachlehrerin',
+                'class_name' => null,
                 'email' => null,
                 'group' => PersonGroup::Kollegium,
                 'sort_order' => 25,
@@ -777,13 +786,14 @@ class DatabaseSeeder extends Seeder
                 'section' => 'unsere-schule',
                 'menu_group' => 'Profil & Menschen',
                 'menu_order' => 2,
-                'summary' => 'Schulleiterin Diana Blum, Konrektorin Sabine Caputo und Schulsekretärin Mechthild Vennebusch.',
+                'summary' => 'Schulleiterin Diana Blum, Konrektorin Sabine Caputo, Schulsekretärin Stefanie Kremer und Hausmeister Reinhard Frei.',
                 'content' => [
                     [
                         'type' => 'rich_text',
                         'data' => [
                             'heading' => 'Schulleitung und Verwaltung',
-                            'body' => $wpPages['schulleitung-und-verwaltung']['body'] ?? '',
+                            'body' => '<p>Die Schulleitung, das Schulsekretariat und unser Hausmeister sind die zentralen Anlaufstellen für Eltern, Schülerinnen und Schüler sowie Kooperationspartner der Mühlmattenschule.</p>'
+                                .'<p>Unser Sekretariat ist <strong>montags, mittwochs und freitags von 7:30 bis 12:00 Uhr</strong> für Sie erreichbar.</p>',
                         ],
                     ],
                     [
@@ -796,7 +806,7 @@ class DatabaseSeeder extends Seeder
                     [
                         'type' => 'people_list',
                         'data' => [
-                            'heading' => 'Schulsekretariat',
+                            'heading' => 'Sekretariat & Hausmeister',
                             'group' => PersonGroup::Verwaltung->value,
                         ],
                     ],
@@ -814,14 +824,21 @@ class DatabaseSeeder extends Seeder
                         'type' => 'rich_text',
                         'data' => [
                             'heading' => 'Kollegium',
-                            'body' => $wpPages['kollegium']['body'] ?? '',
+                            'body' => '<p>An der Mühlmattenschule arbeiten Klassenlehrkräfte, Fachlehrkräfte, eine Referendarin, Schulleitung, Verwaltung sowie Schulsozialarbeit Hand in Hand für unsere Schülerinnen und Schüler.</p>',
                         ],
                     ],
                     [
                         'type' => 'people_list',
                         'data' => [
-                            'heading' => 'Schulleitung & Sekretariat',
+                            'heading' => 'Schulleitung',
                             'group' => PersonGroup::Schulleitung->value,
+                        ],
+                    ],
+                    [
+                        'type' => 'people_list',
+                        'data' => [
+                            'heading' => 'Sekretariat & Hausmeister',
+                            'group' => PersonGroup::Verwaltung->value,
                         ],
                     ],
                     [
@@ -846,13 +863,25 @@ class DatabaseSeeder extends Seeder
                 'section' => 'unsere-schule',
                 'menu_group' => 'Profil & Menschen',
                 'menu_order' => 4,
-                'summary' => 'Neun Grundschulklassen und eine kooperative Außenklasse – eine starke Schulgemeinschaft.',
+                'summary' => 'Zehn Grundschulklassen (1a–4b) mit eigenen Klassentieren – eine starke Schulgemeinschaft.',
                 'content' => [
                     [
                         'type' => 'rich_text',
                         'data' => [
                             'heading' => 'Unsere Klassen',
-                            'body' => $wpPages['unsere-klassen']['body'] ?? '',
+                            'body' => '<p>An der Mühlmattenschule lernen derzeit zehn Grundschulklassen in den Jahrgangsstufen 1 bis 4. Jede Klasse hat ihr eigenes Klassentier:</p>'
+                                .'<ul>'
+                                .'<li><strong>Klasse 1a – Chamäleonklasse:</strong> Herr Raimund Früh und Frau Elisabeth Borgas</li>'
+                                .'<li><strong>Klasse 1b – Igelklasse:</strong> Frau Elvira Piess</li>'
+                                .'<li><strong>Klasse 1c – Otterklasse:</strong> Frau Saskia Jungfleisch</li>'
+                                .'<li><strong>Klasse 2a – Bienenklasse:</strong> Frau Daniela Bayer und Frau Sabine Caputo</li>'
+                                .'<li><strong>Klasse 2b – Koalaklasse:</strong> Frau Alexa Götten</li>'
+                                .'<li><strong>Klasse 3a – Erdmännchenklasse:</strong> Frau Britta Sterzik</li>'
+                                .'<li><strong>Klasse 3b – Pinguinklasse:</strong> Frau Melanie Jakoby</li>'
+                                .'<li><strong>Klasse 3c – Eisbärenklasse:</strong> Frau Jutta Garrido</li>'
+                                .'<li><strong>Klasse 4a – Elefantenklasse:</strong> Frau Marion Huber und Frau Katja Bürger</li>'
+                                .'<li><strong>Klasse 4b – Fuchsklasse:</strong> Frau Nina Neumann</li>'
+                                .'</ul>',
                         ],
                     ],
                     [

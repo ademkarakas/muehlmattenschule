@@ -16,6 +16,7 @@
             </p>
             <a
                 href="/"
+                target="_top"
                 class="mt-6 inline-flex min-h-11 items-center justify-center rounded-xl bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-700"
             >
                 Zur Startseite →

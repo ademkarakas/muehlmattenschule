@@ -159,4 +159,3 @@ class SearchController extends Controller
         ]);
     }
 }
-
