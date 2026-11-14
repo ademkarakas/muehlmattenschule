@@ -1,8 +1,8 @@
+import { BackButton } from '@/components/back-button';
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { PhotoLightbox } from '@/components/photo-lightbox';
 import { Reveal } from '@/components/reveal';
 import { SiteLayout } from '@/layouts/site-layout';
-import { Link } from '@inertiajs/react';
 import { useState, type ReactElement } from 'react';
 
 export interface AlbumPhoto {
@@ -32,9 +32,9 @@ export interface AlbumShowProps {
 export default function AlbumShowPage({ album }: AlbumShowProps): ReactElement {
     const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
-    const lightboxImages = album.photos.map((photo, index) => ({
+    const lightboxImages = album.photos.map((photo) => ({
         url: photo.largeUrl,
-        alt: `${photo.alt} (${index + 1})`,
+        alt: photo.alt,
     }));
 
     return (
@@ -42,12 +42,7 @@ export default function AlbumShowPage({ album }: AlbumShowProps): ReactElement {
             <div className="mx-auto max-w-6xl px-4 sm:px-6 py-7 sm:py-10">
                 <Breadcrumbs />
 
-                <Link
-                    href="/galerie"
-                    className="inline-flex min-h-10 items-center py-1 text-sm font-semibold text-brand-700 hover:text-brand-900"
-                >
-                    ← Alle Fotoalben
-                </Link>
+                <BackButton href="/galerie" label="Alle Fotoalben" />
 
                 <header className="mt-3 sm:mt-4 mb-6 sm:mb-8">
                     <div className="flex flex-wrap items-center gap-2 text-xs font-semibold">
@@ -66,7 +61,7 @@ export default function AlbumShowPage({ album }: AlbumShowProps): ReactElement {
                         {album.title}
                     </h1>
                     {album.description && (
-                        <p className="mt-2 max-w-3xl text-sm sm:text-base text-slate-600">{album.description}</p>
+                        <p className="mt-2 text-sm sm:text-base text-slate-600">{album.description}</p>
                     )}
                 </header>
 
@@ -85,7 +80,7 @@ export default function AlbumShowPage({ album }: AlbumShowProps): ReactElement {
                                 >
                                     <img
                                         src={photo.thumbUrl}
-                                        alt={`${photo.alt} (${index + 1})`}
+                                        alt={photo.alt}
                                         loading="lazy"
                                         decoding="async"
                                         className="h-full w-full object-cover transition duration-300 group-hover:scale-105"

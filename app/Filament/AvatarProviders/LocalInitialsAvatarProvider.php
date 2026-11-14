@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\AvatarProviders;
 
+use App\Enums\UserRole;
 use App\Models\User;
 use Filament\AvatarProviders\Contracts\AvatarProvider;
 use Filament\Facades\Filament;
@@ -13,8 +14,8 @@ use Illuminate\Database\Eloquent\Model;
 class LocalInitialsAvatarProvider implements AvatarProvider
 {
     /**
-     * Erzeugt einen DSGVO- und CSP-konformen lokalen SVG-Data-URI-Avatar mit Initialen
-     * im Farbschema der Mühlmattenschule (ohne externe Anfragen an ui-avatars.com).
+     * Erzeugt einen DSGVO- und CSP-konformen lokalen SVG-Data-URI-Avatar (36×36, rx="10")
+     * im Pastell-Farbschema von SupportCallSystem.Frontend (ohne externe Anfragen).
      */
     public function get(Model|Authenticatable $record): string
     {
@@ -41,20 +42,36 @@ class LocalInitialsAvatarProvider implements AvatarProvider
             $initials = 'MM';
         }
 
+        [$bg, $fg] = $this->resolveRoleColors($record);
+
         $svg = <<<SVG
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="{$initials}">
-  <defs>
-    <linearGradient id="av" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#029786" />
-      <stop offset="100%" stop-color="#00544a" />
-    </linearGradient>
-  </defs>
-  <rect width="64" height="64" rx="32" fill="url(#av)" />
-  <circle cx="32" cy="32" r="30.5" fill="none" stroke="#ffffff" stroke-opacity="0.22" stroke-width="1.5" />
-  <text x="50%" y="52%" dominant-baseline="central" text-anchor="middle" fill="#ffffff" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="24" font-weight="700" letter-spacing="0.5">{$initials}</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" width="36" height="36" role="img" aria-label="{$initials}">
+  <rect width="36" height="36" rx="10" fill="{$bg}" />
+  <text x="50%" y="52%" dominant-baseline="central" text-anchor="middle" fill="{$fg}" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="600" letter-spacing="0.4">{$initials}</text>
 </svg>
 SVG;
 
         return 'data:image/svg+xml;utf8,'.rawurlencode($svg);
+    }
+
+    /**
+     * Liefert die Pastell-Hintergrund- und Textfarbe passend zur Benutzerrolle
+     * (1:1 angelehnt an .avatar-admin / .avatar-leader / .avatar-user in SupportCallSystem.Frontend).
+     *
+     * @return array{0: string, 1: string}
+     */
+    private function resolveRoleColors(Model|Authenticatable $record): array
+    {
+        if (! $record instanceof User) {
+            return ['#e8f4fd', '#0078d4'];
+        }
+
+        return match ($record->role) {
+            UserRole::Admin => ['#fff0eb', '#e8590c'],
+            UserRole::Schulleitung => ['#fff4e0', '#c07a00'],
+            UserRole::Sekretariat => ['#e8f4fd', '#0078d4'],
+            UserRole::Lehrkraft => ['#e6f6f4', '#029786'],
+            default => ['#e8f4fd', '#0078d4'],
+        };
     }
 }

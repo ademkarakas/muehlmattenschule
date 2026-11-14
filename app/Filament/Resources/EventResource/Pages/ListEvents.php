@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\EventResource\Pages;
 
+use App\Filament\Concerns\HasSupportCallListHeader;
 use App\Filament\Resources\EventResource;
 use App\Models\Event;
-use Filament\Actions\Action;
-use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListEvents extends ListRecords
 {
+    use HasSupportCallListHeader;
+
     protected static string $resource = EventResource::class;
 
     /**
@@ -25,17 +26,5 @@ class ListEvents extends ListRecords
         return $upcoming === 1
             ? "1 anstehender Termin ({$total} insgesamt)"
             : "{$upcoming} anstehende Termine ({$total} insgesamt)";
-    }
-
-    /**
-     * Kopfzeilen-Aktionen.
-     *
-     * @return array<Action>
-     */
-    protected function getHeaderActions(): array
-    {
-        return [
-            CreateAction::make(),
-        ];
     }
 }

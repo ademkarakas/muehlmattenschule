@@ -23,6 +23,8 @@ use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
+use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\HtmlString;
 use UnitEnum;
 
 /**
@@ -41,15 +43,50 @@ class ManageSchoolSettings extends Page
     protected static ?int $navigationSort = 2;
 
     /**
-     * Dezent-solider Untertitel unter der Seitenüberschrift.
+     * Keine Breadcrumbs (1:1 wie in SupportCallSystem.Frontend).
+     *
+     * @return array<string, string>
      */
-    public function getSubheading(): ?string
+    public function getBreadcrumbs(): array
     {
-        return 'Stammdaten, Kontaktinformationen, Startseiten-Elemente, Unterrichtszeiten und Wartungsmodus der Mühlmattenschule verwalten.';
+        return [];
     }
 
     /**
-     * Fügt die Design-Klasse für den helltürkisen Kopfbereich und das Karten-Layout hinzu.
+     * Baut die linke und mittlere Spalte der 3-teiligen Top-Bar (.top-bar):
+     * Links [← Zurück zum Dashboard], mittig [Titel + Untertitel].
+     */
+    public function getHeading(): string|Htmlable|null
+    {
+        $backUrl = e(Dashboard::getUrl());
+        $title = e($this->getTitle());
+        $subtitle = e('Stammdaten, Kontaktinformationen, Startseiten-Elemente, Unterrichtszeiten und Wartungsmodus verwalten.');
+
+        $backSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">'
+            .'<path fill-rule="evenodd" d="M17 10a.75.75 0 0 1-.75.75H5.612l4.158 3.96a.75.75 0 1 1-1.04 1.08l-5.5-5.25a.75.75 0 0 1 0-1.08l5.5-5.25a.75.75 0 1 1 1.04 1.08L5.612 9.25H16.25A.75.75 0 0 1 17 10Z" clip-rule="evenodd"/>'
+            .'</svg>';
+
+        return new HtmlString(
+            '<span class="scs-top-bar-lead">'
+            .'<a href="'.$backUrl.'" class="scs-back-btn">'.$backSvg.'<span>Zurück</span></a>'
+            .'<span class="scs-top-bar-titles">'
+            .'<span class="scs-top-bar-title">'.$title.'</span>'
+            .'<span class="scs-top-bar-subtitle">'.$subtitle.'</span>'
+            .'</span>'
+            .'</span>'
+        );
+    }
+
+    /**
+     * Untertitel ist bereits in der mittleren Spalte von getHeading() enthalten.
+     */
+    public function getSubheading(): ?string
+    {
+        return null;
+    }
+
+    /**
+     * Fügt die Design-Klasse für die Sticky-Top-Bar und das Formular-Layout hinzu.
      *
      * @return array<int, string>
      */
@@ -85,7 +122,7 @@ class ManageSchoolSettings extends Page
     }
 
     /**
-     * Schnell-Aktion oben rechts zum direkten Ein-/Ausschalten des Wartungsmodus.
+     * Kopfzeilen-Aktionen oben rechts (Wartungsmodus).
      *
      * @return array<Action>
      */
@@ -94,11 +131,6 @@ class ManageSchoolSettings extends Page
         $isActive = (bool) ($this->data['maintenance_active'] ?? false);
 
         return [
-            Action::make('backToDashboard')
-                ->label('Zurück')
-                ->color('gray')
-                ->icon(Heroicon::OutlinedArrowLeft)
-                ->url(Dashboard::getUrl()),
             Action::make('previewMaintenancePage')
                 ->label('Wartungsseite ansehen')
                 ->color('gray')

@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\CategoryResource\Pages;
 
+use App\Filament\Concerns\HasSupportCallListHeader;
 use App\Filament\Resources\CategoryResource;
 use App\Models\Category;
-use Filament\Actions\Action;
-use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListCategories extends ListRecords
 {
+    use HasSupportCallListHeader;
+
     protected static string $resource = CategoryResource::class;
 
     /**
@@ -22,17 +23,5 @@ class ListCategories extends ListRecords
         $count = Category::query()->count();
 
         return "Insgesamt {$count} ".($count === 1 ? 'Kategorie' : 'Kategorien');
-    }
-
-    /**
-     * Kopfzeilen-Aktionen.
-     *
-     * @return array<Action>
-     */
-    protected function getHeaderActions(): array
-    {
-        return [
-            CreateAction::make(),
-        ];
     }
 }

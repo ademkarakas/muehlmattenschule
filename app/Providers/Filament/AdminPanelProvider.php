@@ -17,6 +17,9 @@ use Filament\Navigation\NavigationGroup;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use Filament\Support\Facades\FilamentIcon;
+use Filament\Support\Icons\Heroicon;
+use Filament\Tables\View\TablesIconAlias;
 use Filament\View\PanelsRenderHook;
 use Illuminate\Contracts\View\View;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
@@ -28,6 +31,17 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AdminPanelProvider extends PanelProvider
 {
+    /**
+     * Registriert moderne Outline-Icons für Tabellen-Filter und Spaltenauswahl.
+     */
+    public function boot(): void
+    {
+        FilamentIcon::register([
+            TablesIconAlias::ACTIONS_FILTER => Heroicon::OutlinedAdjustmentsHorizontal,
+            TablesIconAlias::ACTIONS_COLUMN_MANAGER => Heroicon::OutlinedViewColumns,
+        ]);
+    }
+
     /**
      * Konfiguriert das deutschsprachige Verwaltungs-Panel der Mühlmattenschule.
      */
@@ -59,6 +73,10 @@ class AdminPanelProvider extends PanelProvider
             ->renderHook(
                 PanelsRenderHook::HEAD_END,
                 fn (): View => view('filament.admin-theme'),
+            )
+            ->renderHook(
+                PanelsRenderHook::BODY_END,
+                fn (): View => view('filament.unsaved-changes-dialog'),
             )
             ->renderHook(
                 PanelsRenderHook::USER_MENU_BEFORE,

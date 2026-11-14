@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\DownloadResource\Pages;
 
+use App\Filament\Concerns\HasSupportCallListHeader;
 use App\Filament\Resources\DownloadResource;
 use App\Models\Download;
-use Filament\Actions\Action;
-use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListDownloads extends ListRecords
 {
+    use HasSupportCallListHeader;
+
     protected static string $resource = DownloadResource::class;
 
     /**
@@ -23,17 +24,5 @@ class ListDownloads extends ListRecords
         $total = Download::query()->count();
 
         return "{$published} veröffentlichte Dokumente & Formulare ({$total} insgesamt)";
-    }
-
-    /**
-     * Kopfzeilen-Aktionen.
-     *
-     * @return array<Action>
-     */
-    protected function getHeaderActions(): array
-    {
-        return [
-            CreateAction::make(),
-        ];
     }
 }

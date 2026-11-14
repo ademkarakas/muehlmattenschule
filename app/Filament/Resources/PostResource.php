@@ -65,9 +65,9 @@ class PostResource extends Resource
         return $schema
             ->columns(1)
             ->components([
-                Grid::make(1)
+                Grid::make(['default' => 1, 'lg' => 3])
                     ->schema([
-                        // Hauptspalte: Inhalt des Beitrags
+                        // Hauptspalte (2/3): Inhalt des Beitrags
                         Group::make()
                             ->schema([
                                 Section::make('Beitragsinhalt')
@@ -97,10 +97,10 @@ class PostResource extends Resource
                                             ->minHeight('22rem'),
                                     ]),
                             ])
-                            ->columnSpanFull(),
+                            ->columnSpan(['lg' => 2]),
 
-                        // Einstellungen: Veröffentlichung, Titelbild, Zuordnung, Erweitert – nebeneinander
-                        Grid::make(['default' => 1, 'md' => 2, 'xl' => 4])
+                        // Seitenleiste (1/3): Veröffentlichung, Titelbild, Zuordnung, Erweitert
+                        Group::make()
                             ->schema([
                                 Section::make('Veröffentlichung')
                                     ->icon(Heroicon::OutlinedRocketLaunch)
@@ -178,7 +178,7 @@ class PostResource extends Resource
                                             ->unique(ignoreRecord: true),
                                     ]),
                             ])
-                            ->columnSpanFull(),
+                            ->columnSpan(['lg' => 1]),
                     ])
                     ->columnSpanFull(),
             ]);

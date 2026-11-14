@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\AlbumResource\Pages;
 
+use App\Filament\Concerns\HasSupportCallListHeader;
 use App\Filament\Resources\AlbumResource;
 use App\Models\Album;
-use Filament\Actions\Action;
-use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListAlbums extends ListRecords
 {
+    use HasSupportCallListHeader;
+
     protected static string $resource = AlbumResource::class;
 
     /**
@@ -22,17 +23,5 @@ class ListAlbums extends ListRecords
         $count = Album::query()->count();
 
         return "Insgesamt {$count} ".($count === 1 ? 'Fotoalbum' : 'Fotoalben');
-    }
-
-    /**
-     * Kopfzeilen-Aktionen.
-     *
-     * @return array<Action>
-     */
-    protected function getHeaderActions(): array
-    {
-        return [
-            CreateAction::make(),
-        ];
     }
 }

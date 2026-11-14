@@ -60,7 +60,7 @@ export default function BellSchedulePage(): ReactElement {
                 <Breadcrumbs />
 
                 <header className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-600 via-brand-500 to-[#06b09d] p-6 sm:p-9 text-white shadow-md">
-                    <div className="relative z-10 max-w-3xl">
+                    <div className="relative z-10">
                         <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-xs font-bold uppercase tracking-wider text-white ring-1 ring-white/25">
                             Unsere Schule · Läuteordnung
                         </span>

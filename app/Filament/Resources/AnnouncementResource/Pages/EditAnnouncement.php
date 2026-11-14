@@ -11,7 +11,6 @@ use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
-use Filament\Support\Enums\Width;
 use Illuminate\Support\Str;
 
 class EditAnnouncement extends EditRecord
@@ -19,8 +18,6 @@ class EditAnnouncement extends EditRecord
     use HasCenteredStickyFormActions;
 
     protected static string $resource = AnnouncementResource::class;
-
-    protected Width|string|null $maxContentWidth = Width::FourExtraLarge;
 
     /**
      * Seitentitel mit dem gekürzten Mitteilungstext.

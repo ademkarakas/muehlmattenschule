@@ -11,7 +11,6 @@ use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
-use Filament\Support\Enums\Width;
 use Filament\Support\Icons\Heroicon;
 
 class EditPost extends EditRecord
@@ -19,8 +18,6 @@ class EditPost extends EditRecord
     use HasCenteredStickyFormActions;
 
     protected static string $resource = PostResource::class;
-
-    protected Width|string|null $maxContentWidth = Width::FiveExtraLarge;
 
     /**
      * Seitentitel mit der Überschrift des Beitrags.
@@ -49,7 +46,7 @@ class EditPost extends EditRecord
     }
 
     /**
-     * Kopfzeilen-Aktionen: „← Zurück“ und „Auf Website ansehen“.
+     * Kopfzeilen-Aktion: „Auf Website ansehen“.
      *
      * @return array<Action>
      */
@@ -59,7 +56,6 @@ class EditPost extends EditRecord
         $post = $this->getRecord();
 
         return [
-            $this->getBackToListHeaderAction(),
             Action::make('preview')
                 ->label('Auf Website ansehen')
                 ->icon(Heroicon::OutlinedArrowTopRightOnSquare)

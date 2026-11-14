@@ -168,9 +168,9 @@ class Post extends Model implements HasMedia
             if ($url === '') {
                 continue;
             }
-            $alt = is_array($entry) && isset($entry['alt']) && is_string($entry['alt'])
+            $alt = is_array($entry) && isset($entry['alt']) && is_string($entry['alt']) && $entry['alt'] !== ''
                 ? $entry['alt']
-                : sprintf('%s – Bild %d', $this->title, (int) $index + 1);
+                : (string) $this->title;
 
             $photos[] = [
                 'id' => $baseId + (int) $index,

@@ -51,13 +51,6 @@ export interface PageShowProps {
     people: PersonItem[];
 }
 
-const SECTION_LABELS: Record<string, string> = {
-    "unsere-schule": "Unsere Schule",
-    "konzepte-projekte": "Konzepte & Projekte",
-    angebote: "Angebote & Betreuung",
-    schulleben: "Schulleben & Angebote",
-};
-
 /**
  * Stellt eine über den Admin-Baukasten gepflegte Schulseite dar (inkl. Fotos, Galerien, Akkordeon, Downloads und Kollegiums-Karten).
  */
@@ -109,23 +102,17 @@ export default function PageShow({
         }
     };
 
-    const sectionBadge =
-        SECTION_LABELS[page.section] ?? "Schulleben & Angebote";
-
     return (
         <SiteLayout>
             <div className="mx-auto max-w-6xl px-4 sm:px-6 py-7 sm:py-10">
                 <Breadcrumbs />
 
                 <header className="mb-6 sm:mb-8 border-b border-slate-200 pb-5 sm:pb-6">
-                    <span className="inline-block rounded-full bg-brand-100 px-3 py-1 text-xs font-extrabold uppercase tracking-wider text-brand-800">
-                        {sectionBadge}
-                    </span>
-                    <h1 className="mt-2.5 text-2xl sm:text-3xl md:text-4xl font-extrabold text-brand-900 break-words hyphens-auto">
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-brand-900 break-words hyphens-auto">
                         {page.title}
                     </h1>
                     {page.summary && (
-                        <p className="mt-2 max-w-3xl text-base sm:text-lg text-slate-600 break-words">
+                        <p className="mt-2 text-base sm:text-lg text-slate-600 break-words">
                             {page.summary}
                         </p>
                     )}

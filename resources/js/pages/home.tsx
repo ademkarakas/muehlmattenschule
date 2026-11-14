@@ -115,121 +115,216 @@ export default function HomePage({ posts, postsPagination, upcomingEvents, album
 
     return (
         <SiteLayout>
-            {/* Charakteristischer, frischer Logo-Türkis-Hero-Bereich (#029786) */}
-            <section className="relative overflow-hidden bg-gradient-to-br from-[#dff7f4] via-[#edfcf9] to-[#d0f2ee] border-b border-brand-300/70 shadow-xs text-ink">
-                <div className="relative mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10 py-8 sm:py-12 lg:py-16 grid gap-6 sm:gap-8 lg:grid-cols-12 items-center">
-                    {/* Linke Seite: Willkommenstext im Logo-Türkis-Farbton */}
-                    <Reveal variant="fade-up" duration={600} className="lg:col-span-6 flex flex-col justify-center">
-                        <div className="inline-flex items-center gap-2 self-start rounded-full border border-brand-300 bg-white/90 px-3.5 py-1.5 text-xs font-bold tracking-wide text-brand-900 shadow-2xs">
-                            <span className="inline-block h-2 w-2 rounded-full bg-brand-500" aria-hidden="true" />
-                            <span>Grundschule Freiburg-Hochdorf & Benzhausen</span>
-                        </div>
-
-                        <h1 className="mt-3.5 sm:mt-4 text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight text-brand-900 break-words hyphens-auto">
-                            {school.welcome_title || `Willkommen an der ${school.name}`}
-                        </h1>
-
-                        <p className="mt-3 sm:mt-4 max-w-2xl text-sm sm:text-lg text-brand-950/85 leading-relaxed font-normal">
-                            {school.welcome_text ||
-                                'Die Grundschule für den Freiburger Stadtteil Hochdorf mit Benzhausen – ein Ort zum Lernen, Wachsen und Entdecken.'}
-                        </p>
-
-                        <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row flex-wrap gap-3">
-                            <Link
-                                href="/aktuelles"
-                                className="inline-flex min-h-11 items-center justify-center rounded-xl bg-gradient-to-r from-brand-700 to-brand-800 px-5 py-3 text-sm font-extrabold text-white shadow-md transition hover:from-brand-600 hover:to-brand-700 hover:shadow-lg"
-                            >
-                                Aktuelle Beiträge →
-                            </Link>
-                            <Link
-                                href="/unsere-schule/schulportrait"
-                                className="inline-flex min-h-11 items-center justify-center rounded-xl border-2 border-brand-800/30 bg-white/90 px-5 py-3 text-sm font-bold text-brand-900 shadow-xs transition hover:border-brand-800 hover:bg-white"
-                            >
-                                Unsere Schule kennenlernen
-                            </Link>
-                        </div>
-                    </Reveal>
-
-                    {/* Rechte Seite: Echtes Foto des Schulgebäudes der Mühlmattenschule mit weißem Passepartout-Rahmen */}
-                    <Reveal variant="zoom-in" delay={100} duration={650} className="lg:col-span-6">
-                        <div
-                            onTouchStart={handleHeroTouchStart}
-                            onTouchEnd={handleHeroTouchEnd}
-                            onMouseEnter={() => setIsHeroPaused(true)}
-                            onMouseLeave={() => setIsHeroPaused(false)}
-                            onFocus={() => setIsHeroPaused(true)}
-                            onBlur={(event) => {
-                                if (!event.currentTarget.contains(event.relatedTarget)) {
-                                    setIsHeroPaused(false);
-                                }
-                            }}
-                            className="relative overflow-hidden rounded-2xl sm:rounded-3xl border-4 border-white bg-white shadow-xl ring-1 ring-brand-900/10 aspect-[16/10]"
+            {/* Architektonischer Bento-Hero-Bereich: Großformatige Fotobühne links und strukturierter Willkommens- & Schnellzugriffs-Bereich rechts */}
+            <section className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10 pt-5 sm:pt-7">
+                <div className="overflow-hidden rounded-2xl sm:rounded-3xl border border-slate-200/85 bg-white shadow-xs">
+                    <div className="grid lg:grid-cols-12 items-stretch">
+                        {/* Linke Spalte (7/12 auf XL, 6/12 auf LG): Nahtlos integrierte Fotobühne mit Bildunterschrift & Steuerung */}
+                        <Reveal
+                            variant="fade"
+                            duration={600}
+                            className="lg:col-span-6 xl:col-span-7 relative min-h-[260px] sm:min-h-[340px] lg:min-h-[380px] border-b lg:border-b-0 lg:border-r border-slate-200/80 bg-slate-900"
                         >
-                            {heroPhotos.map((photo, index) => (
-                                <img
-                                    key={`${photo.url}-${index}`}
-                                    src={photo.url}
-                                    alt={photo.alt}
-                                    fetchPriority={index === 0 ? 'high' : 'auto'}
-                                    decoding="async"
-                                    aria-hidden={heroPhotoIndex !== index}
-                                    className={`absolute inset-0 h-full w-full object-cover select-none transition-opacity duration-700 ease-in-out ${
-                                        heroPhotoIndex === index ? 'opacity-100' : 'opacity-0 pointer-events-none'
-                                    }`}
-                                />
-                            ))}
-                            <button
-                                type="button"
-                                onClick={showPrevHero}
-                                aria-label="Vorheriges Schulfoto"
-                                className="absolute left-2.5 sm:left-3 top-1/2 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full border border-white/30 bg-slate-900/55 text-white backdrop-blur-md transition hover:scale-110 hover:bg-brand-600 cursor-pointer"
+                            <div
+                                onTouchStart={handleHeroTouchStart}
+                                onTouchEnd={handleHeroTouchEnd}
+                                onMouseEnter={() => setIsHeroPaused(true)}
+                                onMouseLeave={() => setIsHeroPaused(false)}
+                                onFocus={() => setIsHeroPaused(true)}
+                                onBlur={(event) => {
+                                    if (!event.currentTarget.contains(event.relatedTarget)) {
+                                        setIsHeroPaused(false);
+                                    }
+                                }}
+                                className="relative h-full w-full min-h-[260px] sm:min-h-[340px] lg:min-h-[380px] overflow-hidden"
                             >
-                                <svg
-                                    className="h-5 w-5 -ml-0.5"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2.4"
-                                >
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-                                </svg>
-                            </button>
-                            <button
-                                type="button"
-                                onClick={showNextHero}
-                                aria-label="Nächstes Schulfoto"
-                                className="absolute right-2.5 sm:right-3 top-1/2 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full border border-white/30 bg-slate-900/55 text-white backdrop-blur-md transition hover:scale-110 hover:bg-brand-600 cursor-pointer"
-                            >
-                                <svg
-                                    className="h-5 w-5 ml-0.5"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2.4"
-                                >
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                                </svg>
-                            </button>
-
-                            {/* Bild-Indikatoren für Mobilgeräte & Desktop */}
-                            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-2 rounded-full bg-slate-950/50 px-3 py-1.5 backdrop-blur-xs">
                                 {heroPhotos.map((photo, index) => (
-                                    <button
-                                        key={photo.url}
-                                        type="button"
-                                        onClick={() => setHeroPhotoIndex(index)}
-                                        aria-label={`Schulfoto ${index + 1} anzeigen`}
-                                        aria-current={heroPhotoIndex === index ? 'true' : undefined}
-                                        className={`h-2.5 rounded-full transition-all cursor-pointer ${
-                                            heroPhotoIndex === index
-                                                ? 'w-6 bg-white'
-                                                : 'w-2.5 bg-white/50 hover:bg-white/80'
+                                    <img
+                                        key={`${photo.url}-${index}`}
+                                        src={photo.url}
+                                        alt={photo.alt}
+                                        fetchPriority={index === 0 ? 'high' : 'auto'}
+                                        decoding="async"
+                                        aria-hidden={heroPhotoIndex !== index}
+                                        className={`absolute inset-0 h-full w-full object-cover select-none transition-opacity duration-700 ease-in-out ${
+                                            heroPhotoIndex === index ? 'opacity-100' : 'opacity-0 pointer-events-none'
                                         }`}
                                     />
                                 ))}
+
+                                {/* Sanfter Verlauf am unteren Bildrand für Bildunterschrift & Indikatoren */}
+                                <div
+                                    aria-hidden="true"
+                                    className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-slate-950/80 via-slate-950/35 to-transparent"
+                                />
+
+                                <button
+                                    type="button"
+                                    onClick={showPrevHero}
+                                    aria-label="Vorheriges Schulfoto"
+                                    className="absolute left-3 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full border border-white/25 bg-slate-950/45 text-white backdrop-blur-md transition hover:scale-105 hover:bg-brand-600 cursor-pointer"
+                                >
+                                    <svg
+                                        className="h-4.5 w-4.5 -ml-0.5"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="2.2"
+                                    >
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                                    </svg>
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={showNextHero}
+                                    aria-label="Nächstes Schulfoto"
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full border border-white/25 bg-slate-950/45 text-white backdrop-blur-md transition hover:scale-105 hover:bg-brand-600 cursor-pointer"
+                                >
+                                    <svg
+                                        className="h-4.5 w-4.5 ml-0.5"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="2.2"
+                                    >
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </button>
+
+                                {/* Untere Info- & Indikatorleiste im Foto */}
+                                <div className="absolute inset-x-4 bottom-3.5 flex items-center justify-between gap-3">
+                                    <p className="truncate text-xs sm:text-sm font-semibold text-white/95 drop-shadow-xs">
+                                        {heroPhotos[heroPhotoIndex]?.alt || school.name}
+                                    </p>
+
+                                    <div className="flex shrink-0 items-center gap-1.5 rounded-full bg-slate-950/55 px-2.5 py-1.5 backdrop-blur-xs ring-1 ring-white/15">
+                                        {heroPhotos.map((photo, index) => (
+                                            <button
+                                                key={photo.url}
+                                                type="button"
+                                                onClick={() => setHeroPhotoIndex(index)}
+                                                aria-label={`Schulfoto ${index + 1} anzeigen`}
+                                                aria-current={heroPhotoIndex === index ? 'true' : undefined}
+                                                className={`h-2 rounded-full transition-all cursor-pointer ${
+                                                    heroPhotoIndex === index
+                                                        ? 'w-5 bg-white'
+                                                        : 'w-2 bg-white/50 hover:bg-white/80'
+                                                }`}
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </Reveal>
+                        </Reveal>
+
+                        {/* Rechte Spalte (5/12 auf XL, 6/12 auf LG): Strukturierter Willkommensbereich + 2x2 Direktzugriff-Karten */}
+                        <Reveal
+                            variant="fade-up"
+                            delay={80}
+                            duration={550}
+                            className="lg:col-span-6 xl:col-span-5 p-6 sm:p-8 lg:p-9 flex flex-col justify-center bg-gradient-to-br from-white via-white to-brand-50/35"
+                        >
+                            <h1 className="text-2xl sm:text-3xl xl:text-[2.15rem] font-extrabold tracking-tight leading-[1.18] text-slate-900 break-words hyphens-auto">
+                                {school.welcome_title || `Willkommen an der ${school.name}`}
+                            </h1>
+
+                            <p className="mt-3 text-sm sm:text-[15px] text-slate-600 leading-relaxed">
+                                {school.welcome_text ||
+                                    'Die Grundschule für den Freiburger Stadtteil Hochdorf mit Benzhausen – ein Ort zum Lernen, Wachsen und Entdecken.'}
+                            </p>
+
+                            {/* 2x2 Schnellzugriffs-Bento für Eltern, Schülerinnen, Schüler & Gäste */}
+                            <div className="mt-6 pt-5 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <Link
+                                    href="/unsere-schule/schulportrait"
+                                    className="group flex items-center gap-3 rounded-2xl border border-slate-200/80 bg-white p-3.5 shadow-2xs transition-all hover:border-brand-300 hover:bg-brand-50/40"
+                                >
+                                    <span
+                                        aria-hidden="true"
+                                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700 ring-1 ring-brand-500/15 transition-colors group-hover:bg-brand-600 group-hover:text-white"
+                                    >
+                                        <svg className="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z" />
+                                        </svg>
+                                    </span>
+                                    <div className="min-w-0 flex-1">
+                                        <span className="block truncate text-xs sm:text-[13px] font-extrabold text-slate-900 group-hover:text-brand-800">
+                                            Unsere Schule
+                                        </span>
+                                        <span className="block truncate text-[11px] font-medium text-slate-500">
+                                            Schulportrait, Klassen &amp; Team
+                                        </span>
+                                    </div>
+                                </Link>
+
+                                <Link
+                                    href="/unsere-schule/unterrichtszeiten"
+                                    className="group flex items-center gap-3 rounded-2xl border border-slate-200/80 bg-white p-3.5 shadow-2xs transition-all hover:border-brand-300 hover:bg-brand-50/40"
+                                >
+                                    <span
+                                        aria-hidden="true"
+                                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700 ring-1 ring-brand-500/15 transition-colors group-hover:bg-brand-600 group-hover:text-white"
+                                    >
+                                        <svg className="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l4 2m6-2a10 10 0 11-20 0 10 10 0 0120 0z" />
+                                        </svg>
+                                    </span>
+                                    <div className="min-w-0 flex-1">
+                                        <span className="block truncate text-xs sm:text-[13px] font-extrabold text-slate-900 group-hover:text-brand-800">
+                                            Unterricht &amp; Pausen
+                                        </span>
+                                        <span className="block truncate text-[11px] font-medium text-slate-500">
+                                            Stundenplan &amp; Pausenzeiten
+                                        </span>
+                                    </div>
+                                </Link>
+
+                                <Link
+                                    href="/angebote/schulkindbetreuung"
+                                    className="group flex items-center gap-3 rounded-2xl border border-slate-200/80 bg-white p-3.5 shadow-2xs transition-all hover:border-brand-300 hover:bg-brand-50/40"
+                                >
+                                    <span
+                                        aria-hidden="true"
+                                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700 ring-1 ring-brand-500/15 transition-colors group-hover:bg-brand-600 group-hover:text-white"
+                                    >
+                                        <svg className="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
+                                        </svg>
+                                    </span>
+                                    <div className="min-w-0 flex-1">
+                                        <span className="block truncate text-xs sm:text-[13px] font-extrabold text-slate-900 group-hover:text-brand-800">
+                                            Betreuung &amp; AGs
+                                        </span>
+                                        <span className="block truncate text-[11px] font-medium text-slate-500">
+                                            Nachmittag &amp; Projekte
+                                        </span>
+                                    </div>
+                                </Link>
+
+                                <Link
+                                    href="/kontakt"
+                                    className="group flex items-center gap-3 rounded-2xl border border-slate-200/80 bg-white p-3.5 shadow-2xs transition-all hover:border-brand-300 hover:bg-brand-50/40"
+                                >
+                                    <span
+                                        aria-hidden="true"
+                                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700 ring-1 ring-brand-500/15 transition-colors group-hover:bg-brand-600 group-hover:text-white"
+                                    >
+                                        <svg className="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+                                        </svg>
+                                    </span>
+                                    <div className="min-w-0 flex-1">
+                                        <span className="block truncate text-xs sm:text-[13px] font-extrabold text-slate-900 group-hover:text-brand-800">
+                                            Sekretariat &amp; Kontakt
+                                        </span>
+                                        <span className="block truncate text-[11px] font-medium text-slate-500">
+                                            Krankmeldung &amp; Bürozeiten
+                                        </span>
+                                    </div>
+                                </Link>
+                            </div>
+                        </Reveal>
+                    </div>
                 </div>
             </section>
 

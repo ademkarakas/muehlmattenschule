@@ -7,15 +7,12 @@ namespace App\Filament\Resources\PersonResource\Pages;
 use App\Filament\Concerns\HasCenteredStickyFormActions;
 use App\Filament\Resources\PersonResource;
 use Filament\Resources\Pages\CreateRecord;
-use Filament\Support\Enums\Width;
 
 class CreatePerson extends CreateRecord
 {
     use HasCenteredStickyFormActions;
 
     protected static string $resource = PersonResource::class;
-
-    protected Width|string|null $maxContentWidth = Width::FourExtraLarge;
 
     /**
      * Seitentitel des Formulars.

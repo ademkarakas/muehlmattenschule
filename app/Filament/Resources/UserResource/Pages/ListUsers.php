@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\UserResource\Pages;
 
+use App\Filament\Concerns\HasSupportCallListHeader;
 use App\Filament\Resources\UserResource;
 use App\Models\User;
-use Filament\Actions\Action;
-use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListUsers extends ListRecords
 {
+    use HasSupportCallListHeader;
+
     protected static string $resource = UserResource::class;
 
     /**
@@ -22,17 +23,5 @@ class ListUsers extends ListRecords
         $count = User::query()->count();
 
         return "Insgesamt {$count} ".($count === 1 ? 'Benutzerkonto' : 'Benutzerkonten');
-    }
-
-    /**
-     * Kopfzeilen-Aktionen.
-     *
-     * @return array<Action>
-     */
-    protected function getHeaderActions(): array
-    {
-        return [
-            CreateAction::make(),
-        ];
     }
 }

@@ -7,15 +7,12 @@ namespace App\Filament\Resources\EventResource\Pages;
 use App\Filament\Concerns\HasCenteredStickyFormActions;
 use App\Filament\Resources\EventResource;
 use Filament\Resources\Pages\CreateRecord;
-use Filament\Support\Enums\Width;
 
 class CreateEvent extends CreateRecord
 {
     use HasCenteredStickyFormActions;
 
     protected static string $resource = EventResource::class;
-
-    protected Width|string|null $maxContentWidth = Width::FourExtraLarge;
 
     /**
      * Seitentitel des Formulars.

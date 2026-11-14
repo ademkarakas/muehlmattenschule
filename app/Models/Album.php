@@ -162,9 +162,9 @@ class Album extends Model implements HasMedia
                     continue;
                 }
                 $seenUrls[$base] = true;
-                $alt = is_array($entry) && isset($entry['alt']) && is_string($entry['alt'])
+                $alt = is_array($entry) && isset($entry['alt']) && is_string($entry['alt']) && $entry['alt'] !== ''
                     ? $entry['alt']
-                    : sprintf('%s – Foto %d', $this->title, $index + 1);
+                    : (string) $this->title;
 
                 $photos[] = [
                     'id' => $nextId + (int) $index,

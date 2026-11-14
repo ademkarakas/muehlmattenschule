@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\PostResource\Pages;
 
+use App\Filament\Concerns\HasSupportCallListHeader;
 use App\Filament\Resources\PostResource;
 use App\Models\Post;
-use Filament\Actions\Action;
-use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListPosts extends ListRecords
 {
+    use HasSupportCallListHeader;
+
     protected static string $resource = PostResource::class;
 
     /**
@@ -22,17 +23,5 @@ class ListPosts extends ListRecords
         $count = Post::query()->count();
 
         return "Insgesamt {$count} ".($count === 1 ? 'Beitrag' : 'Beiträge');
-    }
-
-    /**
-     * Kopfzeilen-Aktionen.
-     *
-     * @return array<Action>
-     */
-    protected function getHeaderActions(): array
-    {
-        return [
-            CreateAction::make(),
-        ];
     }
 }

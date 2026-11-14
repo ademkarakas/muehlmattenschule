@@ -11,15 +11,12 @@ use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
-use Filament\Support\Enums\Width;
 
 class EditDownload extends EditRecord
 {
     use HasCenteredStickyFormActions;
 
     protected static string $resource = DownloadResource::class;
-
-    protected Width|string|null $maxContentWidth = Width::FourExtraLarge;
 
     /**
      * Seitentitel mit dem Namen des Dokuments.

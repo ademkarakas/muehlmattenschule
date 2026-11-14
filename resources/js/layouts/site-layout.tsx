@@ -51,6 +51,24 @@ interface DesktopNavDropdownProps {
 }
 
 /**
+ * Erzeugt die minimal-modernen Klassen für Hauptnavigations-Tabs (dezentes Glas-Highlight + animierte Unterstreichung).
+ */
+function getDesktopNavTabClass(active: boolean, isOpen = false): string {
+    const base =
+        "relative inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2 cursor-pointer transition-all duration-200 after:content-[''] after:absolute after:bottom-0.5 after:left-3 after:right-3 after:h-[2.5px] after:rounded-full after:transition-all after:duration-200";
+
+    if (active) {
+        return `${base} bg-white/15 text-white font-bold shadow-[inset_0_1px_0_0_rgba(255,255,255,0.22)] after:bg-white after:scale-x-100 after:opacity-100`;
+    }
+
+    if (isOpen) {
+        return `${base} bg-white/12 text-white font-semibold after:bg-white/75 after:scale-x-100 after:opacity-100`;
+    }
+
+    return `${base} text-white/90 font-medium hover:bg-white/10 hover:text-white after:bg-white/60 after:scale-x-0 after:opacity-0 hover:after:scale-x-100 hover:after:opacity-100`;
+}
+
+/**
  * Barrierefreies Desktop-Dropdown-Menü für die Hauptnavigation mit Hover-, Klick- und
  * Tastatursteuerung (Escape / Outside-Click) sowie farblich hervorgehobenen Gruppenüberschriften.
  */
@@ -145,20 +163,14 @@ function DesktopNavDropdown({
                     clearCloseTimer();
                     setIsOpen((prev) => !prev);
                 }}
-                className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 cursor-pointer transition-all duration-150 ${
-                    active
-                        ? "bg-white text-brand-800 font-bold shadow-sm"
-                        : isOpen
-                          ? "bg-white/20 text-white"
-                          : "text-white/95 hover:bg-white/15 hover:text-white"
-                }`}
+                className={getDesktopNavTabClass(active, isOpen)}
             >
                 <span>{label}</span>
                 <svg
                     aria-hidden="true"
                     viewBox="0 0 20 20"
                     fill="currentColor"
-                    className={`h-4 w-4 shrink-0 transition-transform duration-150 ${isOpen ? "rotate-180" : ""}`}
+                    className={`h-4 w-4 shrink-0 opacity-85 transition-transform duration-200 ${isOpen ? "rotate-180 opacity-100" : ""}`}
                 >
                     <path
                         fillRule="evenodd"
@@ -199,17 +211,17 @@ function DesktopNavDropdown({
                                                         : undefined
                                                 }
                                                 onClick={() => setIsOpen(false)}
-                                                className={`flex items-center justify-between gap-2 rounded-xl px-3 py-2 text-sm transition ${
+                                                className={`flex items-center justify-between gap-2 rounded-xl px-3 py-2 text-sm transition-all duration-150 ${
                                                     itemActive
-                                                        ? "bg-brand-600 text-white font-bold shadow-xs"
-                                                        : "font-medium text-slate-700 hover:bg-brand-50 hover:text-brand-800"
+                                                        ? "bg-brand-50 text-brand-800 font-bold ring-1 ring-brand-500/20"
+                                                        : "font-medium text-slate-700 hover:bg-brand-50/65 hover:text-brand-800 hover:translate-x-0.5"
                                                 }`}
                                             >
                                                 <span>{item.title}</span>
                                                 {itemActive && (
                                                     <span
                                                         aria-hidden="true"
-                                                        className="h-1.5 w-1.5 shrink-0 rounded-full bg-white"
+                                                        className="h-1.5 w-1.5 shrink-0 rounded-full bg-brand-600"
                                                     />
                                                 )}
                                             </Link>
@@ -324,6 +336,18 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
     }, [currentUrl]);
 
     useEffect(() => {
+        if (currentPath === "/suche") {
+            const queryString = currentUrl.includes("?")
+                ? currentUrl.split("?")[1]
+                : "";
+            const qParam = new URLSearchParams(queryString).get("q") ?? "";
+            setHeaderSearchQuery(qParam);
+        } else {
+            setHeaderSearchQuery("");
+        }
+    }, [currentPath, currentUrl]);
+
+    useEffect(() => {
         if (!mobileOpen) {
             return;
         }
@@ -411,10 +435,10 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                 </div>
             )}
 
-            {/* Oberer Kopfbereich im modernen Portalstil */}
-            <header className="sticky top-0 z-40 shadow-[0_2px_16px_-4px_rgba(2,151,134,0.12)]">
-                <div className="bg-white/95 backdrop-blur-md border-b border-slate-200/80">
-                    <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10 py-2.5 sm:py-3 flex items-center justify-between gap-3 sm:gap-6">
+            {/* Einheitlicher Kopfbereich (Markenzeile + Hauptnavigation) im originalen Logo-Türkis (#029786) ohne Farbbruch */}
+            <header className="sticky top-0 z-40 bg-gradient-to-r from-brand-700 via-brand-500 to-brand-700 text-white shadow-[0_4px_20px_-4px_rgba(2,151,134,0.28)]">
+                <div>
+                    <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10 py-2.5 sm:py-3.5 flex items-center justify-between gap-3 sm:gap-6">
                         <Link
                             href="/"
                             className="flex items-center gap-3 sm:gap-3.5 group min-w-0"
@@ -424,34 +448,34 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                                 alt={`Logo ${school.name}`}
                                 width={52}
                                 height={52}
-                                className="h-11 w-11 sm:h-12 sm:w-12 shrink-0 rounded-2xl bg-white p-0.5 ring-1 ring-slate-200/80 shadow-xs transition duration-200 group-hover:scale-105 object-contain"
+                                className="h-11 w-11 sm:h-12 sm:w-12 shrink-0 rounded-2xl bg-white p-1 ring-2 ring-white/25 shadow-sm transition duration-200 group-hover:scale-105 object-contain"
                             />
                             <div className="min-w-0">
-                                <span className="block truncate text-lg sm:text-2xl font-extrabold tracking-tight text-brand-900 leading-tight">
+                                <span className="block truncate text-lg sm:text-2xl font-extrabold tracking-tight text-white leading-tight">
                                     {school.name}
                                 </span>
-                                <span className="block truncate text-xs sm:text-[13px] font-semibold text-brand-700">
+                                <span className="block truncate text-xs sm:text-[13px] font-medium text-brand-100">
                                     {school.subtitle}
                                 </span>
                             </div>
                         </Link>
 
-                        <div className="flex items-center gap-2 lg:gap-3 text-xs sm:text-sm shrink-0">
+                        <div className="flex items-center gap-2 lg:gap-2.5 text-xs sm:text-sm shrink-0">
                             {/* Barrierefreie Schriftgrößen-Auswahl */}
                             <div
                                 role="group"
                                 aria-label="Schriftgröße anpassen"
-                                className="hidden lg:flex items-center gap-0.5 rounded-full bg-slate-100/90 p-1 ring-1 ring-slate-200/80"
+                                className="hidden lg:flex items-center gap-0.5 rounded-full bg-white/14 p-1 ring-1 ring-white/25 backdrop-blur-xs"
                             >
                                 <button
                                     type="button"
                                     onClick={() => updateFontScale("normal")}
                                     aria-pressed={fontScale === "normal"}
                                     title="Normale Schriftgröße"
-                                    className={`rounded-full px-2.5 py-1.5 text-xs font-extrabold cursor-pointer transition-all ${
+                                    className={`rounded-full px-2.5 py-1 text-xs font-extrabold cursor-pointer transition-all ${
                                         fontScale === "normal"
-                                            ? "bg-white text-brand-700 shadow-xs ring-1 ring-brand-500/20"
-                                            : "text-slate-600 hover:text-brand-800 hover:bg-white/60"
+                                            ? "bg-white text-brand-800 shadow-xs"
+                                            : "text-white/90 hover:text-white hover:bg-white/15"
                                     }`}
                                 >
                                     A
@@ -461,10 +485,10 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                                     onClick={() => updateFontScale("lg")}
                                     aria-pressed={fontScale === "lg"}
                                     title="Große Schriftgröße"
-                                    className={`rounded-full px-2.5 py-1.5 text-xs font-extrabold cursor-pointer transition-all ${
+                                    className={`rounded-full px-2.5 py-1 text-xs font-extrabold cursor-pointer transition-all ${
                                         fontScale === "lg"
-                                            ? "bg-white text-brand-700 shadow-xs ring-1 ring-brand-500/20"
-                                            : "text-slate-600 hover:text-brand-800 hover:bg-white/60"
+                                            ? "bg-white text-brand-800 shadow-xs"
+                                            : "text-white/90 hover:text-white hover:bg-white/15"
                                     }`}
                                 >
                                     A+
@@ -474,10 +498,10 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                                     onClick={() => updateFontScale("xl")}
                                     aria-pressed={fontScale === "xl"}
                                     title="Sehr große Schriftgröße"
-                                    className={`rounded-full px-2.5 py-1.5 text-xs font-extrabold cursor-pointer transition-all ${
+                                    className={`rounded-full px-2.5 py-1 text-xs font-extrabold cursor-pointer transition-all ${
                                         fontScale === "xl"
-                                            ? "bg-white text-brand-700 shadow-xs ring-1 ring-brand-500/20"
-                                            : "text-slate-600 hover:text-brand-800 hover:bg-white/60"
+                                            ? "bg-white text-brand-800 shadow-xs"
+                                            : "text-white/90 hover:text-white hover:bg-white/15"
                                     }`}
                                 >
                                     A++
@@ -488,7 +512,7 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                                 onSubmit={handleHeaderSearch}
                                 role="search"
                                 aria-label="Schulportal durchsuchen"
-                                className="relative hidden md:flex w-56 lg:w-64 xl:w-80 2xl:w-[25rem] items-center"
+                                className="relative hidden md:flex w-56 lg:w-64 xl:w-76 2xl:w-96 items-center"
                             >
                                 <label
                                     htmlFor="header-search-input"
@@ -504,13 +528,13 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                                         setHeaderSearchQuery(e.target.value)
                                     }
                                     placeholder="Schulportal durchsuchen…"
-                                    className="h-10.5 w-full rounded-full border border-slate-200/90 bg-slate-100/80 pl-4 pr-11 text-sm font-medium text-slate-900 placeholder:text-slate-500 transition-all focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-brand-500/12"
+                                    className="h-10 w-full rounded-full border border-white/25 bg-white/15 pl-4 pr-10 text-sm font-medium text-white placeholder:text-white/80 backdrop-blur-xs transition-all hover:bg-white/20 focus:border-white focus:bg-white focus:text-slate-900 focus:placeholder:text-slate-400 focus:outline-none focus:ring-4 focus:ring-white/20"
                                 />
                                 <button
                                     type="submit"
                                     aria-label="Suche starten"
                                     title="Suchen"
-                                    className="absolute right-1.5 flex h-8 w-8 items-center justify-center rounded-full bg-transparent text-slate-500 hover:bg-brand-50 hover:text-brand-700 cursor-pointer transition"
+                                    className="absolute right-1.5 flex h-7.5 w-7.5 items-center justify-center rounded-full bg-transparent text-white/90 hover:bg-white/20 hover:text-white cursor-pointer transition"
                                 >
                                     <SearchIcon className="h-4 w-4" />
                                 </button>
@@ -519,7 +543,7 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                             <Link
                                 href="/suche"
                                 aria-label="Suche öffnen"
-                                className="flex md:hidden h-11 w-11 items-center justify-center rounded-full bg-slate-100/80 text-slate-700 hover:bg-brand-50 hover:text-brand-800 transition"
+                                className="flex md:hidden h-11 w-11 items-center justify-center rounded-full bg-white/15 text-white ring-1 ring-white/25 hover:bg-white/25 transition"
                             >
                                 <SearchIcon className="h-5 w-5" />
                             </Link>
@@ -527,10 +551,10 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                             <a
                                 href="/admin"
                                 rel="nofollow"
-                                className="hidden lg:inline-flex min-h-10.5 shrink-0 items-center gap-2 rounded-full bg-brand-600 px-4 py-2 text-sm font-bold text-white shadow-xs transition-all hover:bg-brand-700 hover:shadow-sm"
+                                className="hidden lg:inline-flex h-10 shrink-0 items-center gap-2 rounded-full bg-white/16 px-4 py-2 text-xs xl:text-sm font-bold text-white ring-1 ring-white/30 backdrop-blur-xs transition-all hover:bg-white hover:text-brand-800 hover:shadow-sm"
                             >
                                 <svg
-                                    className="h-4 w-4 shrink-0 text-brand-100"
+                                    className="h-4 w-4 shrink-0"
                                     fill="none"
                                     viewBox="0 0 24 24"
                                     stroke="currentColor"
@@ -556,7 +580,7 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                                         ? "Hauptmenü schließen"
                                         : "Hauptmenü öffnen"
                                 }
-                                className="inline-flex lg:hidden min-h-11 items-center gap-2 rounded-full border border-brand-200 bg-brand-50 px-3.5 py-2 text-sm font-bold text-brand-800 active:bg-brand-100 cursor-pointer"
+                                className="inline-flex lg:hidden min-h-11 items-center gap-2 rounded-full border border-white/30 bg-white/15 px-3.5 py-2 text-sm font-bold text-white active:bg-white/25 cursor-pointer"
                             >
                                 <span>{mobileOpen ? "Schließen" : "Menü"}</span>
                                 {mobileOpen ? (
@@ -595,24 +619,22 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                     </div>
                 </div>
 
-                {/* Moderne türkise Navigationsleiste mit Pill-Tabs im Original-Logo-Farbton (#029786) */}
+                {/* Nahtlos in denselben Logo-Türkis-Kopfbereich integrierte Hauptnavigation (gleiche Farbe, feine Trennlinie) */}
                 <nav
                     aria-label="Hauptnavigation"
-                    className="bg-gradient-to-r from-brand-700 via-brand-600 to-brand-700 text-white border-t border-white/10"
+                    className="border-t border-white/15"
                 >
                     <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
-                        <ul className="hidden lg:flex items-center justify-between gap-1 py-2 text-[14px] xl:text-[14.5px] font-semibold tracking-wide">
+                        <ul className="hidden lg:flex items-center justify-between gap-1 py-1.5 text-[14px] xl:text-[14.5px] tracking-wide">
                             <li>
                                 <Link
                                     href="/"
                                     aria-current={
                                         isActive("/") ? "page" : undefined
                                     }
-                                    className={`block rounded-full px-3.5 py-2 transition-all duration-150 ${
-                                        isActive("/")
-                                            ? "bg-white text-brand-800 font-bold shadow-sm"
-                                            : "text-white/95 hover:bg-white/15 hover:text-white"
-                                    }`}
+                                    className={getDesktopNavTabClass(
+                                        isActive("/"),
+                                    )}
                                 >
                                     Startseite
                                 </Link>
@@ -625,11 +647,9 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                                             ? "page"
                                             : undefined
                                     }
-                                    className={`block rounded-full px-3.5 py-2 transition-all duration-150 ${
-                                        isActive("/aktuelles")
-                                            ? "bg-white text-brand-800 font-bold shadow-sm"
-                                            : "text-white/95 hover:bg-white/15 hover:text-white"
-                                    }`}
+                                    className={getDesktopNavTabClass(
+                                        isActive("/aktuelles"),
+                                    )}
                                 >
                                     Aktuelles
                                 </Link>
@@ -677,11 +697,9 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                                             ? "page"
                                             : undefined
                                     }
-                                    className={`block rounded-full px-3.5 py-2 transition-all duration-150 ${
-                                        isActive("/termine")
-                                            ? "bg-white text-brand-800 font-bold shadow-sm"
-                                            : "text-white/95 hover:bg-white/15 hover:text-white"
-                                    }`}
+                                    className={getDesktopNavTabClass(
+                                        isActive("/termine"),
+                                    )}
                                 >
                                     Termine
                                 </Link>
@@ -694,11 +712,9 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                                             ? "page"
                                             : undefined
                                     }
-                                    className={`block rounded-full px-3.5 py-2 transition-all duration-150 ${
-                                        isActive("/galerie")
-                                            ? "bg-white text-brand-800 font-bold shadow-sm"
-                                            : "text-white/95 hover:bg-white/15 hover:text-white"
-                                    }`}
+                                    className={getDesktopNavTabClass(
+                                        isActive("/galerie"),
+                                    )}
                                 >
                                     Fotogalerie
                                 </Link>
@@ -711,11 +727,9 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                                             ? "page"
                                             : undefined
                                     }
-                                    className={`block rounded-full px-3.5 py-2 transition-all duration-150 ${
-                                        isActive("/downloads")
-                                            ? "bg-white text-brand-800 font-bold shadow-sm"
-                                            : "text-white/95 hover:bg-white/15 hover:text-white"
-                                    }`}
+                                    className={getDesktopNavTabClass(
+                                        isActive("/downloads"),
+                                    )}
                                 >
                                     Downloads
                                 </Link>
@@ -728,11 +742,9 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                                             ? "page"
                                             : undefined
                                     }
-                                    className={`block rounded-full px-3.5 py-2 transition-all duration-150 ${
-                                        isActive("/kontakt")
-                                            ? "bg-white text-brand-800 font-bold shadow-sm"
-                                            : "text-white/95 hover:bg-white/15 hover:text-white"
-                                    }`}
+                                    className={getDesktopNavTabClass(
+                                        isActive("/kontakt"),
+                                    )}
                                 >
                                     Kontakt
                                 </Link>
@@ -743,7 +755,7 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                         {mobileOpen && (
                             <div
                                 id="mobile-navigation-panel"
-                                className="lg:hidden max-h-[calc(100dvh-4.25rem)] overflow-y-auto overscroll-contain py-3 space-y-1.5 text-sm font-semibold"
+                                className="lg:hidden max-h-[calc(100dvh-4.25rem)] overflow-y-auto overscroll-contain py-3 space-y-1.5 text-sm font-semibold text-white"
                             >
                                 <div className="flex items-center justify-between rounded-xl bg-white/10 px-3 py-2 mb-2">
                                     <span className="text-xs font-bold text-brand-100">
@@ -786,7 +798,7 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                                     }
                                     className={`flex min-h-11 items-center rounded-xl px-3.5 py-2.5 ${
                                         isActive("/")
-                                            ? "bg-white/20 font-extrabold"
+                                            ? "bg-white text-brand-800 font-extrabold"
                                             : "hover:bg-white/15"
                                     }`}
                                 >
@@ -801,7 +813,7 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                                     }
                                     className={`flex min-h-11 items-center rounded-xl px-3.5 py-2.5 ${
                                         isActive("/aktuelles")
-                                            ? "bg-white/20 font-extrabold"
+                                            ? "bg-white text-brand-800 font-extrabold"
                                             : "hover:bg-white/15"
                                     }`}
                                 >
@@ -809,7 +821,7 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                                 </Link>
 
                                 {navigationPages.unsereSchule.length > 0 && (
-                                    <div className="rounded-xl bg-white/8 p-1">
+                                    <div className="rounded-xl bg-white/10 p-1">
                                         <button
                                             type="button"
                                             onClick={() =>
@@ -875,7 +887,7 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                                 )}
 
                                 {konzepteLinks.length > 0 && (
-                                    <div className="rounded-xl bg-white/8 p-1">
+                                    <div className="rounded-xl bg-white/10 p-1">
                                         <button
                                             type="button"
                                             onClick={() =>
@@ -938,7 +950,7 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                                 )}
 
                                 {angeboteLinks.length > 0 && (
-                                    <div className="rounded-xl bg-white/8 p-1">
+                                    <div className="rounded-xl bg-white/10 p-1">
                                         <button
                                             type="button"
                                             onClick={() =>
@@ -1005,7 +1017,7 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                                     }
                                     className={`flex min-h-11 items-center rounded-xl px-3.5 py-2.5 ${
                                         isActive("/termine")
-                                            ? "bg-white/20 font-extrabold"
+                                            ? "bg-white text-brand-800 font-extrabold"
                                             : "hover:bg-white/15"
                                     }`}
                                 >
@@ -1020,7 +1032,7 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                                     }
                                     className={`flex min-h-11 items-center rounded-xl px-3.5 py-2.5 ${
                                         isActive("/galerie")
-                                            ? "bg-white/20 font-extrabold"
+                                            ? "bg-white text-brand-800 font-extrabold"
                                             : "hover:bg-white/15"
                                     }`}
                                 >
@@ -1035,7 +1047,7 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                                     }
                                     className={`flex min-h-11 items-center rounded-xl px-3.5 py-2.5 ${
                                         isActive("/downloads")
-                                            ? "bg-white/20 font-extrabold"
+                                            ? "bg-white text-brand-800 font-extrabold"
                                             : "hover:bg-white/15"
                                     }`}
                                 >
@@ -1050,7 +1062,7 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                                     }
                                     className={`flex min-h-11 items-center rounded-xl px-3.5 py-2.5 ${
                                         isActive("/kontakt")
-                                            ? "bg-white/20 font-extrabold"
+                                            ? "bg-white text-brand-800 font-extrabold"
                                             : "hover:bg-white/15"
                                     }`}
                                 >

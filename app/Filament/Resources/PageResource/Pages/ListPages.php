@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\PageResource\Pages;
 
+use App\Filament\Concerns\HasSupportCallListHeader;
 use App\Filament\Resources\PageResource;
 use App\Models\Page;
-use Filament\Actions\Action;
-use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListPages extends ListRecords
 {
+    use HasSupportCallListHeader;
+
     protected static string $resource = PageResource::class;
 
     /**
@@ -22,17 +23,5 @@ class ListPages extends ListRecords
         $count = Page::query()->count();
 
         return "Insgesamt {$count} ".($count === 1 ? 'redaktionelle Schulseite' : 'redaktionelle Schulseiten');
-    }
-
-    /**
-     * Kopfzeilen-Aktionen.
-     *
-     * @return array<Action>
-     */
-    protected function getHeaderActions(): array
-    {
-        return [
-            CreateAction::make(),
-        ];
     }
 }

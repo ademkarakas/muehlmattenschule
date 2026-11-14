@@ -4,46 +4,58 @@ declare(strict_types=1);
 
 namespace App\Filament\Concerns;
 
-use Filament\Actions\Action;
 use Filament\Support\Enums\Alignment;
-use Filament\Support\Icons\Heroicon;
+use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\HtmlString;
 
 /**
- * Einheitliches Layout für Hinzufügen- und Bearbeiten-Seiten im Admin-Panel:
- * - Kopfzeilen-Aktion „← Zurück“ zur Listenansicht (analog zu SupportCallSystem.Frontend)
- * - Zentrierte, am unteren Bildschirmrand haftende Formular-Aktionen (Speichern, Abbrechen, Löschen)
+ * Einheitliches Layout für Hinzufügen- und Bearbeiten-Seiten:
+ * - Sticky .top-bar oben: Links [← Zurück] | Mitte [Titel + Untertitel]
+ * - Formular-Aktionen (Speichern, Abbrechen, Löschen) zentriert unter dem Formular
  */
 trait HasCenteredStickyFormActions
 {
     /**
-     * Erstellt die „← Zurück“-Schaltfläche zur Übersichtsliste der jeweiligen Ressource.
+     * Keine Breadcrumbs über der .top-bar.
+     *
+     * @return array<string, string>
      */
-    protected function getBackToListHeaderAction(): Action
+    public function getBreadcrumbs(): array
+    {
+        return [];
+    }
+
+    /**
+     * Rendert die linke und mittlere Zone der .top-bar ([← Zurück] + [Titel & Untertitel]).
+     */
+    public function getHeading(): string|Htmlable
     {
         /** @var class-string<\Filament\Resources\Resource> $resource */
         $resource = static::getResource();
 
-        return Action::make('backToList')
-            ->label('Zurück')
-            ->icon(Heroicon::OutlinedArrowLeft)
-            ->color('gray')
-            ->url($resource::getUrl('index'));
+        $backUrl = e($resource::getUrl('index'));
+        $title = e($this->getTitle());
+        $subheading = $this->getSubheading();
+        $subtitleHtml = filled($subheading)
+            ? '<span class="scs-top-bar-subtitle">'.e((string) $subheading).'</span>'
+            : '';
+
+        return new HtmlString(
+            '<span class="scs-top-bar-lead">'
+            .'<a href="'.$backUrl.'" class="scs-back-btn">'
+            .'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="scs-back-icon" aria-hidden="true"><path fill-rule="evenodd" d="M17 10a.75.75 0 0 1-.75.75H5.612l4.158 3.96a.75.75 0 1 1-1.04 1.08l-5.5-5.25a.75.75 0 0 1 0-1.08l5.5-5.25a.75.75 0 1 1 1.04 1.08L5.612 9.25H16.25A.75.75 0 0 1 17 10Z" clip-rule="evenodd" /></svg>'
+            .'<span>Zurück</span>'
+            .'</a>'
+            .'<span class="scs-top-bar-titles">'
+            .'<span class="scs-top-bar-title">'.$title.'</span>'
+            .$subtitleHtml
+            .'</span>'
+            .'</span>'
+        );
     }
 
     /**
-     * Standard-Kopfzeilen-Aktionen für Create- und Edit-Seiten.
-     *
-     * @return array<Action>
-     */
-    protected function getHeaderActions(): array
-    {
-        return [
-            $this->getBackToListHeaderAction(),
-        ];
-    }
-
-    /**
-     * Zentriert die Aktionsleiste.
+     * Zentriert die Aktionsleiste unter dem Formular.
      */
     public function getFormActionsAlignment(): string|Alignment
     {
@@ -51,10 +63,10 @@ trait HasCenteredStickyFormActions
     }
 
     /**
-     * Die Aktionsleiste bleibt beim Scrollen sichtbar.
+     * Aktionsleiste bleibt am Formularende statt schwebend am unteren Rand zu kleben.
      */
     public function areFormActionsSticky(): bool
     {
-        return true;
+        return false;
     }
 }

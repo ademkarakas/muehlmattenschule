@@ -7,15 +7,12 @@ namespace App\Filament\Resources\AlbumResource\Pages;
 use App\Filament\Concerns\HasCenteredStickyFormActions;
 use App\Filament\Resources\AlbumResource;
 use Filament\Resources\Pages\CreateRecord;
-use Filament\Support\Enums\Width;
 
 class CreateAlbum extends CreateRecord
 {
     use HasCenteredStickyFormActions;
 
     protected static string $resource = AlbumResource::class;
-
-    protected Width|string|null $maxContentWidth = Width::FiveExtraLarge;
 
     /**
      * Seitentitel des Formulars.

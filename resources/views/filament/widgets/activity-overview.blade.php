@@ -1,81 +1,72 @@
 <x-filament-widgets::widget>
-    <style>
-        .mms-feed { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.5rem; }
-        .mms-feed-item {
-            display: flex; align-items: center; gap: 1rem;
-            padding: 0.85rem 1.05rem; border: 1px solid var(--mms-line, #e2e8f0); border-radius: 0.75rem;
-            background: var(--mms-surface, #fff); text-decoration: none; color: inherit;
-            transition: border-color .15s, background-color .15s, box-shadow .15s, transform .15s;
-        }
-        a.mms-feed-item:hover {
-            border-color: var(--mms-primary-100, #c5ebe6);
-            background: var(--mms-row-hover, #f0fdfa);
-            box-shadow: 0 4px 14px rgba(2, 151, 134, .1);
-            transform: translateY(-1px);
-        }
-        .mms-feed-icon {
-            flex-shrink: 0; width: 2.35rem; height: 2.35rem; border-radius: 10px;
-            display: grid; place-items: center;
-            background: var(--mms-primary-50, #e6f6f4);
-            color: var(--mms-primary, #029786);
-            box-shadow: inset 0 0 0 1px var(--mms-primary-100, #c5ebe6);
-        }
-        .mms-feed-icon.is-draft { background: #f1f5f9; color: #64748b; box-shadow: none; }
-        .mms-feed-icon svg { width: 1.2rem; height: 1.2rem; }
-        .mms-feed-body { min-width: 0; flex: 1; }
-        .mms-feed-title { display: block; font-size: 0.925rem; font-weight: 600; color: var(--mms-ink, #0f172a); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .mms-feed-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-top: 0.15rem; font-size: 0.775rem; color: var(--mms-subtle, #64748b); }
-        .mms-feed-chip { padding: 0.05rem 0.55rem; border-radius: 999px; background: #f1f5f9; color: #475569; font-weight: 500; }
-        .mms-feed-chevron { flex-shrink: 0; width: 1.1rem; height: 1.1rem; color: #cbd5e1; }
-        a.mms-feed-item:hover .mms-feed-chevron { color: var(--mms-primary, #029786); }
-        .mms-feed-all { font-size: 0.85rem; font-weight: 600; color: var(--mms-primary, #029786); text-decoration: none; }
-        .mms-feed-all:hover { text-decoration: underline; }
-        .dark .mms-feed-item { background: rgba(255, 255, 255, .03); border-color: rgba(255, 255, 255, .08); }
-        .dark .mms-feed-title { color: #f8fafc; }
-        .dark .mms-feed-chip { background: rgba(255, 255, 255, .08); color: #cbd5e1; }
-        .dark .mms-feed-icon { background: rgba(54, 196, 178, .15); color: #36c4b2; }
-    </style>
+    <div class="scs-activity-card">
+        <div class="scs-activity-header">
+            <h3>Neueste Aktivitäten</h3>
+            <a href="{{ $postsUrl }}" class="scs-btn-link">
+                <span>Alle Beiträge</span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M3 10a.75.75 0 0 1 .75-.75h10.638L10.23 5.29a.75.75 0 1 1 1.04-1.08l5.5 5.25a.75.75 0 0 1 0 1.08l-5.5 5.25a.75.75 0 1 1-1.04-1.08l4.158-3.96H3.75A.75.75 0 0 1 3 10Z" clip-rule="evenodd" />
+                </svg>
+            </a>
+        </div>
 
-    <x-filament::section heading="Neueste Beiträge" icon="heroicon-o-newspaper">
-        <x-slot name="afterHeader">
-            <a href="{{ $postsUrl }}" class="mms-feed-all">Alle Beiträge →</a>
-        </x-slot>
-
-        <ul class="mms-feed">
-            @forelse ($posts as $post)
-                <li>
-                    @if ($post['url'])
-                        <a href="{{ $post['url'] }}" class="mms-feed-item">
-                    @else
-                        <div class="mms-feed-item">
-                    @endif
-                        <span class="mms-feed-icon {{ $post['published'] ? '' : 'is-draft' }}">
-                            <x-filament::icon icon="heroicon-o-newspaper" />
-                        </span>
-                        <span class="mms-feed-body">
-                            <span class="mms-feed-title">{{ $post['title'] }}</span>
-                            <span class="mms-feed-meta">
-                                @if ($post['date'])
-                                    <span>{{ $post['date'] }}</span>
+        @if (count($posts) > 0)
+            <div class="scs-table-container">
+                <table class="scs-data-table">
+                    <thead>
+                        <tr>
+                            <th>Datum</th>
+                            <th>Titel</th>
+                            <th>Verfasser</th>
+                            <th>Rubrik / Klasse</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($posts as $post)
+                            <tr
+                                @if ($post['url'])
+                                    class="is-clickable"
+                                    onclick="window.location.href='{{ $post['url'] }}'"
                                 @endif
-                                <span class="mms-feed-chip">{{ $post['class'] }}</span>
-                            </span>
-                        </span>
-                        <x-filament::badge :color="$post['published'] ? 'success' : 'gray'">
-                            {{ $post['published'] ? 'Veröffentlicht' : 'Entwurf' }}
-                        </x-filament::badge>
-                        @if ($post['url'])
-                            <x-filament::icon icon="heroicon-m-chevron-right" class="mms-feed-chevron" />
-                        @endif
-                    @if ($post['url'])
-                        </a>
-                    @else
-                        </div>
-                    @endif
-                </li>
-            @empty
-                <li style="padding:1rem;color:#64748b;font-size:0.9rem;">Noch keine Beiträge.</li>
-            @endforelse
-        </ul>
-    </x-filament::section>
+                            >
+                                <td class="scs-cell-date">{{ $post['date'] ?? '—' }}</td>
+                                <td class="scs-cell-main">
+                                    @if ($post['url'])
+                                        <a href="{{ $post['url'] }}" class="scs-row-link">
+                                            {{ $post['title'] }}
+                                        </a>
+                                    @else
+                                        {{ $post['title'] }}
+                                    @endif
+                                </td>
+                                <td>
+                                    <span class="scs-customer-cell">
+                                        <span class="scs-name-avatar {{ $post['avatarTone'] }}">
+                                            {{ $post['initials'] }}
+                                        </span>
+                                        <span>{{ $post['author'] }}</span>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="scs-badge scs-badge-muted">{{ $post['class'] }}</span>
+                                </td>
+                                <td>
+                                    @if ($post['published'])
+                                        <span class="scs-badge scs-badge-success">Veröffentlicht</span>
+                                    @else
+                                        <span class="scs-badge scs-badge-muted">Entwurf</span>
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @else
+            <div class="scs-empty-state">
+                <p>Keine aktuellen Aktivitäten vorhanden.</p>
+            </div>
+        @endif
+    </div>
 </x-filament-widgets::widget>

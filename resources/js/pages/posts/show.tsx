@@ -1,3 +1,4 @@
+import { BackButton } from '@/components/back-button';
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { PhotoLightbox, type LightboxImageItem } from '@/components/photo-lightbox';
 import { Reveal } from '@/components/reveal';
@@ -52,12 +53,7 @@ export default function PostShowPage({ post }: PostShowProps): ReactElement {
             <article className="mx-auto max-w-6xl px-4 sm:px-6 py-7 sm:py-10">
                 <Breadcrumbs />
 
-                <Link
-                    href="/aktuelles"
-                    className="inline-flex min-h-10 items-center py-1 text-sm font-semibold text-brand-700 hover:text-brand-900"
-                >
-                    ← Zurück zur Übersicht
-                </Link>
+                <BackButton href="/aktuelles" label="Zurück zur Übersicht" />
 
                 <header className="mt-3 sm:mt-4">
                     <div className="flex flex-wrap items-center gap-2 text-xs font-semibold">

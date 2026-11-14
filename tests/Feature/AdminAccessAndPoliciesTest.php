@@ -191,12 +191,18 @@ class AdminAccessAndPoliciesTest extends TestCase
             ->assertOk()
             ->assertSee('Neuer Beitrag')
             ->assertSee('Beitragsinhalt')
-            ->assertSee('Zurück');
+            ->assertSee('scs-back-btn', false)
+            ->assertDontSee('resetForm')
+            ->assertDontSee('saveForm')
+            ->assertSee('Abbrechen');
         $this->actingAs($schulleitung)->get("/admin/posts/{$post->id}/edit")
             ->assertOk()
             ->assertSee('Projektwoche im Frühling')
             ->assertSee('Auf Website ansehen')
-            ->assertSee('Zurück');
+            ->assertSee('scs-back-btn', false)
+            ->assertDontSee('resetForm')
+            ->assertDontSee('saveForm')
+            ->assertSee('Speichern');
 
         $this->actingAs($schulleitung)->get('/admin/albums/create')
             ->assertOk()
@@ -252,12 +258,36 @@ class AdminAccessAndPoliciesTest extends TestCase
         $response = $this->actingAs($schulleitung)->get('/admin');
 
         $response->assertOk();
-        $response->assertSee('Übersicht & Schnellzugriff');
+        $response->assertSee('Willkommen,');
+        $response->assertDontSee('Neuer Beitrag');
+        $response->assertDontSee('refreshDashboard', false);
+        $response->assertSee('scs-stat-card-1', false);
+        $response->assertSee('scs-stat-card-2', false);
+        $response->assertSee('scs-stat-card-3', false);
+        $response->assertSee('scs-stat-card-4', false);
         $response->assertSee('mms-topbar-user-pill', false);
         $response->assertSee('Diana Blum');
         $response->assertSee('Schulleitung');
         $response->assertSee('Zur Website');
         $response->assertSee('data:image/svg+xml;utf8,', false);
         $response->assertDontSee('ui-avatars.com', false);
+    }
+
+    /**
+     * Prüft, dass Bearbeitungsseiten den eigenen Mini-Bestätigungsdialog für ungespeicherte Änderungen
+     * inkl. fehlertoleranter Änderungsverfolgung einbinden.
+     */
+    public function test_admin_edit_page_renders_custom_unsaved_changes_mini_dialog(): void
+    {
+        $schulleitung = User::factory()->schulleitung()->create();
+        $post = Post::factory()->create(['author_id' => $schulleitung->id]);
+
+        $response = $this->actingAs($schulleitung)->get('/admin/posts/'.$post->id.'/edit');
+
+        $response->assertOk();
+        $response->assertSee('mms-unsaved-dialog', false);
+        $response->assertSee('Ungespeicherte Änderungen');
+        $response->assertSee('Seite verlassen');
+        $response->assertSee('setUpFilamentUnsavedDataChangesAlert', false);
     }
 }

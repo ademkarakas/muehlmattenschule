@@ -36,7 +36,7 @@ export default function ContactPage(): ReactElement {
 
                 {/* Hero Header */}
                 <header className="relative overflow-hidden rounded-3xl border border-slate-200/90 bg-gradient-to-br from-white via-slate-50/60 to-brand-50/40 p-6 sm:p-9 shadow-xs">
-                    <div className="relative z-10 max-w-3xl">
+                    <div className="relative z-10">
                         <div className="inline-flex items-center gap-2 rounded-full border border-brand-200/70 bg-brand-50/80 px-3 py-1 text-xs font-semibold text-brand-700">
                             <svg
                                 className="h-3.5 w-3.5"

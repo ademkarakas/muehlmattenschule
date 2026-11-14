@@ -50,24 +50,28 @@ class SchoolOverviewStatsWidget extends StatsOverviewWidget
                 ->description($postDescription)
                 ->descriptionIcon(Heroicon::OutlinedNewspaper)
                 ->color('primary')
+                ->extraAttributes(['class' => 'scs-stat-card-1'])
                 ->url(PostResource::getUrl('index')),
 
             Stat::make('Anstehende Termine', (string) $upcomingEvents)
                 ->description('Im öffentlichen Schulkalender')
                 ->descriptionIcon(Heroicon::OutlinedCalendarDays)
                 ->color('warning')
+                ->extraAttributes(['class' => 'scs-stat-card-2'])
                 ->url(EventResource::getUrl('index')),
 
             Stat::make('Freigegebene Fotoalben', (string) $publishedAlbums)
                 ->description('Mit bestätigter DSGVO-Freigabe')
                 ->descriptionIcon(Heroicon::OutlinedPhoto)
                 ->color('success')
+                ->extraAttributes(['class' => 'scs-stat-card-3'])
                 ->url(AlbumResource::getUrl('index')),
 
             Stat::make('Kollegium & Dokumente', "{$activePeople} / {$publishedDownloads}")
                 ->description("{$activePeople} Teammitglieder · {$publishedDownloads} PDF-Downloads")
                 ->descriptionIcon(Heroicon::OutlinedUserGroup)
                 ->color('info')
+                ->extraAttributes(['class' => 'scs-stat-card-4'])
                 ->url(PersonResource::getUrl('index')),
         ];
     }

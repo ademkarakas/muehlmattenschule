@@ -31,18 +31,35 @@ class ActivityOverviewWidget extends Widget
     {
         $user = auth()->user();
 
+        $tones = ['avatar-tone-1', 'avatar-tone-2', 'avatar-tone-3', 'avatar-tone-4'];
+
         $posts = Post::query()
-            ->select(['id', 'title', 'class_name', 'status', 'published_at'])
+            ->with('author:id,name')
+            ->select(['id', 'title', 'author_id', 'class_name', 'status', 'published_at', 'updated_at'])
             ->latest('published_at')
-            ->limit(5)
+            ->limit(6)
             ->get()
-            ->map(fn (Post $post): array => [
-                'title' => $post->title,
-                'date' => $post->published_at?->format('d.m.Y'),
-                'class' => $post->class_name ?: 'Schule',
-                'published' => $post->status === PublishStatus::Published,
-                'url' => $user?->can('update', $post) ? PostResource::getUrl('edit', ['record' => $post]) : null,
-            ])
+            ->map(function (Post $post, int $index) use ($user, $tones): array {
+                $authorName = $post->author?->name ?? 'Redaktion';
+                $cleanAuthor = trim((string) preg_replace('/\s*\([^)]*\)\s*/u', ' ', $authorName));
+                $initials = str($cleanAuthor !== '' ? $cleanAuthor : 'MM')
+                    ->explode(' ')
+                    ->filter(fn (string $part): bool => filled($part))
+                    ->map(fn (string $part): string => mb_strtoupper(mb_substr($part, 0, 1)))
+                    ->take(2)
+                    ->join('') ?: 'MM';
+
+                return [
+                    'title' => $post->title,
+                    'date' => ($post->published_at ?? $post->updated_at)?->format('d.m.Y, H:i'),
+                    'author' => $cleanAuthor ?: 'Redaktion',
+                    'initials' => $initials,
+                    'avatarTone' => $tones[$index % count($tones)],
+                    'class' => $post->class_name ?: 'Gesamte Schule',
+                    'published' => $post->status === PublishStatus::Published,
+                    'url' => $user?->can('update', $post) ? PostResource::getUrl('edit', ['record' => $post]) : null,
+                ];
+            })
             ->all();
 
         return [
