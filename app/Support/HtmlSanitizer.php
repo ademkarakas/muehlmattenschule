@@ -69,7 +69,56 @@ class HtmlSanitizer
     }
 
     /**
-     * Prüft und bereinigt eine URL gegen gefährliche Schemata (z. B. javascript:, data:, vbscript:).
+     * Bekannte Pfad-Zuordnungen der alten WordPress-Website (s545272237.online.de / muehlmattenschule.de)
+     * auf die neuen internen Routen.
+     *
+     * @var array<string, string>
+     */
+    private const LEGACY_PATH_MAP = [
+        '' => '/',
+        '/' => '/',
+        '/unsere-schule' => '/unsere-schule/schulportrait',
+        '/unsere-schule/schulportrait' => '/unsere-schule/schulportrait',
+        '/unsere-schule/schulleitung-und-verwaltung' => '/unsere-schule/schulleitung-und-verwaltung',
+        '/unsere-schule/kollegium' => '/unsere-schule/kollegium',
+        '/unsere-schule/unsere-klassen' => '/unsere-schule/unsere-klassen',
+        '/unsere-schule/elternbeirat' => '/unsere-schule/elternbeirat',
+        '/unsere-schule/elternbeirat/aufgaben-des-elternbeirats' => '/unsere-schule/aufgaben-des-elternbeirats',
+        '/unsere-schule/elternbeirat/aktivitaeten' => '/unsere-schule/aktivitaeten-des-elternbeirats',
+        '/unsere-schule/foerderverein' => '/unsere-schule/foerderverein',
+        '/unsere-schule/foerderverein/crosslauf' => '/unsere-schule/crosslauf',
+        '/unsere-schule/hochschulpartnerschule' => '/unsere-schule/hochschulpartnerschule',
+        '/schulsozialarbeit' => '/unsere-schule/schulsozialarbeit',
+        '/betreuung' => '/angebote/schulkindbetreuung',
+        '/arbeitsgemeinschaften' => '/angebote/arbeitsgemeinschaften',
+        '/angebote' => '/schulleben/betreuung-und-ags',
+        '/angebote/lesepatenschaften' => '/angebote/lesepatenschaften',
+        '/angebote/der-bibfit-lesekompass-fuer-die-1-und-2-grundschulklasse' => '/angebote/bibfit',
+        '/angebote/kooperationen' => '/angebote/kooperationen',
+        '/konzepte-projekte' => '/schulleben/konzepte-und-projekte',
+        '/konzepte-projekte/leitbild' => '/konzepte-projekte/leitbild',
+        '/konzepte-projekte/so-ist-es-bei-uns' => '/konzepte-projekte/so-ist-es-bei-uns',
+        '/konzepte-projekte/klassenrat' => '/konzepte-projekte/klassenrat',
+        '/konzepte-projekte/patenschaft-zimbabwe' => '/konzepte-projekte/patenschaft-simbabwe',
+        '/konzepte-projekte/patenschaft-simbabwe' => '/konzepte-projekte/patenschaft-simbabwe',
+        '/kontakt' => '/kontakt',
+        '/impressum' => '/impressum',
+        '/datenschutz' => '/datenschutz',
+        '/wp-content/uploads/2014/09/leitbild.jpg' => '/images/school/leitbild-schema.jpg',
+        '/wp-content/uploads/2014/10/bibfit_1.jpg' => '/images/school/bibfit-buecherei.jpg',
+        '/wp-content/uploads/2014/10/kinderinrosedale_mitc.jpg' => '/images/school/rosedale-kinder-afrika.jpg',
+        '/wp-content/uploads/2014/10/kindertrommelnfuerrosedale.png' => '/images/school/rosedale-trommeln.png',
+        '/wp-content/uploads/2014/10/cache_2414322075.jpg' => '/images/school/klassenrat-symbol.jpg',
+        '/wp-content/uploads/2014/09/unsere-schule_innen.jpg' => '/images/school/unsere-schule-innen.jpg',
+        '/wp-content/uploads/2014/09/unsere-schule_umgegend_mit_c.jpg' => '/images/school/unsere-schule-umgegend.jpg',
+        '/wp-content/uploads/2014/09/unsere-schule_gebaeude_mit_c.jpg' => '/images/school/gebaeude-full.jpg',
+        '/wp-content/uploads/2014/09/kapitel_angebote.jpg' => '/images/school/2014-09-Kapitel_Angebote.jpg',
+        '/wp-content/uploads/2014/09/kapitel_5.png' => '/images/school/2014-09-kapitel_5.png',
+    ];
+
+    /**
+     * Prüft und bereinigt eine URL gegen gefährliche Schemata (z. B. javascript:, data:, vbscript:)
+     * und wandelt alte Domain-Verweise (s545272237.online.de / muehlmattenschule.de) in interne Pfade um.
      */
     public static function sanitizeUrl(?string $url, bool $allowMailtoAndTel = false): ?string
     {
@@ -81,6 +130,8 @@ class HtmlSanitizer
         if ($trimmed === '') {
             return null;
         }
+
+        $trimmed = self::normalizeLegacyInternalUrl($trimmed);
 
         // Steuerzeichen und unsichtbare Whitespace-Tricks entfernen
         $normalized = preg_replace('/[\x00-\x20]+/', '', $trimmed) ?? '';
@@ -111,6 +162,45 @@ class HtmlSanitizer
         }
 
         return null;
+    }
+
+    /**
+     * Schreibt Links der alten WordPress-Domains (s545272237.online.de, muehlmattenschule.de, muehlmattenschule.0x6e.net)
+     * automatisch auf die neuen relativen Routen des Schulportals um.
+     */
+    public static function normalizeLegacyInternalUrl(string $url): string
+    {
+        $host = strtolower((string) parse_url($url, PHP_URL_HOST));
+        $legacyHosts = [
+            's545272237.online.de',
+            'www.s545272237.online.de',
+            'muehlmattenschule.de',
+            'www.muehlmattenschule.de',
+            'muehlmattenschule.0x6e.net',
+        ];
+
+        if (! in_array($host, $legacyHosts, true)) {
+            return $url;
+        }
+
+        $rawPath = (string) parse_url($url, PHP_URL_PATH);
+        $cleanPath = rtrim($rawPath, '/');
+        $lowerPath = strtolower($cleanPath);
+
+        if (isset(self::LEGACY_PATH_MAP[$lowerPath])) {
+            return self::LEGACY_PATH_MAP[$lowerPath];
+        }
+
+        if (str_starts_with($lowerPath, '/category/')) {
+            return '/aktuelles';
+        }
+
+        // Einzelne Beitrags-Slugs (z. B. /ferienplan-schuljahr-24-25/) -> /aktuelles/{slug}
+        if (preg_match('#^/([a-z0-9-]+)$#i', $cleanPath, $matches) === 1) {
+            return '/aktuelles/'.strtolower($matches[1]);
+        }
+
+        return '/';
     }
 
     /**

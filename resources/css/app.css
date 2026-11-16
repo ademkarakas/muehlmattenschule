@@ -116,7 +116,10 @@
     @apply font-semibold text-brand-700 underline underline-offset-2 hover:text-brand-900 break-words;
 }
 
-.prose-school img,
+.prose-school img {
+    @apply max-w-full h-auto rounded-xl my-4 cursor-zoom-in transition duration-200 hover:opacity-95;
+}
+
 .prose-school video,
 .prose-school iframe {
     @apply max-w-full h-auto rounded-xl my-4;
@@ -137,6 +140,37 @@
 
 .prose-school pre {
     @apply my-4 overflow-x-auto rounded-xl bg-slate-900 p-4 text-xs text-slate-100;
+}
+
+/*
+ * Moderner Karten-Kopfbereich (.mms-card-header) in den originalen Farben der Mühlmattenschule:
+ * Mehrschichtiger Mesh-Verlauf aus Logo-Türkis (brand-800 → brand-600 → brand-500 #029786),
+ * sanften Lichtakzenten in Hell-Türkis (brand-300) und Schul-Amber (accent #f59e0b)
+ * sowie dezentem geometrischem Ornament-Muster mit Radial-Maske.
+ */
+.mms-card-header {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background-color: var(--color-brand-600);
+    background-image:
+        radial-gradient(115% 150% at 92% -20%, rgba(112, 221, 205, 0.45) 0%, transparent 58%),
+        radial-gradient(95% 135% at 6% 125%, rgba(245, 158, 11, 0.22) 0%, transparent 52%),
+        linear-gradient(135deg, var(--color-brand-800) 0%, var(--color-brand-600) 48%, var(--color-brand-500) 100%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+.mms-card-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.11;
+    background-size: 64px 64px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72' viewBox='0 0 72 72' fill='none' stroke='white' stroke-width='1'%3E%3Cpath d='M36 14 58 36 36 58 14 36Z'/%3E%3Cpath d='M20.44 20.44H51.56V51.56H20.44Z'/%3E%3Cpath d='M0 28 8 36 0 44M72 28 64 36 72 44M28 0 36 8 44 0M28 72 36 64 44 72'/%3E%3C/svg%3E");
+    -webkit-mask-image: radial-gradient(130% 100% at 88% 0%, #000 0%, transparent 76%);
+    mask-image: radial-gradient(130% 100% at 88% 0%, #000 0%, transparent 76%);
 }
 
 /*

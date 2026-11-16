@@ -73,8 +73,8 @@ class AnnouncementResource extends Resource
                             ->default(AnnouncementLevel::Info->value)
                             ->required(),
                         Toggle::make('is_active')
-                            ->label('Auf der Startseite anzeigen (Aktiv)')
-                            ->helperText('Wenn aktiviert, wird diese Ankündigung prominent oben auf der Startseite eingeblendet.')
+                            ->label('Als Pop-up beim Website-Besuch anzeigen (Aktiv)')
+                            ->helperText('Wenn aktiviert, öffnet sich diese Ankündigung beim Betreten der Website als zentriertes Hinweisfenster (schließbar per × oder Esc).')
                             ->default(true),
                         TextInput::make('link_label')
                             ->label('Link-Beschriftung (optional)')
@@ -128,7 +128,7 @@ class AnnouncementResource extends Resource
             ->searchPlaceholder('Mitteilungstext suchen...')
             ->emptyStateIcon(Heroicon::OutlinedMegaphone)
             ->emptyStateHeading('Keine Ankündigungen gefunden')
-            ->emptyStateDescription('Erstellen Sie eine neue Ankündigung für das obere Hinweisbanner der Startseite.')
+            ->emptyStateDescription('Erstellen Sie eine neue Ankündigung, die Besuchern beim Öffnen der Website als zentriertes Hinweisfenster angezeigt wird.')
             ->recordActions([
                 EditAction::make()->iconButton(),
                 DeleteAction::make()->iconButton(),

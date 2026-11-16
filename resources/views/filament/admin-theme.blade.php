@@ -188,28 +188,29 @@
     }
 
     .fi-sidebar {
-        background: #e3f0ee !important;
-        border-right: 1px solid #c7deda !important;
-        box-shadow: none !important;
+        background: #ffffff !important;
+        border-right: 1px solid #e2e8f0 !important;
+        box-shadow: 1px 0 3px rgba(0, 0, 0, 0.02) !important;
     }
 
     .dark .fi-sidebar {
-        background: #0d2422 !important;
-        border-right-color: #163835 !important;
+        background: #111827 !important;
+        border-right-color: #1f2937 !important;
     }
 
     .fi-body-has-topbar .fi-sidebar-header {
-        background-color: #e3f0ee !important;
-        border-bottom: 1px solid #c7deda !important;
+        background-color: #ffffff !important;
+        border-bottom: 1px solid #e2e8f0 !important;
     }
 
     .dark .fi-body-has-topbar .fi-sidebar-header {
-        background-color: #0d2422 !important;
-        border-bottom-color: #163835 !important;
+        background-color: #111827 !important;
+        border-bottom-color: #1f2937 !important;
     }
 
     .fi-sidebar-header .mms-admin-brand-title {
-        color: #132a27 !important;
+        color: #0f172a !important;
+        font-weight: 700 !important;
     }
 
     .fi-sidebar-header .mms-admin-brand-subtitle {
@@ -217,103 +218,197 @@
     }
 
     .dark .fi-sidebar-header .mms-admin-brand-title {
-        color: #f0fdfa !important;
+        color: #f8fafc !important;
     }
 
     .dark .fi-sidebar-header .mms-admin-brand-subtitle {
-        color: #5eead4 !important;
+        color: #36c4b2 !important;
     }
 
     .fi-sidebar-nav {
-        padding: 0.9rem 0.75rem 1.25rem 0.75rem !important;
-        gap: 0.95rem !important;
+        padding: 1rem 0.75rem 1.25rem 0.75rem !important;
+        gap: 1rem !important;
         scrollbar-width: thin;
-        scrollbar-color: #b4d0cc transparent;
+        scrollbar-color: #cbd5e1 transparent;
     }
 
     .fi-sidebar-nav-groups {
-        gap: 0.95rem !important;
+        gap: 1rem !important;
         margin-inline: 0 !important;
     }
 
     .fi-sidebar-group-btn {
-        padding: 0.25rem 0.6rem !important;
+        padding: 0.3rem 0.65rem !important;
     }
 
     .fi-sidebar-group-label {
-        color: #5c7a76 !important;
+        color: #64748b !important;
         font-size: 0.68rem !important;
         font-weight: 700 !important;
         text-transform: uppercase !important;
-        letter-spacing: 0.07em !important;
+        letter-spacing: 0.08em !important;
     }
 
     .dark .fi-sidebar-group-label {
-        color: #6b9993 !important;
+        color: #94a3b8 !important;
     }
 
     .fi-sidebar-group-btn .fi-icon,
     .fi-sidebar-group-collapse-btn {
-        color: #5c7a76 !important;
+        color: #94a3b8 !important;
+        transition: color 0.15s ease, transform 0.15s ease !important;
+    }
+
+    .fi-sidebar-group-btn:hover .fi-sidebar-group-label,
+    .fi-sidebar-group-btn:hover .fi-icon {
+        color: #029786 !important;
+    }
+
+    .fi-sidebar-item {
+        position: relative;
     }
 
     .fi-sidebar-item-btn {
+        position: relative !important;
         border-radius: var(--radius-md) !important;
-        padding: 0.45rem 0.7rem !important;
-        transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease !important;
+        padding: 0.5rem 0.75rem !important;
+        transition: background-color 0.18s cubic-bezier(0.4, 0, 0.2, 1),
+                    color 0.18s cubic-bezier(0.4, 0, 0.2, 1),
+                    box-shadow 0.18s cubic-bezier(0.4, 0, 0.2, 1),
+                    transform 0.18s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
 
     .fi-sidebar-item-label {
-        color: #1e3a37 !important;
+        color: #334155 !important;
         font-size: 0.855rem !important;
         font-weight: 500 !important;
+        transition: color 0.15s ease !important;
     }
 
     .dark .fi-sidebar-item-label {
-        color: #ccfbf1 !important;
+        color: #cbd5e1 !important;
     }
 
     .fi-sidebar-item-btn > .fi-icon,
     .fi-sidebar-item-icon {
-        color: #4b6e6a !important;
-        width: 1.15rem !important;
-        height: 1.15rem !important;
+        color: #64748b;
+        width: 1.25rem !important;
+        height: 1.25rem !important;
+        flex-shrink: 0;
+        transition: color 0.18s ease, transform 0.18s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
 
-    .dark .fi-sidebar-item-btn > .fi-icon,
-    .dark .fi-sidebar-item-icon {
-        color: #80b8b0 !important;
+    /* Semantik Özel Renkli İkonlar (URL bazlı) */
+    /* Dashboard - Canlı Turkuaz */
+    .fi-sidebar-item-btn[href$="/admin"] > .fi-icon,
+    .fi-sidebar-item-btn[href$="/admin/"] > .fi-icon {
+        color: #029786 !important;
     }
 
+    /* Beiträge (Yazılar/Haberler) - Mavi/Indigo */
+    .fi-sidebar-item-btn[href*="/admin/posts"] > .fi-icon {
+        color: #2563eb !important;
+    }
+
+    /* Termine (Etkinlikler/Takvim) - Turuncu/Amber */
+    .fi-sidebar-item-btn[href*="/admin/events"] > .fi-icon {
+        color: #ea580c !important;
+    }
+
+    /* Fotoalben (Albümler/Galeri) - Mor/Fuşya */
+    .fi-sidebar-item-btn[href*="/admin/albums"] > .fi-icon {
+        color: #9333ea !important;
+    }
+
+    /* Ankündigungen (Duyurular) - Sıcak Kırmızı/Mercan */
+    .fi-sidebar-item-btn[href*="/admin/announcements"] > .fi-icon {
+        color: #e11d48 !important;
+    }
+
+    /* Seiten (Sayfalar) - Camgöbeği/Cyan */
+    .fi-sidebar-item-btn[href*="/admin/pages"] > .fi-icon {
+        color: #0891b2 !important;
+    }
+
+    /* Personen (Kişiler/Öğretmenler) - Zümrüt Yeşili */
+    .fi-sidebar-item-btn[href*="/admin/people"] > .fi-icon {
+        color: #059669 !important;
+    }
+
+    /* Downloads (İndirmeler/Belgeler) - Açık Mavi/Sky */
+    .fi-sidebar-item-btn[href*="/admin/downloads"] > .fi-icon {
+        color: #0284c7 !important;
+    }
+
+    /* Kategorien (Kategoriler) - Sarı/Kehribar */
+    .fi-sidebar-item-btn[href*="/admin/categories"] > .fi-icon {
+        color: #d97706 !important;
+    }
+
+    /* Benutzer (Kullanıcılar) - Çivit/Violet */
+    .fi-sidebar-item-btn[href*="/admin/users"] > .fi-icon {
+        color: #4f46e5 !important;
+    }
+
+    /* Schuleinstellungen (Okul Ayarları) - Slate/Petrol Mavisi */
+    .fi-sidebar-item-btn[href*="/admin/manage-school-settings"] > .fi-icon {
+        color: #0d9488 !important;
+    }
+
+    /* Karanlık Mod Renk Doygunluğu */
+    .dark .fi-sidebar-item-btn[href$="/admin"] > .fi-icon,
+    .dark .fi-sidebar-item-btn[href$="/admin/"] > .fi-icon { color: #2dd4bf !important; }
+    .dark .fi-sidebar-item-btn[href*="/admin/posts"] > .fi-icon { color: #60a5fa !important; }
+    .dark .fi-sidebar-item-btn[href*="/admin/events"] > .fi-icon { color: #fb923c !important; }
+    .dark .fi-sidebar-item-btn[href*="/admin/albums"] > .fi-icon { color: #c084fc !important; }
+    .dark .fi-sidebar-item-btn[href*="/admin/announcements"] > .fi-icon { color: #fb7185 !important; }
+    .dark .fi-sidebar-item-btn[href*="/admin/pages"] > .fi-icon { color: #22d3ee !important; }
+    .dark .fi-sidebar-item-btn[href*="/admin/people"] > .fi-icon { color: #34d399 !important; }
+    .dark .fi-sidebar-item-btn[href*="/admin/downloads"] > .fi-icon { color: #38bdf8 !important; }
+    .dark .fi-sidebar-item-btn[href*="/admin/categories"] > .fi-icon { color: #fbbf24 !important; }
+    .dark .fi-sidebar-item-btn[href*="/admin/users"] > .fi-icon { color: #818cf8 !important; }
+    .dark .fi-sidebar-item-btn[href*="/admin/manage-school-settings"] > .fi-icon { color: #2dd4bf !important; }
+
+    /* Hover State: Yumuşak ferah açık turkuaz/nane zemin, hafif büyüyen ikon, mikro sağa kayma (translate-x) */
     .fi-sidebar-item.fi-sidebar-item-has-url > .fi-sidebar-item-btn:hover {
-        background-color: rgba(2, 151, 134, 0.09) !important;
+        background-color: #f1f9f8 !important;
+        transform: translateX(2px) !important;
     }
 
     .dark .fi-sidebar-item.fi-sidebar-item-has-url > .fi-sidebar-item-btn:hover {
-        background-color: rgba(45, 212, 191, 0.09) !important;
+        background-color: rgba(54, 196, 178, 0.12) !important;
+        transform: translateX(2px) !important;
     }
 
     .fi-sidebar-item.fi-sidebar-item-has-url > .fi-sidebar-item-btn:hover .fi-sidebar-item-label {
-        color: #0d2422 !important;
+        color: #0f172a !important;
+        font-weight: 600 !important;
     }
 
     .dark .fi-sidebar-item.fi-sidebar-item-has-url > .fi-sidebar-item-btn:hover .fi-sidebar-item-label {
         color: #ffffff !important;
     }
 
+    .fi-sidebar-item.fi-sidebar-item-has-url > .fi-sidebar-item-btn:hover > .fi-icon,
+    .fi-sidebar-item.fi-sidebar-item-has-url > .fi-sidebar-item-btn:hover .fi-sidebar-item-icon {
+        transform: scale(1.12) !important;
+    }
+
+    /* Active State: Hafif turkuaz dolgu zemin + sol kenarda 3.5px dikey vurgu çizgisi */
     .fi-sidebar-item.fi-active > .fi-sidebar-item-btn {
-        background: #ffffff !important;
-        box-shadow: 0 1px 3px rgba(0, 77, 67, 0.09) !important;
+        background: #e6f6f4 !important;
+        box-shadow: inset 3.5px 0 0 0 #029786 !important;
+        transform: none !important;
     }
 
     .dark .fi-sidebar-item.fi-active > .fi-sidebar-item-btn {
         background: rgba(2, 151, 134, 0.22) !important;
-        box-shadow: none !important;
+        box-shadow: inset 3.5px 0 0 0 #36c4b2 !important;
     }
 
     .fi-sidebar-item.fi-active > .fi-sidebar-item-btn .fi-sidebar-item-label {
-        color: #00695c !important;
-        font-weight: 600 !important;
+        color: #004d43 !important;
+        font-weight: 700 !important;
     }
 
     .dark .fi-sidebar-item.fi-active > .fi-sidebar-item-btn .fi-sidebar-item-label {
@@ -322,12 +417,7 @@
 
     .fi-sidebar-item.fi-active > .fi-sidebar-item-btn > .fi-icon,
     .fi-sidebar-item.fi-active > .fi-sidebar-item-btn .fi-sidebar-item-icon {
-        color: #029786 !important;
-    }
-
-    .dark .fi-sidebar-item.fi-active > .fi-sidebar-item-btn > .fi-icon,
-    .dark .fi-sidebar-item.fi-active > .fi-sidebar-item-btn .fi-sidebar-item-icon {
-        color: #5eead4 !important;
+        transform: none !important;
     }
 
     .fi-sidebar-item-badge-ctn {
@@ -338,26 +428,46 @@
     .mms-topbar-site-link {
         display: inline-flex;
         align-items: center;
-        gap: 0.4rem;
-        padding: 0.4rem 0.65rem;
+        gap: 0.45rem;
+        padding: 0.38rem 0.75rem;
         border-radius: var(--radius-md);
-        font-size: 0.82rem;
-        font-weight: 500;
-        color: var(--color-text-secondary);
-        background-color: transparent;
-        border: 1px solid transparent;
+        font-size: 0.815rem;
+        font-weight: 600;
+        color: #029786;
+        background-color: #e6f6f4;
+        border: 1px solid rgba(2, 151, 134, 0.22);
         text-decoration: none;
-        transition: background-color 0.15s ease, color 0.15s ease;
+        transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
         white-space: nowrap;
+        box-shadow: 0 1px 2px rgba(2, 151, 134, 0.06);
     }
 
     .mms-topbar-site-link:hover {
-        background-color: #f1f5f9;
-        color: var(--color-brand);
+        background-color: #029786;
+        border-color: #029786;
+        color: #ffffff;
+        box-shadow: 0 2px 6px rgba(2, 151, 134, 0.28);
+        transform: translateY(-1px);
+    }
+
+    .mms-topbar-site-link svg {
+        transition: transform 0.18s ease;
+    }
+
+    .mms-topbar-site-link:hover svg {
+        transform: translate(1px, -1px);
+    }
+
+    .dark .mms-topbar-site-link {
+        color: #5eead4;
+        background-color: rgba(2, 151, 134, 0.16);
+        border-color: rgba(94, 234, 212, 0.25);
     }
 
     .dark .mms-topbar-site-link:hover {
-        background-color: rgba(255, 255, 255, 0.06);
+        background-color: #029786;
+        color: #ffffff;
+        border-color: #029786;
     }
 
     .mms-topbar-user-pill {
@@ -488,10 +598,11 @@
         margin-left: 2.5rem !important;
     }
 
-    /* Hinzufügen- & Bearbeiten-Seiten: Sticky .top-bar
+    /* Hinzufügen-, Bearbeiten- & Einstellungs-Seiten: Sticky .top-bar
        Links: [← Zurück] | Mitte: [Titel + Untertitel] */
     .fi-resource-create-record-page .fi-header,
-    .fi-resource-edit-record-page .fi-header {
+    .fi-resource-edit-record-page .fi-header,
+    .mms-settings-page .fi-header {
         position: sticky;
         top: 0;
         z-index: 10;
@@ -500,9 +611,10 @@
         padding-bottom: 0.5rem !important;
     }
 
-    /* Untertitel wird auf Create/Edit direkt in .scs-top-bar-titles gerendert */
+    /* Untertitel wird auf Create/Edit/Settings direkt in .scs-top-bar-titles gerendert */
     .fi-resource-create-record-page .fi-header-subheading,
-    .fi-resource-edit-record-page .fi-header-subheading {
+    .fi-resource-edit-record-page .fi-header-subheading,
+    .mms-settings-page .fi-header-subheading {
         display: none !important;
     }
 
@@ -1229,6 +1341,150 @@
         grid-template-rows: 1fr auto 1fr !important;
     }
 
+    /* ==========================================================================
+       11. REGISTER-TABS / EINSTELLUNGS-NAVIGATION (.fi-sc-tabs, .fi-tabs, .fi-tabs-item)
+           Segmented Bar / Pill Navigation Best-Practice für Schuleinstellungen
+       ========================================================================== */
+    .fi-sc-tabs {
+        gap: 1.25rem !important;
+    }
+
+    /* Tabs-Leiste als zusammenhängende, erhabene Navigationskarte */
+    .fi-sc-tabs > .fi-tabs,
+    .fi-tabs:not(.fi-contained),
+    .fi-tabs.fi-contained {
+        background-color: var(--color-card-bg) !important;
+        border: 1px solid var(--color-card-border) !important;
+        border-radius: var(--radius-xl) !important;
+        box-shadow: var(--shadow-sm) !important;
+        padding: 0.375rem !important;
+        display: flex !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        gap: 0.375rem !important;
+        overflow-x: auto !important;
+        align-items: center !important;
+        scrollbar-width: thin;
+        --tw-ring-shadow: 0 0 #0000 !important;
+    }
+
+    .fi-sc-tabs-tablist {
+        display: flex !important;
+        align-items: center !important;
+        gap: 0.375rem !important;
+        width: 100% !important;
+    }
+
+    /* Jeder Tab als eigenständiger, abgerundeter Navigations-Button */
+    .fi-tabs-item {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 0.5rem !important;
+        padding: 0.625rem 1.125rem !important;
+        border-radius: var(--radius-md) !important;
+        font-size: 0.875rem !important;
+        font-weight: 500 !important;
+        line-height: 1.4 !important;
+        white-space: nowrap !important;
+        color: var(--color-text-secondary) !important;
+        background-color: transparent !important;
+        border: 1px solid transparent !important;
+        transition: all 0.15s ease-in-out !important;
+        cursor: pointer !important;
+        flex: 1 1 0px !important;
+        min-width: fit-content !important;
+        text-decoration: none !important;
+        box-shadow: none !important;
+    }
+
+    .fi-tabs-item > .fi-icon {
+        width: 1.15rem !important;
+        height: 1.15rem !important;
+        color: var(--color-text-tertiary) !important;
+        transition: color 0.15s ease-in-out, transform 0.15s ease !important;
+        flex-shrink: 0 !important;
+    }
+
+    .fi-tabs-item .fi-tabs-item-label {
+        color: inherit !important;
+        font-weight: inherit !important;
+        font-size: 0.875rem !important;
+    }
+
+    /* Hover-Zustand für inaktive Tabs */
+    .fi-tabs-item:not(.fi-active):hover {
+        background-color: var(--color-table-header-bg) !important;
+        color: var(--color-text-primary) !important;
+        border-color: var(--color-card-border) !important;
+    }
+
+    .fi-tabs-item:not(.fi-active):hover > .fi-icon {
+        color: var(--color-brand) !important;
+        transform: translateY(-1px);
+    }
+
+    /* Aktiver Tab: Klar und leuchtend in Logo-Türkis (#029786) hervorgehoben */
+    .fi-tabs-item.fi-active {
+        background-color: var(--color-brand) !important;
+        color: #ffffff !important;
+        font-weight: 600 !important;
+        border-color: var(--color-brand) !important;
+        box-shadow: 0 2px 8px rgba(2, 151, 134, 0.28) !important;
+    }
+
+    .fi-tabs-item.fi-active > .fi-icon {
+        color: #ffffff !important;
+    }
+
+    .fi-tabs-item.fi-active .fi-tabs-item-label {
+        color: #ffffff !important;
+    }
+
+    .dark .fi-tabs-item.fi-active {
+        background-color: var(--color-brand) !important;
+        color: #0f172a !important;
+        border-color: var(--color-brand) !important;
+    }
+
+    .dark .fi-tabs-item.fi-active > .fi-icon,
+    .dark .fi-tabs-item.fi-active .fi-tabs-item-label {
+        color: #0f172a !important;
+    }
+
+    /* Badges innerhalb der Tabs (z. B. Wartungsmodus-Status, Element-Zähler) */
+    .fi-tabs-item .fi-badge {
+        margin-left: 0.35rem !important;
+        font-size: 0.72rem !important;
+        padding: 2px 8px !important;
+        border-radius: var(--radius-badge) !important;
+        font-weight: 600 !important;
+        transition: all 0.15s ease !important;
+    }
+
+    .fi-tabs-item:not(.fi-active) .fi-badge {
+        background-color: var(--color-status-neutral-bg) !important;
+        color: var(--color-status-neutral-text) !important;
+        border: 1px solid var(--color-card-border) !important;
+    }
+
+    .fi-tabs-item.fi-active .fi-badge {
+        background-color: rgba(255, 255, 255, 0.25) !important;
+        color: #ffffff !important;
+        border: 1px solid rgba(255, 255, 255, 0.35) !important;
+    }
+
+    .dark .fi-tabs-item.fi-active .fi-badge {
+        background-color: rgba(15, 23, 42, 0.25) !important;
+        color: #0f172a !important;
+        border: 1px solid rgba(15, 23, 42, 0.35) !important;
+    }
+
+    /* Aktiver Tab-Inhalt (.fi-sc-tabs-tab) ohne doppelte Card-Umrahmung */
+    .fi-sc-tabs-tab.fi-active {
+        margin-top: 1rem !important;
+    }
+
     /* Mobile Anpassungen (< 768px) wie in SupportCallSystem.Frontend */
     @media (max-width: 768px) {
         .fi-main .fi-header {
@@ -1257,6 +1513,20 @@
             flex: 1 1 0% !important;
             min-width: 0 !important;
             max-width: 100% !important;
+        }
+
+        .fi-sc-tabs > .fi-tabs,
+        .fi-tabs:not(.fi-contained),
+        .fi-tabs.fi-contained {
+            overflow-x: auto !important;
+            justify-content: flex-start !important;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .fi-tabs-item {
+            flex: 0 0 auto !important;
+            min-width: max-content !important;
+            padding: 0.5rem 0.875rem !important;
         }
     }
 </style>

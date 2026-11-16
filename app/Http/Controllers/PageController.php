@@ -72,7 +72,7 @@ class PageController extends Controller
             $type = $block['type'] ?? '';
             $data = is_array($block['data'] ?? null) ? $block['data'] : [];
 
-            if ($firstImage === null && $type === 'image_banner' && ! empty($data['image_url']) && is_string($data['image_url'])) {
+            if ($firstImage === null && in_array($type, ['image_banner', 'rich_text'], true) && ! empty($data['image_url']) && is_string($data['image_url'])) {
                 $firstImage = $data['image_url'];
             }
             if ($firstImage === null && $type === 'image_gallery' && ! empty($data['image_1_url']) && is_string($data['image_1_url'])) {

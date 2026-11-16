@@ -11,7 +11,6 @@ import type { ReactElement } from 'react';
  */
 export default function DatenschutzPage(): ReactElement {
     const { school } = usePage<SharedInertiaProps>().props;
-    const phoneHref = `tel:${school.phone.replace(/\s+/g, '')}`;
 
     return (
         <SiteLayout>
@@ -52,11 +51,7 @@ export default function DatenschutzPage(): ReactElement {
                                 <strong>Vertreten durch die Schulleitung:</strong> Rektorin Diana Blum
                             </p>
                             <p>
-                                <strong>Telefon:</strong>{' '}
-                                <a href={phoneHref} className="font-semibold text-brand-700 underline">
-                                    {school.phone}
-                                </a>{' '}
-                                · <strong>Telefax:</strong> +49 7665 932081
+                                <strong>Telefon:</strong> {school.phone} · <strong>Telefax:</strong> +49 7665 932081
                             </p>
                             <p>
                                 <strong>E-Mail:</strong>{' '}

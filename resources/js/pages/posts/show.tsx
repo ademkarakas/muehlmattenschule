@@ -5,7 +5,29 @@ import { Reveal } from '@/components/reveal';
 import { SiteLayout } from '@/layouts/site-layout';
 import type { CategorySummary, GalleryPhotoItem } from '@/types/school';
 import { Link } from '@inertiajs/react';
-import { useState, type ReactElement } from 'react';
+import { useState, type MouseEvent, type ReactElement } from 'react';
+
+/**
+ * Extrahiert eingebettete <img>-Tags aus dem Beitrags-HTML für die Lightbox.
+ */
+function extractInlinePostImages(html: string, fallbackAlt: string): LightboxImageItem[] {
+    if (!html) {
+        return [];
+    }
+    const results: LightboxImageItem[] = [];
+    const regex = /<img\b[^>]*?\bsrc=["']([^"']+)["'][^>]*>/gi;
+    let match: RegExpExecArray | null;
+    while ((match = regex.exec(html)) !== null) {
+        const url = match[1]?.trim();
+        if (!url) {
+            continue;
+        }
+        const altMatch = /\balt=["']([^"']*)["']/i.exec(match[0]);
+        const alt = altMatch?.[1]?.trim() || fallbackAlt;
+        results.push({ url, alt });
+    }
+    return results;
+}
 
 export interface PostShowProps {
     post: {
@@ -43,10 +65,51 @@ export default function PostShowPage({ post }: PostShowProps): ReactElement {
     const galleryPhotos = post.galleryPhotos ?? [];
     const hasInlineImages = /<img\b/i.test(post.body);
 
-    const lightboxImages: LightboxImageItem[] = galleryPhotos.map((photo) => ({
-        url: photo.largeUrl,
-        alt: photo.alt,
-    }));
+    const lightboxImages: LightboxImageItem[] = [];
+    if (post.coverUrl && !hasInlineImages) {
+        lightboxImages.push({
+            url: post.coverUrl,
+            alt: post.title,
+        });
+    }
+    for (const inlineImg of extractInlinePostImages(post.body, post.title)) {
+        if (!lightboxImages.some((existing) => existing.url === inlineImg.url)) {
+            lightboxImages.push(inlineImg);
+        }
+    }
+    for (const photo of galleryPhotos) {
+        if (!lightboxImages.some((existing) => existing.url === photo.largeUrl)) {
+            lightboxImages.push({
+                url: photo.largeUrl,
+                alt: photo.alt,
+            });
+        }
+    }
+
+    const openImageUrlInLightbox = (url: string): void => {
+        const normalizedTarget = url.replace(/^https?:\/\/[^/]+/i, '');
+        const idx = lightboxImages.findIndex(
+            (img) => img.url === url || img.url === normalizedTarget,
+        );
+        if (idx !== -1) {
+            setActiveLightboxIndex(idx);
+        }
+    };
+
+    const handlePostBodyClick = (event: MouseEvent<HTMLDivElement>): void => {
+        const target = event.target as HTMLElement | null;
+        if (!target) {
+            return;
+        }
+        const imgEl = target.closest('img');
+        if (imgEl) {
+            const rawSrc = imgEl.getAttribute('src') || imgEl.src;
+            if (rawSrc) {
+                event.preventDefault();
+                openImageUrlInLightbox(rawSrc);
+            }
+        }
+    };
 
     return (
         <SiteLayout>
@@ -103,12 +166,18 @@ export default function PostShowPage({ post }: PostShowProps): ReactElement {
 
                 {post.coverUrl && !hasInlineImages && (
                     <Reveal variant="zoom-in" className="mt-5 sm:mt-6 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50">
-                        <img
-                            src={post.coverUrl}
-                            alt=""
-                            decoding="async"
-                            className="mx-auto max-h-[560px] w-auto max-w-full object-contain"
-                        />
+                        <button
+                            type="button"
+                            onClick={() => openImageUrlInLightbox(post.coverUrl!)}
+                            className="block w-full cursor-zoom-in"
+                        >
+                            <img
+                                src={post.coverUrl}
+                                alt={post.title}
+                                decoding="async"
+                                className="mx-auto max-h-[560px] w-auto max-w-full object-contain"
+                            />
+                        </button>
                     </Reveal>
                 )}
 
@@ -118,7 +187,7 @@ export default function PostShowPage({ post }: PostShowProps): ReactElement {
                         delay={60}
                         className="prose-school mt-6 sm:mt-8 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 md:p-8 shadow-2xs space-y-4 text-sm sm:text-base leading-relaxed text-slate-800"
                     >
-                        <div dangerouslySetInnerHTML={{ __html: post.body }} />
+                        <div onClick={handlePostBodyClick} dangerouslySetInnerHTML={{ __html: post.body }} />
                     </Reveal>
                 )}
 
@@ -147,11 +216,11 @@ export default function PostShowPage({ post }: PostShowProps): ReactElement {
                         </div>
 
                         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 sm:gap-4">
-                            {galleryPhotos.map((photo, index) => (
+                            {galleryPhotos.map((photo) => (
                                 <button
                                     key={photo.id}
                                     type="button"
-                                    onClick={() => setActiveLightboxIndex(index)}
+                                    onClick={() => openImageUrlInLightbox(photo.largeUrl)}
                                     className="group relative aspect-[4/3] overflow-hidden rounded-xl border border-slate-200 bg-slate-100 shadow-2xs transition hover:-translate-y-0.5 hover:border-brand-400 hover:shadow-md cursor-pointer"
                                 >
                                     <img

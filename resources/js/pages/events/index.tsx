@@ -61,18 +61,29 @@ export default function EventsIndexPage({ events }: EventsIndexProps): ReactElem
                 ) : (
                     <div className="space-y-6 sm:space-y-8">
                         {Object.entries(grouped).map(([month, monthEvents], groupIndex) => (
-                            <Reveal key={month} as="section" variant="fade-up" delay={Math.min(groupIndex, 3) * 60}>
-                                <div className="mb-3 flex items-center gap-2.5">
-                                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700 ring-1 ring-brand-500/15" aria-hidden="true">
-                                        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
-                                        </svg>
+                            <Reveal
+                                key={month}
+                                as="section"
+                                variant="fade-up"
+                                delay={Math.min(groupIndex, 3) * 60}
+                                className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-xs"
+                            >
+                                <div className="mms-card-header flex items-center justify-between gap-2 border-b border-brand-700/25 px-5 py-3.5 sm:px-6 sm:py-4">
+                                    <div className="flex items-center gap-2.5">
+                                        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-white/15 text-white ring-1 ring-white/25 backdrop-blur-xs shadow-2xs" aria-hidden="true">
+                                            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+                                            </svg>
+                                        </span>
+                                        <h2 className="text-base sm:text-lg font-extrabold text-white capitalize">
+                                            {month}
+                                        </h2>
+                                    </div>
+                                    <span className="rounded-full bg-white px-2.5 py-0.5 text-xs font-extrabold text-brand-800 shadow-2xs ring-1 ring-white/40">
+                                        {monthEvents.length} {monthEvents.length === 1 ? 'Termin' : 'Termine'}
                                     </span>
-                                    <h2 className="text-base sm:text-lg font-bold text-brand-800 capitalize">
-                                        {month}
-                                    </h2>
                                 </div>
-                                <div className="divide-y divide-slate-200 rounded-2xl border border-slate-200 bg-white shadow-xs">
+                                <div className="divide-y divide-slate-200">
                                     {monthEvents.map((event) => {
                                         const catBadge = event.category
                                             ? EVENT_CATEGORY_LABELS[event.category]

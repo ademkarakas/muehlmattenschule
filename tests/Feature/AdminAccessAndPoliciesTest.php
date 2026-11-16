@@ -290,4 +290,23 @@ class AdminAccessAndPoliciesTest extends TestCase
         $response->assertSee('Seite verlassen');
         $response->assertSee('setUpFilamentUnsavedDataChangesAlert', false);
     }
+
+    /**
+     * Prüft, dass die Schuleinstellungen-Seite die 4 übersichtlichen Navigations-Register (Tabs)
+     * samt sauberer Beschriftung und Speichern-Aktion rendert.
+     */
+    public function test_manage_school_settings_page_renders_four_distinct_navigation_tabs(): void
+    {
+        $schulleitung = User::factory()->schulleitung()->create();
+
+        $response = $this->actingAs($schulleitung)->get('/admin/manage-school-settings');
+
+        $response->assertOk();
+        $response->assertSee('Schuleinstellungen');
+        $response->assertSee('Stammdaten &amp; Kontakt', false);
+        $response->assertSee('Startseite &amp; Hero-Bilder', false);
+        $response->assertSee('Unterrichts- &amp; Pausenzeiten', false);
+        $response->assertSee('Wartungsmodus');
+        $response->assertSee('fi-tabs', false);
+    }
 }

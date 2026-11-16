@@ -38,7 +38,7 @@ class ManageSchoolSettings extends Page
 
     protected static ?string $navigationLabel = 'Schuleinstellungen';
 
-    protected static ?string $title = 'Schuleinstellungen, Startseite & Wartungsmodus';
+    protected static ?string $title = 'Schuleinstellungen';
 
     protected static ?int $navigationSort = 2;
 
@@ -62,7 +62,7 @@ class ManageSchoolSettings extends Page
         $title = e($this->getTitle());
         $subtitle = e('Stammdaten, Kontaktinformationen, Startseiten-Elemente, Unterrichtszeiten und Wartungsmodus verwalten.');
 
-        $backSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">'
+        $backSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="scs-back-icon" aria-hidden="true">'
             .'<path fill-rule="evenodd" d="M17 10a.75.75 0 0 1-.75.75H5.612l4.158 3.96a.75.75 0 1 1-1.04 1.08l-5.5-5.25a.75.75 0 0 1 0-1.08l5.5-5.25a.75.75 0 1 1 1.04 1.08L5.612 9.25H16.25A.75.75 0 0 1 17 10Z" clip-rule="evenodd"/>'
             .'</svg>';
 
@@ -122,7 +122,7 @@ class ManageSchoolSettings extends Page
     }
 
     /**
-     * Kopfzeilen-Aktionen oben rechts (Wartungsmodus).
+     * Kopfzeilen-Aktionen oben rechts (Wartungsmodus & Speichern).
      *
      * @return array<Action>
      */
@@ -160,8 +160,13 @@ class ManageSchoolSettings extends Page
                         ->color($newState ? 'warning' : 'success')
                         ->send();
 
-                    $this->redirect(static::getUrl());
+                    $this->redirect(static::getUrl(['tab' => 'wartungsmodus']));
                 }),
+            Action::make('saveHeader')
+                ->label('Einstellungen speichern')
+                ->color('primary')
+                ->icon(Heroicon::OutlinedCheck)
+                ->action('save'),
         ];
     }
 
@@ -174,11 +179,16 @@ class ManageSchoolSettings extends Page
             ->statePath('data')
             ->components([
                 Tabs::make('Einstellungen')
+                    ->persistTabInQueryString('tab')
+                    ->contained(false)
                     ->tabs([
                         Tab::make('Stammdaten & Kontakt')
+                            ->key('stammdaten')
                             ->icon(Heroicon::OutlinedBuildingLibrary)
                             ->schema([
                                 Section::make('Schuladresse & Sekretariat')
+                                    ->icon(Heroicon::OutlinedBuildingLibrary)
+                                    ->description('Offizielle Anschrift, Telefonnummer, E-Mail und Öffnungszeiten des Schulsekretariats.')
                                     ->schema([
                                         TextInput::make('name')
                                             ->label('Schulname')
@@ -212,6 +222,8 @@ class ManageSchoolSettings extends Page
                                     ->columns(2),
 
                                 Section::make('Schulkindbetreuung (Caritas) Notfall- & Kontaktdaten')
+                                    ->icon(Heroicon::OutlinedHeart)
+                                    ->description('Notfallkontakte der Betreuung für den Wartungsmodus und wichtige Mitteilungen.')
                                     ->schema([
                                         TextInput::make('betreuung_phone')
                                             ->label('Festnetz Betreuung')
@@ -229,9 +241,12 @@ class ManageSchoolSettings extends Page
                             ]),
 
                         Tab::make('Startseite & Hero-Bilder')
+                            ->key('startseite')
                             ->icon(Heroicon::OutlinedPhoto)
                             ->schema([
                                 Section::make('Startseiten-Begrüßung')
+                                    ->icon(Heroicon::OutlinedSparkles)
+                                    ->description('Willkommenstext und Überschrift im oberen Hero-Bereich der Website.')
                                     ->schema([
                                         TextInput::make('welcome_title')
                                             ->label('Begrüßungs-Überschrift')
@@ -243,6 +258,7 @@ class ManageSchoolSettings extends Page
                                     ]),
 
                                 Section::make('Hero-Fotogalerie auf der Startseite')
+                                    ->icon(Heroicon::OutlinedPhoto)
                                     ->description('Diese Schulfotos werden oben rechts im Begrüßungsbereich der Startseite als wischbare Galerie angezeigt.')
                                     ->schema([
                                         Repeater::make('hero_slides')
@@ -265,9 +281,11 @@ class ManageSchoolSettings extends Page
                             ]),
 
                         Tab::make('Unterrichts- & Pausenzeiten')
+                            ->key('unterricht')
                             ->icon(Heroicon::OutlinedClock)
                             ->schema([
                                 Section::make('Stunden- & Pausenraster (Startseiten-Widget „Pausen & Unterrichtszeiten“)')
+                                    ->icon(Heroicon::OutlinedClock)
                                     ->description('Wird wie bei ghsfreiburg.edupage.org in der rechten Spalte der Startseite angezeigt.')
                                     ->schema([
                                         Repeater::make('bell_schedule')
@@ -298,9 +316,11 @@ class ManageSchoolSettings extends Page
                             ]),
 
                         Tab::make('Wartungsmodus')
+                            ->key('wartungsmodus')
                             ->icon(Heroicon::OutlinedWrenchScrewdriver)
                             ->schema([
                                 Section::make('Website in den Wartungsmodus versetzen')
+                                    ->icon(Heroicon::OutlinedWrenchScrewdriver)
                                     ->description('Wenn der Wartungsmodus aktiviert ist, sehen Besucherinnen und Besucher eine freundliche Informationsseite im Mühlmattenschule-Design mit allen wichtigen Kontaktdaten (Sekretariat, Krankmeldung, Schulkindbetreuung). Angemeldete Mitarbeitende können die Website weiterhin normal als Vorschau betrachten.')
                                     ->schema([
                                         Toggle::make('maintenance_active')
@@ -373,7 +393,7 @@ class ManageSchoolSettings extends Page
             ->send();
 
         if ((bool) $previous['maintenance_active'] !== (bool) ($merged['maintenance_active'] ?? false)) {
-            $this->redirect(static::getUrl());
+            $this->redirect(static::getUrl(['tab' => request()->query('tab', 'wartungsmodus')]));
         }
     }
 }

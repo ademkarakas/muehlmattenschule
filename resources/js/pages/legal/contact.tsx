@@ -88,7 +88,10 @@ export default function ContactPage(): ReactElement {
                 {/* 2-Spaltiger Hauptbereich: Links Schulsekretariat (Öffnungszeiten & Kontakt), Rechts Wegbeschreibung */}
                 <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
                     {/* Linke Spalte: Schulsekretariat – Öffnungszeiten & Kontaktdaten */}
-                    <Reveal variant="fade-up" className="overflow-hidden rounded-3xl border border-slate-200/90 bg-white shadow-xs">
+                    <Reveal
+                        variant="fade-up"
+                        className="overflow-hidden rounded-3xl border border-slate-200/90 bg-white shadow-xs"
+                    >
                         {/* Sekretariat Header / Ansprechpartnerin */}
                         <div className="p-6 sm:p-7 border-b border-slate-100 bg-gradient-to-br from-slate-50/80 via-white to-brand-50/20">
                             <div className="flex items-center gap-4">
@@ -164,12 +167,9 @@ export default function ContactPage(): ReactElement {
                                                     <span className="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
                                                         Telefon
                                                     </span>
-                                                    <a
-                                                        href={`tel:${school.phone.replace(/\s+/g, "")}`}
-                                                        className="text-xs sm:text-sm font-bold text-slate-900 hover:text-brand-700 transition select-all"
-                                                    >
+                                                    <span className="text-xs sm:text-sm font-bold text-slate-900 select-all">
                                                         {school.phone}
-                                                    </a>
+                                                    </span>
                                                 </div>
                                             </div>
                                             <button
@@ -451,7 +451,11 @@ export default function ContactPage(): ReactElement {
                     </Reveal>
 
                     {/* Rechte Spalte: Lage, Campusfoto, Wegbeschreibung & Karten */}
-                    <Reveal variant="fade-up" delay={100} className="overflow-hidden rounded-3xl border border-slate-200/90 bg-white shadow-xs">
+                    <Reveal
+                        variant="fade-up"
+                        delay={100}
+                        className="overflow-hidden rounded-3xl border border-slate-200/90 bg-white shadow-xs"
+                    >
                         <div className="relative h-48 sm:h-56 w-full overflow-hidden bg-slate-900">
                             <img
                                 src="/images/school/gebaeude-wide.jpg"

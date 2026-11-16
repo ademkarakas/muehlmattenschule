@@ -198,4 +198,40 @@ class SecurityHardeningTest extends TestCase
 
         @unlink($tempFile);
     }
+
+    /**
+     * Prüft, dass alte WordPress-Domain-Links (s545272237.online.de / muehlmattenschule.de)
+     * automatisch auf die neuen relativen Routen des Schulportals umgeschrieben werden.
+     */
+    public function test_legacy_wordpress_links_are_rewritten_to_internal_routes(): void
+    {
+        $page = Page::query()->create([
+            'title' => 'Aufgaben des Elternbeirats',
+            'slug' => 'aufgaben-des-elternbeirats',
+            'section' => 'unsere-schule',
+            'menu_order' => 7,
+            'status' => PublishStatus::Published,
+            'content' => [
+                [
+                    'type' => 'rich_text',
+                    'data' => [
+                        'heading' => 'Aufgaben des Elternbeirats',
+                        'body' => '<p><a href="http://s545272237.online.de/unsere-schule/elternbeirat/aktivitaeten/">Weitere Informationen zu den Aktivitäten</a>.</p>'
+                            .'<p><a href="http://s545272237.online.de/unsere-schule/elternbeirat/">Zurück zur Elternbeiratsseite</a></p>'
+                            .'<p><a href="http://muehlmattenschule.de/ferienplan-schuljahr-24-25/">Ferienplan</a></p>',
+                    ],
+                ],
+            ],
+        ]);
+
+        /** @var array<int, array{type: string, data: array<string, string>}> $blocks */
+        $blocks = $page->content;
+        $sanitizedBody = $blocks[0]['data']['body'];
+
+        $this->assertStringNotContainsString('s545272237.online.de', $sanitizedBody);
+        $this->assertStringNotContainsString('http://muehlmattenschule.de', $sanitizedBody);
+        $this->assertStringContainsString('href="/unsere-schule/aktivitaeten-des-elternbeirats"', $sanitizedBody);
+        $this->assertStringContainsString('href="/unsere-schule/elternbeirat"', $sanitizedBody);
+        $this->assertStringContainsString('href="/aktuelles/ferienplan-schuljahr-24-25"', $sanitizedBody);
+    }
 }

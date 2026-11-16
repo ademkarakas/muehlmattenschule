@@ -10,7 +10,6 @@ import type { ReactElement } from 'react';
  */
 export default function ImpressumPage(): ReactElement {
     const { school } = usePage<SharedInertiaProps>().props;
-    const phoneHref = `tel:${school.phone.replace(/\s+/g, '')}`;
 
     return (
         <SiteLayout>
@@ -72,10 +71,7 @@ export default function ImpressumPage(): ReactElement {
                             <h2 className="text-base font-bold text-slate-900">Kontakt</h2>
                         </div>
                         <p className="mt-2 pl-10.5">
-                            Telefon:{' '}
-                            <a href={phoneHref} className="font-semibold text-brand-700 hover:underline">
-                                {school.phone}
-                            </a>
+                            Telefon: {school.phone}
                             <br />
                             Telefax: +49 7665 932081
                             <br />

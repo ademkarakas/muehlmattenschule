@@ -762,20 +762,58 @@ class DatabaseSeeder extends Seeder
                 'section' => 'unsere-schule',
                 'menu_group' => 'Profil & Menschen',
                 'menu_order' => 1,
-                'summary' => 'Geschichte, Lage am Naturschutzgebiet Mühlmatten, Holzarchitektur und Hochschulpartnerschaft der Mühlmattenschule in Freiburg-Hochdorf.',
+                'summary' => 'Geschichte, Lage am Naturschutzgebiet Mühlmatten, Holzarchitektur und Schulgelände der Mühlmattenschule in Freiburg-Hochdorf.',
                 'content' => [
                     [
-                        'type' => 'image_banner',
+                        'type' => 'rich_text',
                         'data' => [
-                            'image_url' => '/images/school/gebaeude-full.jpg',
-                            'caption' => 'Das Schulgebäude der Mühlmattenschule in Freiburg-Hochdorf.',
+                            'heading' => 'Unsere Schule in Freiburg-Hochdorf',
+                            'image_url' => '/images/school/logo-mms-2023.png',
+                            'image_position' => 'right',
+                            'image_fit' => 'contain',
+                            'image_caption' => 'Das offizielle Schullogo der Mühlmattenschule Freiburg-Hochdorf.',
+                            'body' => '<p>Alle Kinder aus dem Freiburger Stadtteil Hochdorf (mit den Ortschaften Benzhausen, Hochdorf und dem Industrie- und Gewerbegebiet Hochdorf, zusammen aktuell ca. 5.200 Ew.) besuchen die Mühlmattenschule.</p>'
+                                .'<p>Infolge der Eingemeindung Anfang der 70er Jahre stieg die Einwohnerzahl der ehemaligen Gemeinde Hochdorf stark an. Durch Zuzug vieler junger Familien wurde die Dorfschule, die „Michael-Denzlinger-Schule“, zu klein. Eine neue Schule wurde gebaut und 1991 bezogen. Benannt wurde sie nach dem Gewann, in der sie liegt: „Mühlmattenschule“. In schneller Folge musste die Schule zweimal erweitert werden (1993/94 und 1996/97). Im Schuljahr 1997/98 wurden 344 Kinder in 14 Klassen unterrichtet.</p>'
+                                .'<p>Mittlerweile ist die Zahl der Schüler stark zurückgegangen. Dieses Schuljahr werden 187 Kinder in <a href="/unsere-schule/unsere-klassen">9 Klassen</a> und einer Außenklasse von <a href="/unsere-schule/kollegium">20 Lehrerinnen und Lehrern</a> unterrichtet.</p>',
                         ],
                     ],
                     [
                         'type' => 'rich_text',
                         'data' => [
-                            'heading' => 'Schulportrait',
-                            'body' => $wpPages['schulportrait']['body'] ?? '',
+                            'heading' => 'Lage',
+                            'image_url' => '/images/school/unsere-schule-karte.jpg',
+                            'image_position' => 'right',
+                            'image_fit' => 'contain',
+                            'image_caption' => 'Lageplan der Mühlmattenschule in Freiburg-Hochdorf (zum Vergrößern anklicken).',
+                            'body' => '<p>Die Grundschule Mühlmattenschule befindet sich in Hochdorf am Rande des neuen Ortszentrums. Sie grenzt unmittelbar an das Naturschutzgebiet „Mühlmatten“. Damit ist die Schule sehr ruhig gelegen, dennoch gut erreichbar für alle Hochdorfer.</p>'
+                                .'<p>Optimal auch: Hallenbad und Turnhalle liegen keine hundert Meter von der Schule – können somit zu Fuß in wenigen Minuten erreicht werden.</p>',
+                        ],
+                    ],
+                    [
+                        'type' => 'rich_text',
+                        'data' => [
+                            'heading' => 'Schulgebäude und -gelände',
+                            'image_url' => '/images/school/unsere-schule-innen.jpg',
+                            'image_position' => 'left',
+                            'image_fit' => 'cover',
+                            'image_caption' => 'Heller Flur mit warmer Holzarchitektur, durchgängigen Oberlichtern und Glastür zur Schulkindbetreuung.',
+                            'body' => '<p>Holz ist das optisch dominierende Element der Architektur des einstöckigen Schulgebäudes. Dank der durchgängigen Oberlichter im Flur gelangt, auch wenn die Sonne nicht scheint und in der dunklen Jahreszeit, immer viel natürliches Tageslicht ins Innere der Schule. Helligkeit und Holz – beides zusammen schafft eine warme, angenehme und freundliche Atmosphäre, die wirkt, sobald man in die Schule eintritt.</p>'
+                                .'<p>Am südlichen Ende des Gebäudes befinden sich, abgetrennt durch eine Glastür (siehe Bild links), die Räume der <a href="/angebote/schulkindbetreuung">Schulkindbetreuung</a>.</p>'
+                                .'<p>Auf dem Schulgelände gibt es viel Platz und Angebote zum Austoben in den Pausenzeiten und während der Nachmittagsbetreuung, zum Beispiel eine Spielanlage mit Edelstahlrutsche und Kletterwand.</p>'
+                                .'<p>Besonders in der Sommerzeit spielen die Kinder gerne am Bach, der die Schule nach Osten hin begrenzt. Oder es wird gekickt auf dem Schulsportgelände.</p>',
+                        ],
+                    ],
+                    [
+                        'type' => 'image_gallery',
+                        'data' => [
+                            'heading' => 'Schulgelände und Umgebung aus der Vogelperspektive',
+                            'image_1_url' => '/images/school/unsere-schule-umgegend.jpg',
+                            'image_1_caption' => 'Luftaufnahme der Mühlmattenschule direkt am Naturschutzgebiet „Mühlmatten“ in Freiburg-Hochdorf.',
+                            'image_2_url' => '/images/school/gebaeude-full.jpg',
+                            'image_2_caption' => 'Das einstöckige Schulgebäude mit Pausenhof, Spielanlage, Schulsportgelände und Bachlauf.',
+                            'caption' => 'Die Luftbilder hat uns freundlicherweise das Ballonteam Norbert Blau zur Verfügung gestellt.',
+                            'source_label' => 'Ballonteam Norbert Blau',
+                            'source_url' => 'http://www.freiburg-schwarzwald.net',
                         ],
                     ],
                 ],
@@ -999,7 +1037,64 @@ class DatabaseSeeder extends Seeder
                         'type' => 'rich_text',
                         'data' => [
                             'heading' => 'Verein der Freunde und Förderer der Mühlmattenschule Freiburg-Hochdorf e.V.',
-                            'body' => $wpPages['foerderverein']['body'] ?? '',
+                            'image_url' => '/images/school/logo-foerderverein.png',
+                            'image_position' => 'right',
+                            'image_fit' => 'contain',
+                            'image_caption' => 'Verein der Freunde und Förderer der Mühlmattenschule Freiburg-Hochdorf e.V.',
+                            'body' => '<p>Der Förderverein der Mühlmattenschule wurde im Jahr 1996 gegründet. Wir sind im Vereinsregister Freiburg Nr. 2943 als gemeinnütziger Verein eingetragen. Der Förderverein bietet engagierten Familien sowie Firmen die Möglichkeit, sich für die Schule und ihre Kinder zu beteiligen.</p>'
+                                .'<h3>Was ist der Zweck des Vereins?</h3>'
+                                .'<p>Wir haben das Ziel der ideellen und materiellen Förderung der Bildung und Erziehung der Kinder der Mühlmattenschule. Wir unterstützen die Schulgemeinschaft und die Lehrkräfte. Die Zusammengehörigkeit zwischen Schule, Eltern und Schülern soll unterstützt und erhalten bleiben.</p>'
+                                .'<h3>Was wollen wir fördern und unterstützen wir?</h3>'
+                                .'<ul>'
+                                .'<li>Stärkung des WIR-Gefühls der Grundschüler</li>'
+                                .'<li>Förderung des Sports</li>'
+                                .'<li>Gestaltung der Schule und des Schulhofs</li>'
+                                .'<li>Die Förderung von Arbeitsgemeinschaften</li>'
+                                .'<li>Unterstützung kultureller Projekte und Veranstaltungen</li>'
+                                .'<li>Finanzielle Unterstützung von Klassenaktivitäten</li>'
+                                .'</ul>'
+                                .'<h3>Aktuelle geförderte Projekte, Maßnahmen und Aktivitäten</h3>'
+                                .'<ul>'
+                                .'<li>Organisation und Durchführung des <a href="/unsere-schule/crosslauf"><strong>Crosslaufs</strong></a></li>'
+                                .'<li>Einschulungsgeschenk</li>'
+                                .'<li>Geburtstagsgeschenk für alle Schulkinder</li>'
+                                .'<li>Adventskranz für die Schule</li>'
+                                .'<li>Finanzielle Unterstützung'
+                                .'<ul>'
+                                .'<li>Finanzielle Unterstützung von Autorenlesungen</li>'
+                                .'<li>Beteiligung an den Kosten der Schulprojekte</li>'
+                                .'<li>Finanzielle Unterstützung für Familien, bei welchen die Teilnahme an schulischen Aktivitäten (Klassenfahrten, Arbeitsgemeinschaften) den Rahmen der eigenen Möglichkeiten übersteigt.</li>'
+                                .'<li>Finanzielle Unterstützung von kulturellen Veranstaltungen wie Theaterbesuchen aller Klassen.</li>'
+                                .'<li>Übernahme der Getränkekosten für den Schüleraustausch mit Colmar.</li>'
+                                .'</ul>'
+                                .'</li>'
+                                .'</ul>',
+                        ],
+                    ],
+                    [
+                        'type' => 'rich_text',
+                        'data' => [
+                            'heading' => 'Wer sind Ihre Ansprechpartner & wie können Sie fördern?',
+                            'image_url' => '/images/school/foerderverein-vorstand.jpg',
+                            'image_position' => 'right',
+                            'image_fit' => 'cover',
+                            'image_caption' => 'Der Vorstand des Fördervereins der Mühlmattenschule.',
+                            'body' => '<p><strong>Vorstand des Fördervereins:</strong><br>'
+                                .'Giuseppe Pastore, 1. Vorsitzender<br>'
+                                .'Verena Prestel, 2. Vorsitzende<br>'
+                                .'Jan Gläser, Kassenwart<br>'
+                                .'Steffie Nowak, Schriftführerin<br>'
+                                .'Florian Gutgsell, Beisitzer<br>'
+                                .'Ali Nemer, Beisitzer</p>'
+                                .'<p><strong><a href="/aktuelles/der-vorstand-des-foerdervereins-stellt-sich-vor">Portrait des Vorstands</a></strong></p>'
+                                .'<h3>Wie können Sie fördern?</h3>'
+                                .'<p>Die Mittel bezieht der Förderverein vornehmlich aus Mitgliedsbeiträgen sowie aus Spenden und Bewirtungsüberschüssen von Veranstaltungen.</p>'
+                                .'<p>Ihren Mitgliedsbeitrag können Sie selber bestimmen. Der jährliche Mindestbeitrag beträgt 17,– Euro. Jeder Mitgliedsbeitrag ist voll steuerlich absetzbar im Sinne des § 10 EStG. Sie können auch aktiv fördern, indem Sie bei Veranstaltungen des Vereines mitwirken.</p>'
+                                .'<p>Mitglied werden ist ganz einfach: Beitrittserklärung <a href="https://easyverein.com/public/FoeveMms/applicationform/7095" target="_blank" rel="noopener noreferrer"><strong>hier</strong></a> online ausfüllen oder <strong><a href="/files/school/Beitrittserklaerung-Foerderverein-MMS.pdf">Beitrittserklärung</a></strong> herunterladen, ausfüllen und unterschreiben und im Schulbriefkasten einwerfen oder im Sekretariat oder bei einem der Vorstandsmitglieder persönlich abgeben.</p>'
+                                .'<p><strong>Kontaktadresse:</strong><br>'
+                                .'Verein der Freunde und Förderer der Mühlmattenschule Freiburg-Hochdorf e.V.<br>'
+                                .'Zu den Mühlmatten 8 · 79108 Freiburg i. Br.<br>'
+                                .'Tel.: 07665/2232 · E-Mail: foeve.mms{at}gmail.com</p>',
                         ],
                     ],
                 ],
@@ -1016,7 +1111,47 @@ class DatabaseSeeder extends Seeder
                         'type' => 'rich_text',
                         'data' => [
                             'heading' => 'Crosslauf & Sponsorenlauf',
-                            'body' => $wpPages['crosslauf']['body'] ?? '',
+                            'image_url' => '/images/school/crosslauf-illu.png',
+                            'image_position' => 'right',
+                            'image_fit' => 'contain',
+                            'image_caption' => 'Traditionelles Schulsportfest für die ganze Familie seit 1998.',
+                            'body' => '<p>Der Crosslauf ist ein Schulsportfest für die ganze Familie, veranstaltet vom Förderverein in Kooperation mit der Mühlmattenschule. Es findet in jedem Schuljahr im Mai oder Juni an einem Samstag statt. Der Crosslauf ist der Schülerlauf. Hier geht es zu wie bei Olympia: Die besten Drei eines Jahrgangs bekommen Medaillen. Nach dem Schülerwettbewerb gibt es den Sponsorenlauf. Hier laufen alle, die wollen, für einen guten Zweck. Neben den Läufen gibt es eine große Tombola und natürlich auch für das leibliche Wohl wird gesorgt.</p>'
+                                .'<p>Das Fest findet seit 1998 statt und erfreut sich bei Jung und Alt sehr großer Beliebtheit!</p>',
+                        ],
+                    ],
+                    [
+                        'type' => 'rich_text',
+                        'data' => [
+                            'heading' => 'Crosslauf (Schülerwettlauf)',
+                            'image_url' => '/images/school/crosslauf-karte-2023.png',
+                            'image_position' => 'right',
+                            'image_fit' => 'contain',
+                            'image_caption' => 'Streckenkarte des ca. 450 m langen Rundkurses entlang des Mühlbachs (zum Vergrößern anklicken).',
+                            'body' => '<p>Der Crosslauf ist ein klassischer Wettlauf. Teilnehmen können alle Schüler der Mühlmattenschule. Die Laufstrecke ist ein ca. 450 m langer Rundkurs entlang des Mühlbachs (siehe Karte). Die Kinder trainieren im Rahmen des Sportunterrichts und lernen dort auch die Strecke kennen.</p>'
+                                .'<h3>Ablauf</h3>'
+                                .'<p>Die Kinder laufen jahrgangsweise, Jungs und Mädchen getrennt, in kleinen Gruppen (sind viele Jungs oder Mädchen in einem Jahrgang, starten sie getrennt in mehreren Gruppen).</p>'
+                                .'<h3>Wertung</h3>'
+                                .'<p>Jedes Kind, welches das Ziel erreicht, erhält eine Urkunde und ein Gratislos für die Tombola. Die ersten drei Jungs und Mädchen pro Jahrgang erhalten zusätzlich eine Medaille, Gold-Silber-Bronze – wie bei der Olympiade! Obendrauf erhält die teilnehmerstärkste Klasse den „Mühlmattenpokal“ – eine begehrte Trophäe gefüllt mit Süßigkeiten!</p>'
+                                .'<h3>Rahmenprogramm</h3>'
+                                .'<p>Verkauf von Heiß- und Kaltgetränken, Würstchen und Kuchen und große Tombola!</p>',
+                        ],
+                    ],
+                    [
+                        'type' => 'rich_text',
+                        'data' => [
+                            'heading' => 'Sponsorenlauf',
+                            'image_url' => '/images/school/sponsorenlauf-illu.png',
+                            'image_position' => 'left',
+                            'image_fit' => 'contain',
+                            'image_caption' => 'Beim Sponsorenlauf zählen jede Runde und jeder Stempel für den guten Zweck.',
+                            'body' => '<p>Auf den Crosslauf folgt der Sponsorenlauf. Der Sponsorenlauf ist ein Benefizrennen. Hier geht es nicht darum, der Schnellste zu sein, sondern dass viele Läufer zusammen möglichst viele Runden laufen. Denn dann kommt viel Geld für einen guten Zweck zusammen! Mitlaufen darf jeder: Eltern, Großeltern, Geschwister, Freunde, Lehrer usw., und natürlich die Schüler selbst auch.</p>'
+                                .'<h3>Läufer, Sponsoren, Sponsorenvertrag, Laufkarte</h3>'
+                                .'<p>Jeder Läufer hat einen oder mehrere Sponsoren. Ein Sponsor ist ein „Pate“ des Läufers, der für jede von letzterem vollendete Runde einen Betrag spendet. Wie hoch dieser Betrag ist, legt jeder Sponsor selbst fest. Vor dem Rennen erhält jeder Läufer einen Sponsorenvertrag, in dem der Läufer angibt, für welchen Schüler er läuft (das ist relevant für die Klassenwertung, siehe unten), wer seine Sponsoren sind und welchen Rundenbetrag diese spenden. Dazu bekommt der Läufer eine Laufkarte, die er beim Lauf mit sich führt.</p>'
+                                .'<h3>Laufen, Stempeln, Laufen, Stempeln</h3>'
+                                .'<p>Dann kann es losgehen: Runde für Runde drehen die Läufer um die Schule (die Strecke ist deutlich kürzer als die des Crosslaufs). Am Ende einer jeden Runde erhalten die Läuferinnen und Läufer einen Stempel auf ihre Laufkarte. Insgesamt haben sie etwa eine Stunde Zeit, so viele Stempel wie möglich einzusammeln.</p>'
+                                .'<h3>Am Ende wird gezählt & Wertungen</h3>'
+                                .'<p>Nach Ablauf der Zeit wird gezählt: Für jeden Stempel entrichten die Sponsoren später den Rundenbetrag. Gerechnet wird beispielsweise wie folgt: Ein Läufer schafft 15 Runden und hat 2 Sponsoren, der eine hat sich für 50 Cent, der andere für 25 Cent je Runde verpflichtet. In diesem Beispiel wäre der erlaufene Spendenbetrag dieses Läufers 15 × 0,50 + 15 × 0,25 = 11,25 Euro. Hinweis für Sponsoren: Bitte beachten Sie bei der Festlegung der Rundenspende, dass man in der Zeit locker 20 Runden laufen kann!</p>'
+                                .'<p>Eine Belohnung gibt es für die beste Schulklasse: Alle Runden der Läufer für eine Schulklasse werden addiert. Die Klasse mit den meisten gelaufenen Runden erhält als Sonderpreis einen Betrag für die Klassenkasse. Im Jahr 2022 traten 82 Läuferinnen und Läufer an und liefen 830 Runden und somit ungefähr 400 km.</p>',
                         ],
                     ],
                 ],
@@ -1033,7 +1168,20 @@ class DatabaseSeeder extends Seeder
                         'type' => 'rich_text',
                         'data' => [
                             'heading' => 'Hochschulpartnerschule',
-                            'body' => $wpPages['hochschulpartnerschule']['body'] ?? '',
+                            'image_url' => '/images/school/signet-hochschulpartnerschule.jpg',
+                            'image_position' => 'right',
+                            'image_fit' => 'contain',
+                            'image_caption' => 'Offizielles Signet „Hochschulpartnerschule“ im Praxiskolleg von FACE (PH & Universität Freiburg).',
+                            'body' => '<p>Die Bezeichnung „Hochschulpartnerschule“ erhalten Schulen, die mit der Pädagogischen Hochschule Freiburg und/oder der Albert-Ludwigs-Universität Freiburg eng zusammenarbeiten. Gebündelt werden diese Kooperationen im sog. „Praxiskolleg“, das unter dem Dach des Freiburg Advanced Center of Education (FACE) angesiedelt ist. Das Praxiskolleg fungiert als Plattform für eine intensive Vernetzung zwischen der Schulpraxis und der Bildungsforschung sowie im Bereich der Aus- und Fortbildung von Lehrkräften.</p>'
+                                .'<p>Mit der Schaffung von Hochschulpartnerschulen sollen schon länger bestehende Partnerschaften (z. B. im Bereich der schulischen Praktika) stärker herausgestellt werden. Darüber hinaus gilt es, weitere verbindliche Partnerschaften (z. B. im Bereich der Forschung) zwischen den Hochschulen und den Schulen aufzubauen. Die Zusammenarbeit kann somit über verschiedene Schwerpunkte ausgestaltet werden. Die Vergabe des Status „Hochschulpartnerschule“ ist je nach Schwerpunkt an unterschiedliche Kriterien gebunden.</p>'
+                                .'<h2>Kooperation im Bereich Praxisphasenbetreuung</h2>'
+                                .'<p>Das „Integrierte Semesterpraktikum“ (ISP) ist seit 2011 ein verpflichtender Bestandteil für das Studium der Lehrämter an den Pädagogischen Hochschulen des Landes Baden-Württemberg. Im Rahmen des Kooperationsschwerpunktes erhalten Ausbildungsschulen den Status „Hochschulpartnerschule“, wenn diese bereits vier oder mehr Semester mit der Pädagogischen Hochschule Freiburg in der Betreuung von Studierenden im ISP zusammengearbeitet haben (siehe auch Webseite des Zentrums für Schulpraktische Studien (ZfS)). Voraussetzung, ISP-Ausbildungsschule zu werden, ist – neben der räumlichen Nähe zu Freiburg – eine Lehrkraft, welche die Rolle der Ausbildungsberaterin bzw. des Ausbildungsberaters übernimmt und sich hierzu (weiter-)qualifiziert. Die Qualifizierungsmaßnahmen finden i. d. R. – koordiniert durch das ZfS – an der Pädagogischen Hochschule Freiburg statt. Die Bestellung zur Ausbildungsberaterin bzw. zum Ausbildungsberater erfolgt durch das Schulamt Freiburg.</p>'
+                                .'<h2>Umsetzung der Kooperation im ISP an unserer Schule</h2>'
+                                .'<p><strong>Wir, die Mühlmattenschule, betreuen seit März 2013 Studierende der Pädagogischen Hochschule Freiburg in ihrem „Integrierten Semesterpraktikum“.</strong><br>'
+                                .'Als ISP-Ausbildungsschule gestalten wir das 15 bis 16 Wochen andauernde Praktikum in intensiver Zusammenarbeit mit der Pädagogischen Hochschule. Die Studierenden werden sowohl durch die Ausbildungsberaterin bzw. den Ausbildungsberater als auch durch mehrere Lehrkräfte des Kollegiums (die sog. Ausbildungslehrkräfte) aktiv in den Schulalltag und das Unterrichten eingebunden. Die Praxisphase wird dabei mit integrierten fachdidaktisch und bildungswissenschaftlich akzentuierten Anteilen an der Schule durchgeführt und durch Lehrende der Pädagogischen Hochschule in sogenannten Tagesfachpraktikumsgruppen regelmäßig vor Ort begleitet. Das ISP dient der Berufsorientierung der Studierenden und der Stärkung des Bezugs zur Schulpraxis. Es ermöglicht ein frühzeitiges Kennenlernen des gesamten Tätigkeitsfeldes Schule, insbesondere unter dem Blickwinkel der individuellen Förderung von Schülerinnen und Schülern. Im ISP soll festgestellt werden, ob im Hinblick auf eine spätere Berufstätigkeit die dem Ausbildungsstand entsprechenden Grundlagen didaktisch-methodischer und erzieherischer Kompetenzen und eine sich ausprägende Lehrpersönlichkeit in hinreichender Weise erkennbar sind.<br>'
+                                .'Ansprechpartnerin für das ISP an unserer Schule: <strong>Elvira Piess</strong>.</p>'
+                                .'<h2>Mehrwert der Kooperation im ISP für die Beteiligten</h2>'
+                                .'<p>Durch die Beteiligung am ISP wirken die betreffenden Ausbildungsschulen an einer professionellen, an aktuellen Forschungsergebnissen ausgerichteten Ausbildung der Lehrerinnen und Lehrer von morgen mit. Neben der Möglichkeit, sich aktiv an der Ausbildung von Lehrkräften zu beteiligen, eröffnet die Zusammenarbeit mit der Pädagogischen Hochschule auch Perspektiven für die qualitative Weiterentwicklung von Schule und Unterricht. Darüber hinaus wird die – auch in vielen nicht lehramtsbezogenen Berufsfeldern relevante – Verzahnung von Theorie und Praxis über den Dialog zwischen den Beteiligten aufrechterhalten. Dies trägt auch dazu bei, dass bei den zukünftig für die Bildung und Erziehung von Schülerinnen und Schülern zuständigen Lehrkräften frühzeitig ein Professionalisierungsprozess angebahnt wird.</p>',
                         ],
                     ],
                 ],
@@ -1053,8 +1201,20 @@ class DatabaseSeeder extends Seeder
                     [
                         'type' => 'rich_text',
                         'data' => [
-                            'heading' => 'Leitbild',
-                            'body' => $wpPages['leitbild-2']['body'] ?? '',
+                            'heading' => 'Leitbild der Mühlmattenschule',
+                            'image_url' => '/images/school/leitbild-schema.jpg',
+                            'image_position' => 'right',
+                            'image_fit' => 'contain',
+                            'image_caption' => 'Das Leitbild der Mühlmattenschule im Überblick (zum Vergrößern anklicken).',
+                            'body' => '<p>In den Schuljahren 2006/07 und 2007/08 haben die Mitglieder der Schulkonferenz – Eltern und Lehrer gemeinsam – unter Anleitung einer Prozessbegleiterin das Leitbild der Mühlmattenschule erarbeitet.</p>'
+                                .'<p>Seit dieser Zeit entwickelt das Kollegium zu den Leitsätzen konkrete Projekte und Maßnahmen, um diese auch im Schulalltag Wirklichkeit werden zu lassen:</p>'
+                                .'<ul>'
+                                .'<li>Kompetenzraster</li>'
+                                .'<li>Stärken stärken – Umgang mit Heterogenität</li>'
+                                .'<li>Regelmäßige Mühlmatten-Treffen (Treffen aller Schüler und Schülerinnen)</li>'
+                                .'<li>Klassenrat</li>'
+                                .'<li>Projekthafter und klassenübergreifender Unterricht</li>'
+                                .'</ul>',
                         ],
                     ],
                 ],
@@ -1088,7 +1248,25 @@ class DatabaseSeeder extends Seeder
                         'type' => 'rich_text',
                         'data' => [
                             'heading' => 'Klassenrat',
-                            'body' => $wpPages['klassenrat']['body'] ?? '',
+                            'image_url' => '/images/school/klassenrat-symbol.jpg',
+                            'image_position' => 'right',
+                            'image_fit' => 'contain',
+                            'image_caption' => 'Wöchentliche Gesprächsrunde in allen Klassen der Mühlmattenschule.',
+                            'body' => '<p>Im Herbst 2009 wurde an unserer Schule für alle Klassen der Klassenrat eingeführt. Er ist eine wöchentlich stattfindende Gesprächsrunde, in der konkrete Anliegen aus dem Schulalltag wie Ausflüge, Projekte, Regeln, Dienste, Probleme und Konflikte zur Sprache kommen.</p>'
+                                .'<p>Der Schwerpunkt des Klassenrates liegt im sozialen Lernen, in der Gewaltprävention und der Entwicklung einer demokratischen Schulkultur.</p>'
+                                .'<p>Die Schüler lernen hier:</p>'
+                                .'<ul>'
+                                .'<li>Verantwortung zu übernehmen,</li>'
+                                .'<li>Entscheidungen zu fällen und mitzutragen,</li>'
+                                .'<li>Lösungen zu finden,</li>'
+                                .'<li>angemessenes Verhalten bei Konflikten,</li>'
+                                .'<li>sich ihre eigene Meinung zu bilden und diese zu vertreten,</li>'
+                                .'<li>zu argumentieren,</li>'
+                                .'<li>Aufgaben zu übernehmen,</li>'
+                                .'<li>mit Kritik umzugehen</li>'
+                                .'<li>und viele weitere soziale Kompetenzen.</li>'
+                                .'</ul>'
+                                .'<p>Der Klassenrat stärkt das Wir-Gefühl und schafft ein positives Schul-, Klassen- und Lernklima.</p>',
                         ],
                     ],
                 ],
@@ -1104,8 +1282,28 @@ class DatabaseSeeder extends Seeder
                     [
                         'type' => 'rich_text',
                         'data' => [
-                            'heading' => 'Patenschaft Simbabwe',
-                            'body' => $wpPages['patenschaft-simbabwe']['body'] ?? '',
+                            'heading' => 'Über die Einrichtung – Midlands Children Home Rosedale',
+                            'image_url' => '/images/school/rosedale-kinder-afrika.jpg',
+                            'image_position' => 'right',
+                            'image_fit' => 'cover',
+                            'image_caption' => 'Kinder im Midlands Children Home Rosedale in Gweru, Simbabwe.',
+                            'body' => '<p>Seit 1995 pflegt unsere Schule eine Patenschaft mit dem Kinderheim und Waisenhaus <strong>„Midlands Children Home Rosedale“</strong> in Gweru/Simbabwe.</p>'
+                                .'<p>Vor fast 35 Jahren wurde das Heim von Gertrud Scheu, einer mittlerweile verstorbenen, kirchlichen Sozialarbeiterin aus der Schweiz und anderen engagierten Menschen als Verein gegründet. Die Stadt Gweru, in der sich das Heim befindet, liegt ziemlich genau in der Mitte des Landes. Das Haus Rosedale ist heute Heimat von ca. 60 Kindern von 0 bis 17 Jahren.</p>'
+                                .'<p>Es handelt sich überwiegend um Findelkinder, die als Säuglinge ausgesetzt wurden, z. B. weil die Mütter an Aids starben oder wegen sonstiger Notsituationen und deren Angehörige nicht zu ermitteln waren. Schwere körperliche und seelische Vergewaltigungen sind der Einweisungsgrund für die restlichen Kinder. Die Kinder besuchen ab 5 Jahren den öffentlichen Kindergarten und ab 7 Jahren die Schule. Vor einigen Jahren wurde zusätzlich ein Gelände erworben, wo Jugendliche nach Abschluss der Schule leben und Feldarbeit erlernen können.</p>'
+                                .'<p>Dank des Patenschaftsprogramms kommen der Einrichtung regelmäßig finanzielle Mittel aus der Schweiz und anderen Ländern zugute, sodass der Unterhalt und Betrieb der Einrichtung derzeit gesichert ist.</p>'
+                                .'<p>Weitere Informationen zum MCH Rosedale finden Sie auf den <a href="http://www.kath.ch/kleindoettingen/default/index/index/id/1783" target="_blank" rel="noopener noreferrer">Seiten der St. Antoniuspfarrei in Kleindöttingen (Schweiz)</a>.</p>',
+                        ],
+                    ],
+                    [
+                        'type' => 'rich_text',
+                        'data' => [
+                            'heading' => 'Trommeln für Rosedale',
+                            'image_url' => '/images/school/rosedale-trommeln.png',
+                            'image_position' => 'left',
+                            'image_fit' => 'contain',
+                            'image_caption' => 'Unsere Schülerinnen und Schüler singen und trommeln bei Auftritten und Schulfesten für Rosedale.',
+                            'body' => '<p>Das ganze Jahr über finden wir Gelegenheiten, bei denen wir Geld „zusammen trommeln“ können. Die Kinder singen und trommeln bei ihren Straßenmusik-Auftritten in der Freiburger Innenstadt und bei unseren Schulfesten.</p>'
+                                .'<p>Es freut uns, dass unsere Schülerinnen und Schüler auf diese Weise erleben können, wie befriedigend es ist, anderen Menschen hilfreich zu sein.</p>',
                         ],
                     ],
                 ],
@@ -1232,7 +1430,16 @@ class DatabaseSeeder extends Seeder
                         'type' => 'rich_text',
                         'data' => [
                             'heading' => 'Bibfit für die 1. und 2. Grundschulklasse',
-                            'body' => $wpPages['der-bibfit-lesekompass-fuer-die-1-und-2-grundschulklasse']['body'] ?? '',
+                            'image_url' => '/images/school/bibfit-buecherei.jpg',
+                            'image_position' => 'right',
+                            'image_fit' => 'contain',
+                            'image_caption' => '„Ich bin Bibfit!" – Der Lesekompass in der Bücherei St. Martin Hochdorf.',
+                            'body' => '<p>Seit 2010 besteht zwischen der Mühlmattenschule und der öffentlichen Bücherei in Hochdorf das Bibfit-Programm. Bibfit bedeutet einfach „bibliotheks-fit".</p>'
+                                .'<p>Die Kinder sollen durch das Programm selbstständig in der öffentlichen Bücherei der katholischen Pfarrgemeinde St. Martin Bücher und viele andere Medien ausleihen können. Die Bücherei befindet sich in der Benzhauser Str. 3 hinter dem Pfarrer-Meybrunn-Haus.</p>'
+                                .'<p>Viermal innerhalb des 1. und 2. Grundschuljahres besuchen die Schülerinnen und Schüler der Mühlmattenschule unsere Bibliothek. Natürlich können die Kinder auch zwischen diesen Klassenbesuchen jederzeit privat etwas ausleihen. Am Ende des zweiten Schuljahres werden die nun fitten Leseratten mit einer Urkunde belohnt.</p>'
+                                .'<p>Die Klassenbesuche werden vom Bibfit-Team der Bücherei vorbereitet und durchgeführt. Ziel ist es, die Kinder mit dem Medienangebot der Bücherei Hochdorf auf spielerische Weise vertraut zu machen, zur Leseförderung beizutragen und die Begeisterung fürs Lesen zu wecken.</p>'
+                                .'<p>Jedes Kind, das von den Eltern die Erlaubnis zur Ausleihe bekommt, erhält einen Leseausweis. Die Bücherei hat ein umfangreiches Angebot an Medien für alle Altersgruppen.</p>'
+                                .'<p><em>Das Bibfit-Team</em></p>',
                         ],
                     ],
                 ],

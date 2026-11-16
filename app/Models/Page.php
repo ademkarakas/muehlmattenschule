@@ -62,7 +62,7 @@ class Page extends Model
                     $data['items'] = $cleanItems;
                 }
 
-                foreach (['image_url', 'image_1_url', 'image_2_url', 'image_3_url'] as $urlField) {
+                foreach (['image_url', 'image_1_url', 'image_2_url', 'image_3_url', 'source_url'] as $urlField) {
                     if (array_key_exists($urlField, $data)) {
                         $data[$urlField] = HtmlSanitizer::sanitizeUrl(
                             is_string($data[$urlField]) ? $data[$urlField] : null

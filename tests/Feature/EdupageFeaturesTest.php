@@ -289,4 +289,58 @@ class EdupageFeaturesTest extends TestCase
             ->assertSee('target="_top"', false)
             ->assertSee('Zur Startseite', false);
     }
+
+    /**
+     * Prüft, dass das Schulportrait mehrspaltige Text-Bild-Blöcke (image_url, image_position, image_fit)
+     * und die 2-spaltige Luftbild-Galerie sauber an Inertia übergibt und als OG-Bild auflöst.
+     */
+    public function test_schulportrait_page_delivers_side_by_side_text_image_blocks_and_gallery(): void
+    {
+        Page::query()->create([
+            'title' => 'Schulportrait',
+            'slug' => 'schulportrait',
+            'section' => 'unsere-schule',
+            'menu_group' => 'Profil & Menschen',
+            'menu_order' => 1,
+            'summary' => 'Geschichte, Lage und Holzarchitektur der Mühlmattenschule.',
+            'content' => [
+                [
+                    'type' => 'rich_text',
+                    'data' => [
+                        'heading' => 'Unsere Schule in Freiburg-Hochdorf',
+                        'image_url' => '/images/school/logo-mms-2023.png',
+                        'image_position' => 'right',
+                        'image_fit' => 'contain',
+                        'image_caption' => 'Das offizielle Schullogo der Mühlmattenschule.',
+                        'body' => '<p>Alle Kinder aus dem Freiburger Stadtteil Hochdorf besuchen die Mühlmattenschule.</p>',
+                    ],
+                ],
+                [
+                    'type' => 'rich_text',
+                    'data' => [
+                        'heading' => 'Schulgebäude und -gelände',
+                        'image_url' => '/images/school/unsere-schule-innen.jpg',
+                        'image_position' => 'left',
+                        'image_fit' => 'cover',
+                        'image_caption' => 'Heller Flur mit warmer Holzarchitektur.',
+                        'body' => '<p>Holz ist das optisch dominierende Element der Architektur.</p>',
+                    ],
+                ],
+            ],
+            'status' => PublishStatus::Published,
+        ]);
+
+        $this->get('/unsere-schule/schulportrait')
+            ->assertOk()
+            ->assertInertia(fn (Assert $page): Assert => $page
+                ->component('pages/show')
+                ->where('page.slug', 'schulportrait')
+                ->has('page.content', 2)
+                ->where('page.content.0.data.image_url', '/images/school/logo-mms-2023.png')
+                ->where('page.content.0.data.image_position', 'right')
+                ->where('page.content.0.data.image_fit', 'contain')
+                ->where('page.content.1.data.image_position', 'left')
+                ->where('seo.ogImage', url('/images/school/logo-mms-2023.png'))
+            );
+    }
 }

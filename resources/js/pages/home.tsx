@@ -49,14 +49,13 @@ const EVENT_CATEGORY_LABELS: Record<string, { label: string; className: string }
  * Pausen-, Kalender-, Rubriken- und Sekretariats-Widgets rechts.
  */
 export default function HomePage({ posts, postsPagination, upcomingEvents, albums }: HomePageProps): ReactElement {
-    const { school, announcements, rubriken } = usePage<SharedInertiaProps>().props;
+    const { school, rubriken } = usePage<SharedInertiaProps>().props;
     const heroPhotos =
         school.hero_slides && school.hero_slides.length > 0 ? school.hero_slides : SCHOOL_HERO_PHOTOS;
     const [heroPhotoIndex, setHeroPhotoIndex] = useState(0);
     const [isHeroPaused, setIsHeroPaused] = useState(false);
     const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
     const touchStartX = useRef<number | null>(null);
-    const phoneHref = `tel:${school.phone.replace(/\s+/g, '')}`;
 
     useEffect(() => {
         const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -123,7 +122,7 @@ export default function HomePage({ posts, postsPagination, upcomingEvents, album
                         <Reveal
                             variant="fade"
                             duration={600}
-                            className="lg:col-span-6 xl:col-span-7 relative min-h-[260px] sm:min-h-[340px] lg:min-h-[380px] border-b lg:border-b-0 lg:border-r border-slate-200/80 bg-slate-900"
+                            className="lg:col-span-6 xl:col-span-7 relative min-h-[230px] sm:min-h-[290px] lg:min-h-[310px] border-b lg:border-b-0 lg:border-r border-slate-200/80 bg-slate-900"
                         >
                             <div
                                 onTouchStart={handleHeroTouchStart}
@@ -136,7 +135,7 @@ export default function HomePage({ posts, postsPagination, upcomingEvents, album
                                         setIsHeroPaused(false);
                                     }
                                 }}
-                                className="relative h-full w-full min-h-[260px] sm:min-h-[340px] lg:min-h-[380px] overflow-hidden"
+                                className="relative h-full w-full min-h-[230px] sm:min-h-[290px] lg:min-h-[310px] overflow-hidden"
                             >
                                 {heroPhotos.map((photo, index) => (
                                     <img
@@ -217,180 +216,45 @@ export default function HomePage({ posts, postsPagination, upcomingEvents, album
                             </div>
                         </Reveal>
 
-                        {/* Rechte Spalte (5/12 auf XL, 6/12 auf LG): Strukturierter Willkommensbereich + 2x2 Direktzugriff-Karten */}
+                        {/* Rechte Spalte (5/12 auf XL, 6/12 auf LG): Redaktioneller Willkommens- & Schulportrait-Text von muehlmattenschule.de */}
                         <Reveal
                             variant="fade-up"
                             delay={80}
                             duration={550}
-                            className="lg:col-span-6 xl:col-span-5 p-6 sm:p-8 lg:p-9 flex flex-col justify-center bg-gradient-to-br from-white via-white to-brand-50/35"
+                            className="lg:col-span-6 xl:col-span-5 p-6 sm:p-7 lg:p-8 flex flex-col justify-center bg-gradient-to-br from-white via-white to-brand-50/35"
                         >
-                            <h1 className="text-2xl sm:text-3xl xl:text-[2.15rem] font-extrabold tracking-tight leading-[1.18] text-slate-900 break-words hyphens-auto">
+                            <h1 className="text-xl sm:text-2xl lg:text-3xl font-extrabold leading-snug text-slate-900 break-words hyphens-auto">
                                 {school.welcome_title || `Willkommen an der ${school.name}`}
                             </h1>
 
-                            <p className="mt-3 text-sm sm:text-[15px] text-slate-600 leading-relaxed">
+                            <p className="mt-2 text-sm sm:text-base font-semibold text-brand-700 leading-relaxed">
                                 {school.welcome_text ||
                                     'Die Grundschule für den Freiburger Stadtteil Hochdorf mit Benzhausen – ein Ort zum Lernen, Wachsen und Entdecken.'}
                             </p>
 
-                            {/* 2x2 Schnellzugriffs-Bento für Eltern, Schülerinnen, Schüler & Gäste */}
-                            <div className="mt-6 pt-5 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                <Link
-                                    href="/unsere-schule/schulportrait"
-                                    className="group flex items-center gap-3 rounded-2xl border border-slate-200/80 bg-white p-3.5 shadow-2xs transition-all hover:border-brand-300 hover:bg-brand-50/40"
-                                >
-                                    <span
-                                        aria-hidden="true"
-                                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700 ring-1 ring-brand-500/15 transition-colors group-hover:bg-brand-600 group-hover:text-white"
-                                    >
-                                        <svg className="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z" />
-                                        </svg>
-                                    </span>
-                                    <div className="min-w-0 flex-1">
-                                        <span className="block truncate text-xs sm:text-[13px] font-extrabold text-slate-900 group-hover:text-brand-800">
-                                            Unsere Schule
-                                        </span>
-                                        <span className="block truncate text-[11px] font-medium text-slate-500">
-                                            Schulportrait, Klassen &amp; Team
-                                        </span>
-                                    </div>
-                                </Link>
-
-                                <Link
-                                    href="/unsere-schule/unterrichtszeiten"
-                                    className="group flex items-center gap-3 rounded-2xl border border-slate-200/80 bg-white p-3.5 shadow-2xs transition-all hover:border-brand-300 hover:bg-brand-50/40"
-                                >
-                                    <span
-                                        aria-hidden="true"
-                                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700 ring-1 ring-brand-500/15 transition-colors group-hover:bg-brand-600 group-hover:text-white"
-                                    >
-                                        <svg className="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l4 2m6-2a10 10 0 11-20 0 10 10 0 0120 0z" />
-                                        </svg>
-                                    </span>
-                                    <div className="min-w-0 flex-1">
-                                        <span className="block truncate text-xs sm:text-[13px] font-extrabold text-slate-900 group-hover:text-brand-800">
-                                            Unterricht &amp; Pausen
-                                        </span>
-                                        <span className="block truncate text-[11px] font-medium text-slate-500">
-                                            Stundenplan &amp; Pausenzeiten
-                                        </span>
-                                    </div>
-                                </Link>
-
-                                <Link
-                                    href="/angebote/schulkindbetreuung"
-                                    className="group flex items-center gap-3 rounded-2xl border border-slate-200/80 bg-white p-3.5 shadow-2xs transition-all hover:border-brand-300 hover:bg-brand-50/40"
-                                >
-                                    <span
-                                        aria-hidden="true"
-                                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700 ring-1 ring-brand-500/15 transition-colors group-hover:bg-brand-600 group-hover:text-white"
-                                    >
-                                        <svg className="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
-                                        </svg>
-                                    </span>
-                                    <div className="min-w-0 flex-1">
-                                        <span className="block truncate text-xs sm:text-[13px] font-extrabold text-slate-900 group-hover:text-brand-800">
-                                            Betreuung &amp; AGs
-                                        </span>
-                                        <span className="block truncate text-[11px] font-medium text-slate-500">
-                                            Nachmittag &amp; Projekte
-                                        </span>
-                                    </div>
-                                </Link>
-
-                                <Link
-                                    href="/kontakt"
-                                    className="group flex items-center gap-3 rounded-2xl border border-slate-200/80 bg-white p-3.5 shadow-2xs transition-all hover:border-brand-300 hover:bg-brand-50/40"
-                                >
-                                    <span
-                                        aria-hidden="true"
-                                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700 ring-1 ring-brand-500/15 transition-colors group-hover:bg-brand-600 group-hover:text-white"
-                                    >
-                                        <svg className="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
-                                        </svg>
-                                    </span>
-                                    <div className="min-w-0 flex-1">
-                                        <span className="block truncate text-xs sm:text-[13px] font-extrabold text-slate-900 group-hover:text-brand-800">
-                                            Sekretariat &amp; Kontakt
-                                        </span>
-                                        <span className="block truncate text-[11px] font-medium text-slate-500">
-                                            Krankmeldung &amp; Bürozeiten
-                                        </span>
-                                    </div>
-                                </Link>
+                            {/* Original-Vorstellungstext von der Startseite & dem Schulportrait (muehlmattenschule.de) */}
+                            <div className="mt-4 pt-4 border-t border-slate-200/80 space-y-3 text-sm sm:text-base leading-relaxed text-slate-600 break-words">
+                                <p>
+                                    Die Mühlmattenschule im Freiburger Stadtteil Hochdorf besuchen alle Kinder aus{' '}
+                                    <strong className="font-semibold text-slate-800">Hochdorf, Benzhausen</strong> und
+                                    dem angrenzenden Gewerbegebiet. Aktuell werden{' '}
+                                    <strong className="font-semibold text-slate-800">187 Kinder in 9 Klassen</strong>{' '}
+                                    und einer Außenklasse von{' '}
+                                    <strong className="font-semibold text-slate-800">
+                                        20 Lehrerinnen und Lehrern
+                                    </strong>{' '}
+                                    sowie Referendarinnen und Referendaren unterrichtet.
+                                </p>
+                                <p>
+                                    Unmittelbar am Naturschutzgebiet „Mühlmatten“ gelegen, verbindet unser helles
+                                    Schulgebäude mit seiner warmen Holzarchitektur eine ruhige, freundliche
+                                    Atmosphäre im Grünen mit viel Platz zum gemeinsamen Lernen, Spielen und Leben.
+                                </p>
                             </div>
                         </Reveal>
                     </div>
                 </div>
             </section>
-
-            {/* Aktive Ankündigungen aus dem Admin-Panel (/admin/announcements) */}
-            {announcements.length > 0 && (
-                <Reveal
-                    as="section"
-                    variant="fade-up"
-                    aria-label="Aktuelle Ankündigungen"
-                    className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10 pt-6 sm:pt-8 space-y-3"
-                >
-                    {announcements.map((item) => {
-                        const isImportant = item.level === 'important';
-                        return (
-                            <div
-                                key={item.id}
-                                className={`flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 rounded-2xl border p-4 sm:px-5 sm:py-4 shadow-xs ${
-                                    isImportant
-                                        ? 'border-amber-300 bg-gradient-to-r from-amber-50 to-orange-50 text-amber-950'
-                                        : 'border-brand-200 bg-gradient-to-r from-brand-50 to-white text-slate-900'
-                                }`}
-                            >
-                                <div className="flex items-start sm:items-center gap-3">
-                                    <span
-                                        className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ring-1 ${
-                                            isImportant
-                                                ? 'bg-amber-400/25 text-amber-900 ring-amber-500/30'
-                                                : 'bg-brand-50 text-brand-700 ring-brand-500/15'
-                                        }`}
-                                        aria-hidden="true"
-                                    >
-                                        <svg className="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 110-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38c-.551.318-1.26.117-1.527-.461a20.845 20.845 0 01-1.44-4.282m3.102.069a18.03 18.03 0 01-.59-4.59c0-1.586.205-3.124.59-4.59m0 9.18a23.848 23.848 0 018.835 2.535M10.34 6.66a23.847 23.847 0 008.835-2.535m0 0A23.74 23.74 0 0018.795 3m.38 1.125a23.91 23.91 0 011.014 5.395m-1.014 8.855c-.118.38-.245.754-.38 1.125m.38-1.125a23.91 23.91 0 001.014-5.395m0-3.46c.495.413.811 1.035.811 1.73 0 .695-.316 1.317-.811 1.73m0-3.46a24.347 24.347 0 010 3.46" />
-                                        </svg>
-                                    </span>
-                                    <span
-                                        className={`inline-flex shrink-0 items-center rounded-xl px-3 py-1 text-xs font-extrabold uppercase tracking-wider ${
-                                            isImportant
-                                                ? 'bg-amber-400 text-slate-950'
-                                                : 'bg-brand-700 text-white'
-                                        }`}
-                                    >
-                                        {isImportant ? 'Wichtig' : 'Ankündigung'}
-                                    </span>
-                                    <p className="text-sm sm:text-base font-bold leading-snug break-words">
-                                        {item.text}
-                                    </p>
-                                </div>
-
-                                {item.linkUrl && (
-                                    <Link
-                                        href={item.linkUrl}
-                                        className={`inline-flex min-h-10 shrink-0 items-center justify-center rounded-xl px-4 py-2 text-xs font-extrabold transition ${
-                                            isImportant
-                                                ? 'bg-amber-900 text-white hover:bg-amber-950'
-                                                : 'bg-brand-700 text-white hover:bg-brand-800'
-                                        }`}
-                                    >
-                                        {item.linkLabel || 'Mehr erfahren'} →
-                                    </Link>
-                                )}
-                            </div>
-                        );
-                    })}
-                </Reveal>
-            )}
 
             {/* Hauptbereich im EduPage-Portal-Layout (1 Beitrag pro Zeile links, Pausen/Kalender/Rubriken/Kontakt rechts) */}
             <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10 py-8 sm:py-12 grid gap-8 sm:gap-10 lg:grid-cols-12">
@@ -481,11 +345,11 @@ export default function HomePage({ posts, postsPagination, upcomingEvents, album
                         aria-label="Nächste Termine"
                         className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-xs"
                     >
-                        <div className="flex items-center justify-between gap-2 border-b border-slate-100 px-5 pt-5 pb-3 sm:px-6 sm:pt-6">
-                            <h2 className="flex min-w-0 items-center gap-2.5 text-base font-extrabold text-brand-900 sm:text-lg">
+                        <div className="mms-card-header flex items-center justify-between gap-2 border-b border-brand-700/25 px-5 py-3.5 sm:px-6 sm:py-4">
+                            <h2 className="flex min-w-0 items-center gap-2.5 text-base font-extrabold text-white sm:text-lg">
                                 <span
                                     aria-hidden="true"
-                                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700 ring-1 ring-brand-500/15"
+                                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-white/15 text-white ring-1 ring-white/25 backdrop-blur-xs shadow-2xs"
                                 >
                                     <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
@@ -495,7 +359,7 @@ export default function HomePage({ posts, postsPagination, upcomingEvents, album
                             </h2>
                             <Link
                                 href="/termine"
-                                className="shrink-0 rounded-full bg-brand-50 px-2.5 py-1 text-xs font-bold text-brand-800 transition hover:bg-brand-100"
+                                className="shrink-0 rounded-full bg-white px-3 py-1 text-xs font-extrabold text-brand-800 shadow-2xs ring-1 ring-white/40 transition hover:bg-brand-50 hover:text-brand-900"
                             >
                                 Alle →
                             </Link>
@@ -598,13 +462,13 @@ export default function HomePage({ posts, postsPagination, upcomingEvents, album
                             variant="fade-up"
                             delay={120}
                             aria-label="Unterrichts- & Pausenzeiten"
-                            className="rounded-2xl bg-white p-5 sm:p-6 shadow-xs border border-slate-200/80"
+                            className="overflow-hidden rounded-2xl bg-white shadow-xs border border-slate-200/80"
                         >
-                            <div className="flex items-center justify-between gap-2 pb-3 border-b border-slate-100">
-                                <h2 className="text-base sm:text-lg font-extrabold text-brand-900 flex items-center gap-2.5 min-w-0">
+                            <div className="mms-card-header flex items-center justify-between gap-2 border-b border-brand-700/25 px-5 py-3.5 sm:px-6 sm:py-4">
+                                <h2 className="text-base sm:text-lg font-extrabold text-white flex items-center gap-2.5 min-w-0">
                                     <span
                                         aria-hidden="true"
-                                        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700 ring-1 ring-brand-500/15"
+                                        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-white/15 text-white ring-1 ring-white/25 backdrop-blur-xs shadow-2xs"
                                     >
                                         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l4 2m6-2a10 10 0 11-20 0 10 10 0 0120 0z" />
@@ -614,13 +478,13 @@ export default function HomePage({ posts, postsPagination, upcomingEvents, album
                                 </h2>
                                 <Link
                                     href="/unsere-schule/unterrichtszeiten"
-                                    className="shrink-0 rounded-full bg-brand-50 px-2.5 py-1 text-xs font-bold text-brand-800 transition hover:bg-brand-100"
+                                    className="shrink-0 rounded-full bg-white px-3 py-1 text-xs font-extrabold text-brand-800 shadow-2xs ring-1 ring-white/40 transition hover:bg-brand-50 hover:text-brand-900"
                                 >
                                     Details →
                                 </Link>
                             </div>
 
-                            <ul className="mt-3 space-y-1.5 text-xs sm:text-sm">
+                            <ul className="p-4 sm:p-5 space-y-1.5 text-xs sm:text-sm">
                                 {school.bell_schedule.map((slot, idx) => {
                                     const isBreak = slot.type === 'break' || Boolean(slot.is_break);
                                     const isBetreuung = slot.type === 'betreuung';
@@ -673,74 +537,73 @@ export default function HomePage({ posts, postsPagination, upcomingEvents, album
                     </Reveal>
 
                     {/* 4. Kontakt- & Sekretariats-Widget im modernen Kontakt-Kartendesign */}
-                    <Reveal variant="fade-up" delay={180} className="rounded-2xl border border-slate-200/80 bg-white p-5 sm:p-6 shadow-xs">
-                        <div className="flex items-center gap-2.5">
-                            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700 ring-1 ring-brand-500/15" aria-hidden="true">
+                    <Reveal variant="fade-up" delay={180} className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-xs">
+                        <div className="mms-card-header flex items-center gap-2.5 border-b border-brand-700/25 px-5 py-3.5 sm:px-6 sm:py-4">
+                            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-white/15 text-white ring-1 ring-white/25 backdrop-blur-xs shadow-2xs" aria-hidden="true">
                                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
                                 </svg>
                             </span>
                             <div>
-                                <span className="block text-[11px] font-extrabold uppercase tracking-wider text-brand-700">
+                                <span className="block text-[11px] font-extrabold uppercase tracking-wider text-brand-100">
                                     Schulbüro & Krankmeldung
                                 </span>
-                                <h3 className="text-base sm:text-lg font-extrabold text-slate-900 leading-tight">
+                                <h3 className="text-base sm:text-lg font-extrabold text-white leading-tight">
                                     Sekretariat
                                 </h3>
                             </div>
                         </div>
 
-                        <p className="mt-2.5 text-xs leading-relaxed text-slate-600">
-                            Bitte melden Sie Ihr Kind im Krankheitsfall morgens vor Unterrichtsbeginn telefonisch oder
-                            per E-Mail im Sekretariat ab.
-                        </p>
+                        <div className="p-5 sm:p-6">
+                            <p className="text-xs leading-relaxed text-slate-600">
+                                Bitte melden Sie Ihr Kind im Krankheitsfall morgens vor Unterrichtsbeginn telefonisch oder
+                                per E-Mail im Sekretariat ab.
+                            </p>
 
-                        <div className="mt-4 space-y-2.5 text-sm">
-                            <a
-                                href={phoneHref}
-                                className="flex items-center gap-3 rounded-2xl border border-slate-200/80 bg-white p-3 transition hover:border-brand-200 hover:bg-brand-50/30"
-                            >
-                                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700 ring-1 ring-brand-500/15" aria-hidden="true">
-                                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
-                                    </svg>
-                                </span>
-                                <div className="min-w-0">
-                                    <span className="block text-[11px] font-semibold uppercase tracking-wider text-slate-500">
-                                        Telefon (Direktanruf)
+                            <div className="mt-4 space-y-2.5 text-sm">
+                                <div className="flex items-center gap-3 rounded-2xl border border-slate-200/80 bg-white p-3">
+                                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700 ring-1 ring-brand-500/15" aria-hidden="true">
+                                        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+                                        </svg>
                                     </span>
-                                    <span className="font-bold text-slate-900">{school.phone}</span>
+                                    <div className="min-w-0">
+                                        <span className="block text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+                                            Telefon
+                                        </span>
+                                        <span className="font-bold text-slate-900 select-all">{school.phone}</span>
+                                    </div>
                                 </div>
-                            </a>
 
-                            <a
-                                href={`mailto:${school.email}`}
-                                className="flex items-center gap-3 rounded-2xl border border-slate-200/80 bg-white p-3 transition hover:border-brand-200 hover:bg-brand-50/30"
-                            >
-                                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700 ring-1 ring-brand-500/15" aria-hidden="true">
-                                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
-                                    </svg>
-                                </span>
-                                <div className="min-w-0">
-                                    <span className="block text-[11px] font-semibold uppercase tracking-wider text-slate-500">
-                                        E-Mail
+                                <a
+                                    href={`mailto:${school.email}`}
+                                    className="flex items-center gap-3 rounded-2xl border border-slate-200/80 bg-white p-3 transition hover:border-brand-200 hover:bg-brand-50/30"
+                                >
+                                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700 ring-1 ring-brand-500/15" aria-hidden="true">
+                                        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                                        </svg>
                                     </span>
-                                    <span className="block truncate font-bold text-slate-900">{school.email}</span>
-                                </div>
-                            </a>
+                                    <div className="min-w-0">
+                                        <span className="block text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+                                            E-Mail
+                                        </span>
+                                        <span className="block truncate font-bold text-slate-900">{school.email}</span>
+                                    </div>
+                                </a>
 
-                            <div className="flex items-center gap-3 rounded-2xl border border-slate-200/80 bg-white p-3">
-                                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700 ring-1 ring-brand-500/15" aria-hidden="true">
-                                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l4 2m6-2a10 10 0 11-20 0 10 10 0 0120 0z" />
-                                    </svg>
-                                </span>
-                                <div className="min-w-0">
-                                    <span className="block text-[11px] font-semibold uppercase tracking-wider text-slate-500">
-                                        Öffnungszeiten
+                                <div className="flex items-center gap-3 rounded-2xl border border-slate-200/80 bg-white p-3">
+                                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700 ring-1 ring-brand-500/15" aria-hidden="true">
+                                        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l4 2m6-2a10 10 0 11-20 0 10 10 0 0120 0z" />
+                                        </svg>
                                     </span>
-                                    <span className="font-semibold text-slate-800">{school.office_hours}</span>
+                                    <div className="min-w-0">
+                                        <span className="block text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+                                            Öffnungszeiten
+                                        </span>
+                                        <span className="font-semibold text-slate-800">{school.office_hours}</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>

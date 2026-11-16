@@ -1,3 +1,4 @@
+import { AnnouncementModal } from "@/components/announcement-modal";
 import { Reveal } from "@/components/reveal";
 import { ScrollProgress } from "@/components/scroll-progress";
 import { ScrollToTop } from "@/components/scroll-to-top";
@@ -51,21 +52,22 @@ interface DesktopNavDropdownProps {
 }
 
 /**
- * Erzeugt die minimal-modernen Klassen für Hauptnavigations-Tabs (dezentes Glas-Highlight + animierte Unterstreichung).
+ * Erzeugt die klaren Klassen für Hauptnavigations-Tabs ohne Hintergrundkasten –
+ * aktiver und gehoverter Zustand werden ausschließlich durch die goldgelbe (amber-400) Unterstreichung markiert.
  */
 function getDesktopNavTabClass(active: boolean, isOpen = false): string {
     const base =
-        "relative inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2 cursor-pointer transition-all duration-200 after:content-[''] after:absolute after:bottom-0.5 after:left-3 after:right-3 after:h-[2.5px] after:rounded-full after:transition-all after:duration-200";
+        "relative inline-flex items-center gap-1.5 px-3 py-2 cursor-pointer transition-colors duration-200 after:content-[''] after:absolute after:bottom-0 after:left-2.5 after:right-2.5 after:h-[3px] after:rounded-full after:transition-all after:duration-200";
 
     if (active) {
-        return `${base} bg-white/15 text-white font-bold shadow-[inset_0_1px_0_0_rgba(255,255,255,0.22)] after:bg-white after:scale-x-100 after:opacity-100`;
+        return `${base} text-white font-extrabold after:bg-amber-400 after:scale-x-100 after:opacity-100`;
     }
 
     if (isOpen) {
-        return `${base} bg-white/12 text-white font-semibold after:bg-white/75 after:scale-x-100 after:opacity-100`;
+        return `${base} text-white font-semibold after:bg-amber-400 after:scale-x-100 after:opacity-100`;
     }
 
-    return `${base} text-white/90 font-medium hover:bg-white/10 hover:text-white after:bg-white/60 after:scale-x-0 after:opacity-0 hover:after:scale-x-100 hover:after:opacity-100`;
+    return `${base} text-white/90 font-semibold hover:text-white after:bg-amber-400 after:scale-x-0 after:opacity-0 hover:after:scale-x-100 hover:after:opacity-100`;
 }
 
 /**
@@ -180,14 +182,14 @@ function DesktopNavDropdown({
                 </svg>
             </button>
             <div
-                className={`transition-all duration-150 origin-top-left absolute left-0 top-full pt-2 z-40 ${
+                className={`transition-all duration-150 origin-top-left absolute left-0 top-full pt-2 z-40 before:content-[''] before:absolute before:-top-2 before:inset-x-0 before:h-2 ${
                     isOpen
                         ? "visible opacity-100 translate-y-0"
                         : "invisible opacity-0 -translate-y-1 pointer-events-none"
                 }`}
             >
                 <div
-                    className={`rounded-2xl bg-white p-3.5 text-slate-800 shadow-2xl ring-1 ring-slate-900/10 ${panelWidthClass}`}
+                    className={`rounded-2xl border-t-3 border-amber-400 bg-white p-3.5 text-slate-800 shadow-2xl ring-1 ring-slate-900/10 ${panelWidthClass}`}
                 >
                     {groups.map((groupEntry, idx) => (
                         <div key={groupEntry.group ?? idx}>
@@ -214,14 +216,14 @@ function DesktopNavDropdown({
                                                 className={`flex items-center justify-between gap-2 rounded-xl px-3 py-2 text-sm transition-all duration-150 ${
                                                     itemActive
                                                         ? "bg-brand-50 text-brand-800 font-bold ring-1 ring-brand-500/20"
-                                                        : "font-medium text-slate-700 hover:bg-brand-50/65 hover:text-brand-800 hover:translate-x-0.5"
+                                                        : "font-medium text-slate-700 hover:bg-slate-100 hover:text-brand-800 hover:translate-x-0.5"
                                                 }`}
                                             >
                                                 <span>{item.title}</span>
                                                 {itemActive && (
                                                     <span
                                                         aria-hidden="true"
-                                                        className="h-1.5 w-1.5 shrink-0 rounded-full bg-brand-600"
+                                                        className="h-2 w-2 shrink-0 rounded-full bg-amber-500"
                                                     />
                                                 )}
                                             </Link>
@@ -245,7 +247,8 @@ function DesktopNavDropdown({
  */
 export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
     const page = usePage<SharedInertiaProps>();
-    const { school, navigationPages, maintenancePreview } = page.props;
+    const { school, announcements, navigationPages, maintenancePreview } =
+        page.props;
     const currentUrl = page.url;
     const currentPath = currentUrl.split("?")[0];
     const [mobileOpen, setMobileOpen] = useState(false);
@@ -296,8 +299,6 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
         }
         return currentUrl.startsWith(prefix);
     };
-
-    const phoneHref = `tel:${school.phone.replace(/\s+/g, "")}`;
 
     useEffect(() => {
         try {
@@ -441,41 +442,44 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                     <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10 py-2.5 sm:py-3.5 flex items-center justify-between gap-3 sm:gap-6">
                         <Link
                             href="/"
-                            className="flex items-center gap-3 sm:gap-3.5 group min-w-0"
+                            title={`Zur Startseite – ${school.name}`}
+                            className="flex items-center gap-3 sm:gap-3.5 group min-w-0 rounded-2xl focus-visible:outline-amber-400"
                         >
-                            <img
-                                src="/images/logo.png"
-                                alt={`Logo ${school.name}`}
-                                width={52}
-                                height={52}
-                                className="h-11 w-11 sm:h-12 sm:w-12 shrink-0 rounded-2xl bg-white p-1 ring-2 ring-white/25 shadow-sm transition duration-200 group-hover:scale-105 object-contain"
-                            />
-                            <div className="min-w-0">
-                                <span className="block truncate text-lg sm:text-2xl font-extrabold tracking-tight text-white leading-tight">
+                            <span className="relative shrink-0 before:content-[''] before:absolute before:-inset-1 before:rounded-2xl before:bg-amber-400/45 before:blur-sm before:opacity-0 before:scale-90 before:transition-all before:duration-300 group-hover:before:opacity-100 group-hover:before:scale-105">
+                                <img
+                                    src="/images/logo.png"
+                                    alt={`Logo ${school.name}`}
+                                    width={52}
+                                    height={52}
+                                    className="relative h-11 w-11 sm:h-12 sm:w-12 shrink-0 rounded-2xl bg-white p-1 ring-2 ring-white/40 shadow-md transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:-translate-y-0.5 group-hover:scale-110 group-hover:-rotate-3 group-hover:ring-amber-400 group-hover:shadow-[0_10px_24px_-4px_rgba(15,23,42,0.38)] object-contain"
+                                />
+                            </span>
+                            <div className="min-w-0 transition-transform duration-300 ease-out group-hover:translate-x-1">
+                                <span className="block truncate text-lg sm:text-2xl font-extrabold tracking-tight text-white leading-tight transition-colors duration-200 group-hover:text-amber-400">
                                     {school.name}
                                 </span>
-                                <span className="block truncate text-xs sm:text-[13px] font-medium text-brand-100">
+                                <span className="block truncate text-xs sm:text-[13px] font-medium text-brand-100 transition-colors duration-200 group-hover:text-white">
                                     {school.subtitle}
                                 </span>
                             </div>
                         </Link>
 
                         <div className="flex items-center gap-2 lg:gap-2.5 text-xs sm:text-sm shrink-0">
-                            {/* Barrierefreie Schriftgrößen-Auswahl */}
+                            {/* Barrierefreie Schriftgrößen-Auswahl – dunkler Slate-Kontrast mit warmem Goldgelb-Aktivstatus (amber-400) */}
                             <div
                                 role="group"
                                 aria-label="Schriftgröße anpassen"
-                                className="hidden lg:flex items-center gap-0.5 rounded-full bg-white/14 p-1 ring-1 ring-white/25 backdrop-blur-xs"
+                                className="hidden lg:flex items-center gap-0.5 rounded-full bg-slate-900/55 p-1 ring-1 ring-amber-400/55 shadow-inner backdrop-blur-xs"
                             >
                                 <button
                                     type="button"
                                     onClick={() => updateFontScale("normal")}
                                     aria-pressed={fontScale === "normal"}
                                     title="Normale Schriftgröße"
-                                    className={`rounded-full px-2.5 py-1 text-xs font-extrabold cursor-pointer transition-all ${
+                                    className={`rounded-full px-2.5 py-1 text-xs font-extrabold cursor-pointer transition-all duration-200 ${
                                         fontScale === "normal"
-                                            ? "bg-white text-brand-800 shadow-xs"
-                                            : "text-white/90 hover:text-white hover:bg-white/15"
+                                            ? "bg-amber-400 text-slate-950 shadow-xs"
+                                            : "text-slate-100 hover:text-white hover:bg-white/15"
                                     }`}
                                 >
                                     A
@@ -485,10 +489,10 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                                     onClick={() => updateFontScale("lg")}
                                     aria-pressed={fontScale === "lg"}
                                     title="Große Schriftgröße"
-                                    className={`rounded-full px-2.5 py-1 text-xs font-extrabold cursor-pointer transition-all ${
+                                    className={`rounded-full px-2.5 py-1 text-xs font-extrabold cursor-pointer transition-all duration-200 ${
                                         fontScale === "lg"
-                                            ? "bg-white text-brand-800 shadow-xs"
-                                            : "text-white/90 hover:text-white hover:bg-white/15"
+                                            ? "bg-amber-400 text-slate-950 shadow-xs"
+                                            : "text-slate-100 hover:text-white hover:bg-white/15"
                                     }`}
                                 >
                                     A+
@@ -498,21 +502,22 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                                     onClick={() => updateFontScale("xl")}
                                     aria-pressed={fontScale === "xl"}
                                     title="Sehr große Schriftgröße"
-                                    className={`rounded-full px-2.5 py-1 text-xs font-extrabold cursor-pointer transition-all ${
+                                    className={`rounded-full px-2.5 py-1 text-xs font-extrabold cursor-pointer transition-all duration-200 ${
                                         fontScale === "xl"
-                                            ? "bg-white text-brand-800 shadow-xs"
-                                            : "text-white/90 hover:text-white hover:bg-white/15"
+                                            ? "bg-amber-400 text-slate-950 shadow-xs"
+                                            : "text-slate-100 hover:text-white hover:bg-white/15"
                                     }`}
                                 >
                                     A++
                                 </button>
                             </div>
 
+                            {/* Kontraststarkes Suchfeld (weißes Eingabefeld mit goldgelbem amber-400 Rahmen & Such-Button) */}
                             <form
                                 onSubmit={handleHeaderSearch}
                                 role="search"
                                 aria-label="Schulportal durchsuchen"
-                                className="relative hidden md:flex w-56 lg:w-64 xl:w-76 2xl:w-96 items-center"
+                                className="group/search relative hidden md:flex w-56 lg:w-68 xl:w-80 2xl:w-96 items-center"
                             >
                                 <label
                                     htmlFor="header-search-input"
@@ -528,13 +533,37 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                                         setHeaderSearchQuery(e.target.value)
                                     }
                                     placeholder="Schulportal durchsuchen…"
-                                    className="h-10 w-full rounded-full border border-white/25 bg-white/15 pl-4 pr-10 text-sm font-medium text-white placeholder:text-white/80 backdrop-blur-xs transition-all hover:bg-white/20 focus:border-white focus:bg-white focus:text-slate-900 focus:placeholder:text-slate-400 focus:outline-none focus:ring-4 focus:ring-white/20"
+                                    className="h-10 w-full rounded-full border-2 border-amber-400 bg-white pl-4 pr-18 text-sm font-medium text-slate-800 placeholder:text-slate-400 shadow-[0_3px_12px_rgba(15,23,42,0.16)] transition-all duration-200 hover:border-amber-400 focus:border-amber-400 focus:bg-white focus:text-slate-950 focus:outline-none focus:ring-4 focus:ring-amber-400/35"
                                 />
+                                {headerSearchQuery !== "" && (
+                                    <button
+                                        type="button"
+                                        onClick={() => setHeaderSearchQuery("")}
+                                        aria-label="Suchbegriff löschen"
+                                        title="Eingabe löschen"
+                                        className="absolute right-10.5 flex h-6 w-6 items-center justify-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-700 cursor-pointer transition"
+                                    >
+                                        <svg
+                                            className="h-3.5 w-3.5"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor"
+                                            strokeWidth="2.2"
+                                            aria-hidden="true"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                d="M6 18L18 6M6 6l12 12"
+                                            />
+                                        </svg>
+                                    </button>
+                                )}
                                 <button
                                     type="submit"
                                     aria-label="Suche starten"
                                     title="Suchen"
-                                    className="absolute right-1.5 flex h-7.5 w-7.5 items-center justify-center rounded-full bg-transparent text-white/90 hover:bg-white/20 hover:text-white cursor-pointer transition"
+                                    className="absolute right-1.5 flex h-7.5 w-8 items-center justify-center rounded-full bg-amber-400 text-slate-950 shadow-2xs hover:bg-amber-500 active:scale-95 cursor-pointer transition-all duration-200"
                                 >
                                     <SearchIcon className="h-4 w-4" />
                                 </button>
@@ -543,7 +572,7 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                             <Link
                                 href="/suche"
                                 aria-label="Suche öffnen"
-                                className="flex md:hidden h-11 w-11 items-center justify-center rounded-full bg-white/15 text-white ring-1 ring-white/25 hover:bg-white/25 transition"
+                                className="flex md:hidden h-11 w-11 items-center justify-center rounded-full bg-slate-900/55 text-amber-400 ring-1 ring-amber-400/60 hover:bg-amber-400 hover:text-slate-950 transition-all"
                             >
                                 <SearchIcon className="h-5 w-5" />
                             </Link>
@@ -551,14 +580,14 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                             <a
                                 href="/admin"
                                 rel="nofollow"
-                                className="hidden lg:inline-flex h-10 shrink-0 items-center gap-2 rounded-full bg-white/16 px-4 py-2 text-xs xl:text-sm font-bold text-white ring-1 ring-white/30 backdrop-blur-xs transition-all hover:bg-white hover:text-brand-800 hover:shadow-sm"
+                                className="group/login hidden lg:inline-flex h-10 shrink-0 items-center gap-2 rounded-full bg-slate-900/55 px-4 py-2 text-xs xl:text-sm font-bold text-white ring-1 ring-amber-400/65 shadow-sm backdrop-blur-xs transition-all duration-200 hover:-translate-y-0.5 hover:bg-amber-400 hover:text-slate-950 hover:ring-amber-400 hover:shadow-md"
                             >
                                 <svg
-                                    className="h-4 w-4 shrink-0"
+                                    className="h-4 w-4 shrink-0 text-amber-400 transition-colors duration-200 group-hover/login:text-slate-950"
                                     fill="none"
                                     viewBox="0 0 24 24"
                                     stroke="currentColor"
-                                    strokeWidth="1.9"
+                                    strokeWidth="2"
                                     aria-hidden="true"
                                 >
                                     <path
@@ -580,7 +609,7 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                                         ? "Hauptmenü schließen"
                                         : "Hauptmenü öffnen"
                                 }
-                                className="inline-flex lg:hidden min-h-11 items-center gap-2 rounded-full border border-white/30 bg-white/15 px-3.5 py-2 text-sm font-bold text-white active:bg-white/25 cursor-pointer"
+                                className="inline-flex lg:hidden min-h-11 items-center gap-2 rounded-full border border-amber-400/65 bg-slate-900/55 px-3.5 py-2 text-sm font-bold text-white active:bg-slate-900/75 cursor-pointer transition-all"
                             >
                                 <span>{mobileOpen ? "Schließen" : "Menü"}</span>
                                 {mobileOpen ? (
@@ -1070,10 +1099,7 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                                 </Link>
 
                                 <div className="mt-3 pt-3 border-t border-white/15 grid grid-cols-2 gap-2">
-                                    <a
-                                        href={phoneHref}
-                                        className="flex min-h-11 items-center justify-center gap-2 rounded-xl bg-white/15 px-3 py-2.5 text-xs font-bold text-white active:bg-white/25"
-                                    >
+                                    <div className="flex min-h-11 items-center justify-center gap-1.5 rounded-xl bg-white/10 px-2.5 py-2.5 text-xs font-semibold text-white select-all">
                                         <svg
                                             className="h-4 w-4 shrink-0"
                                             fill="none"
@@ -1088,8 +1114,8 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                                                 d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"
                                             />
                                         </svg>
-                                        <span>Anrufen</span>
-                                    </a>
+                                        <span className="truncate">{school.phone}</span>
+                                    </div>
                                     <a
                                         href={`mailto:${school.email}`}
                                         className="flex min-h-11 items-center justify-center gap-2 rounded-xl bg-white/15 px-3 py-2.5 text-xs font-bold text-white active:bg-white/25"
@@ -1188,12 +1214,9 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                                 </svg>
                                 <span>
                                     Telefon:{" "}
-                                    <a
-                                        href={phoneHref}
-                                        className="font-semibold text-white underline-offset-2 hover:underline"
-                                    >
+                                    <span className="font-semibold text-white">
                                         {school.phone}
-                                    </a>
+                                    </span>
                                 </span>
                             </p>
                             <p className="flex items-start gap-2 break-all">
@@ -1340,6 +1363,12 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                     © {new Date().getFullYear()} {school.name} Freiburg-Hochdorf
                 </div>
             </footer>
+
+            {/* Zentriertes Ankündigungs-Modal beim Betreten der Website (schließbar per × oder Esc) */}
+            <AnnouncementModal
+                announcements={announcements ?? []}
+                schoolName={school.name}
+            />
 
             {/* Füllt sich beim Herabscrollen & bringt den Nutzer zum Seitenanfang */}
             <ScrollToTop />
