@@ -42,6 +42,9 @@ class MaintenanceModeTest extends TestCase
         $response->assertSee('07665 2232');
         $response->assertSee('sekretariat.mmsvn@freiburger-schulen.bwl.de');
         $response->assertSee('Caritas Schulkindbetreuung');
+        $response->assertDontSee('mailto:');
+        $response->assertDontSee('tel:');
+        $response->assertDontSee('<button', false);
     }
 
     /**

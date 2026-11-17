@@ -239,6 +239,46 @@ function DesktopNavDropdown({
     );
 }
 
+interface FooterNavLinkProps {
+    href: string;
+    children: ReactNode;
+}
+
+/**
+ * Interaktiver Navigationslink für den Fußbereich mit sanftem Hover-Effekt,
+ * gleitendem Akzent-Pfeil (Bernstein/Türkis) und barrierefreiem Fokusring.
+ */
+function FooterNavLink({ href, children }: FooterNavLinkProps): ReactElement {
+    return (
+        <Link
+            href={href}
+            className="group flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 -mx-2.5 text-brand-100/85 font-medium transition-all duration-200 hover:bg-white/[0.08] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+        >
+            <span
+                aria-hidden="true"
+                className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-brand-800/80 text-brand-300 transition-all duration-200 ease-out group-hover:bg-amber-400 group-hover:text-brand-950 group-hover:scale-105 group-hover:shadow-xs"
+            >
+                <svg
+                    className="h-3 w-3 transition-transform duration-200 ease-out group-hover:translate-x-0.5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                >
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                    />
+                </svg>
+            </span>
+            <span className="transition-transform duration-200 ease-out group-hover:translate-x-1">
+                {children}
+            </span>
+        </Link>
+    );
+}
+
 /**
  * EduPage-inspiriertes Seitenlayout der Mühlmattenschule im originalen Logo-Türkis (#029786)
  * mit Barrierefreiheits-Schriftgrößenumschalter (A- / A / A+), Suche (/suche),
@@ -1114,7 +1154,9 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                                                 d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"
                                             />
                                         </svg>
-                                        <span className="truncate">{school.phone}</span>
+                                        <span className="truncate">
+                                            {school.phone}
+                                        </span>
                                     </div>
                                     <a
                                         href={`mailto:${school.email}`}
@@ -1173,188 +1215,179 @@ export function SiteLayout({ children }: SiteLayoutProps): ReactElement {
                     className="mx-auto max-w-7xl px-4 sm:px-6 py-10 sm:py-12 grid gap-8 md:grid-cols-4 text-sm"
                 >
                     <div>
-                        <div className="flex items-center gap-3">
+                        <Link
+                            href="/"
+                            className="group inline-flex items-center gap-3 transition-opacity duration-200 hover:opacity-95"
+                        >
                             <img
                                 src="/images/logo.png"
                                 alt={`Logo ${school.name}`}
                                 width={42}
                                 height={42}
-                                className="h-10 w-10 rounded-xl bg-white p-1 object-contain"
+                                className="h-10 w-10 rounded-xl bg-white p-1 object-contain shadow-sm ring-1 ring-white/30 transition-all duration-300 ease-out group-hover:scale-105 group-hover:-rotate-2 group-hover:ring-2 group-hover:ring-amber-400/80"
                             />
-                            <p className="text-lg font-extrabold text-white">
-                                {school.name}
-                            </p>
-                        </div>
+                            <div>
+                                <p className="text-lg font-extrabold text-white transition-colors duration-200 group-hover:text-amber-300">
+                                    {school.name}
+                                </p>
+                            </div>
+                        </Link>
                         <p className="mt-2 text-brand-200">{school.subtitle}</p>
-                        <address className="mt-3 not-italic leading-relaxed">
+                        <address className="mt-3 not-italic leading-relaxed text-brand-200/90">
                             {school.street}
                             <br />
                             {school.zip_city}
                         </address>
                     </div>
                     <div>
-                        <p className="text-base font-bold text-white">
+                        <p className="text-base font-bold text-white tracking-wide">
                             Sekretariat & Erreichbarkeit
                         </p>
-                        <div className="mt-2.5 space-y-2">
-                            <p className="flex items-center gap-2">
-                                <svg
-                                    className="h-4 w-4 shrink-0 text-brand-300"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                    strokeWidth="1.8"
+                        <div className="mt-1.5 h-0.5 w-8 rounded-full bg-brand-400/60" />
+                        <div className="mt-3 space-y-1.5">
+                            <div className="group flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 -mx-2.5 text-brand-100/90 cursor-default select-text transition-all duration-200 hover:bg-white/[0.08] hover:text-white">
+                                <span
                                     aria-hidden="true"
+                                    className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-brand-800/80 text-brand-300 transition-all duration-200 ease-out group-hover:bg-amber-400 group-hover:text-brand-950 group-hover:scale-105 group-hover:shadow-xs"
                                 >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"
-                                    />
-                                </svg>
-                                <span>
+                                    <svg
+                                        className="h-4 w-4"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                        strokeWidth="1.8"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"
+                                        />
+                                    </svg>
+                                </span>
+                                <span className="transition-transform duration-200 ease-out group-hover:translate-x-0.5">
                                     Telefon:{" "}
-                                    <span className="font-semibold text-white">
+                                    <span className="font-semibold text-white transition-colors group-hover:text-amber-300">
                                         {school.phone}
                                     </span>
                                 </span>
-                            </p>
-                            <p className="flex items-start gap-2 break-all">
-                                <svg
-                                    className="h-4 w-4 shrink-0 text-brand-300 mt-0.5"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                    strokeWidth="1.8"
+                            </div>
+                            <a
+                                href={`mailto:${school.email}`}
+                                className="group flex items-start gap-2.5 rounded-lg px-2.5 py-1.5 -mx-2.5 text-brand-100/90 break-all transition-all duration-200 hover:bg-white/[0.08] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+                            >
+                                <span
                                     aria-hidden="true"
+                                    className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-brand-800/80 text-brand-300 transition-all duration-200 ease-out group-hover:bg-amber-400 group-hover:text-brand-950 group-hover:scale-105 group-hover:shadow-xs"
                                 >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
-                                    />
-                                </svg>
-                                <span>
-                                    E-Mail:{" "}
-                                    <a
-                                        href={`mailto:${school.email}`}
-                                        className="font-semibold text-white underline-offset-2 hover:underline"
+                                    <svg
+                                        className="h-4 w-4"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                        strokeWidth="1.8"
                                     >
-                                        {school.email}
-                                    </a>
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
+                                        />
+                                    </svg>
                                 </span>
-                            </p>
-                            <p className="flex items-start gap-2 text-brand-200">
-                                <svg
-                                    className="h-4 w-4 shrink-0 text-brand-300 mt-0.5"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                    strokeWidth="1.8"
+                                <span className="transition-transform duration-200 ease-out group-hover:translate-x-0.5">
+                                    E-Mail:{" "}
+                                    <span className="font-semibold text-white transition-colors group-hover:text-amber-300">
+                                        {school.email}
+                                    </span>
+                                </span>
+                            </a>
+                            <div className="flex items-start gap-2.5 rounded-lg px-2.5 py-1.5 -mx-2.5 text-brand-200/90">
+                                <span
                                     aria-hidden="true"
+                                    className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-brand-800/40 text-brand-300"
                                 >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M12 6v6l4 2m6-2a10 10 0 11-20 0 10 10 0 0120 0z"
-                                    />
-                                </svg>
+                                    <svg
+                                        className="h-4 w-4"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                        strokeWidth="1.8"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            d="M12 6v6l4 2m6-2a10 10 0 11-20 0 10 10 0 0120 0z"
+                                        />
+                                    </svg>
+                                </span>
                                 <span>
                                     Öffnungszeiten: {school.office_hours}
                                 </span>
-                            </p>
+                            </div>
                         </div>
                     </div>
                     <div>
-                        <p className="text-base font-bold text-white">
+                        <p className="text-base font-bold text-white tracking-wide">
                             Unsere Schule & Konzepte
                         </p>
-                        <ul className="mt-2 space-y-1.5">
+                        <div className="mt-1.5 h-0.5 w-8 rounded-full bg-brand-400/60" />
+                        <ul className="mt-3 space-y-1">
                             <li>
-                                <Link
-                                    href="/unsere-schule/schulportrait"
-                                    className="inline-block py-0.5 hover:text-white"
-                                >
+                                <FooterNavLink href="/unsere-schule/schulportrait">
                                     Schulportrait & Kollegium
-                                </Link>
+                                </FooterNavLink>
                             </li>
                             <li>
-                                <Link
-                                    href="/unsere-schule/schulsozialarbeit"
-                                    className="inline-block py-0.5 hover:text-white"
-                                >
+                                <FooterNavLink href="/unsere-schule/schulsozialarbeit">
                                     Schulsozialarbeit
-                                </Link>
+                                </FooterNavLink>
                             </li>
                             <li>
-                                <Link
-                                    href="/konzepte-projekte/leitbild"
-                                    className="inline-block py-0.5 hover:text-white"
-                                >
+                                <FooterNavLink href="/konzepte-projekte/leitbild">
                                     Leitbild & Klassenrat
-                                </Link>
+                                </FooterNavLink>
                             </li>
                             <li>
-                                <Link
-                                    href="/angebote/schulkindbetreuung"
-                                    className="inline-block py-0.5 hover:text-white"
-                                >
+                                <FooterNavLink href="/angebote/schulkindbetreuung">
                                     Schulkindbetreuung & AGs
-                                </Link>
+                                </FooterNavLink>
                             </li>
                         </ul>
                     </div>
                     <div>
-                        <p className="text-base font-bold text-white">
+                        <p className="text-base font-bold text-white tracking-wide">
                             Service & Rechtliches
                         </p>
-                        <ul className="mt-2 space-y-1.5">
+                        <div className="mt-1.5 h-0.5 w-8 rounded-full bg-brand-400/60" />
+                        <ul className="mt-3 space-y-1">
                             <li>
-                                <Link
-                                    href="/aktuelles"
-                                    className="inline-block py-0.5 hover:text-white"
-                                >
+                                <FooterNavLink href="/aktuelles">
                                     Aktuelles & Berichte
-                                </Link>
+                                </FooterNavLink>
                             </li>
                             <li>
-                                <Link
-                                    href="/termine"
-                                    className="inline-block py-0.5 hover:text-white"
-                                >
+                                <FooterNavLink href="/termine">
                                     Schulkalender (.ics Export)
-                                </Link>
+                                </FooterNavLink>
                             </li>
                             <li>
-                                <Link
-                                    href="/downloads"
-                                    className="inline-block py-0.5 hover:text-white"
-                                >
+                                <FooterNavLink href="/downloads">
                                     Elternbriefe & Formulare
-                                </Link>
+                                </FooterNavLink>
                             </li>
                             <li>
-                                <Link
-                                    href="/suche"
-                                    className="inline-block py-0.5 hover:text-white"
-                                >
+                                <FooterNavLink href="/suche">
                                     Suche auf dem Portal
-                                </Link>
+                                </FooterNavLink>
                             </li>
-                            <li className="pt-1">
-                                <Link
-                                    href="/impressum"
-                                    className="inline-block py-0.5 hover:text-white"
-                                >
+                            <li>
+                                <FooterNavLink href="/impressum">
                                     Impressum
-                                </Link>{" "}
-                                ·{" "}
-                                <Link
-                                    href="/datenschutz"
-                                    className="inline-block py-0.5 hover:text-white"
-                                >
+                                </FooterNavLink>
+                            </li>
+                            <li>
+                                <FooterNavLink href="/datenschutz">
                                     Datenschutzerklärung
-                                </Link>
+                                </FooterNavLink>
                             </li>
                         </ul>
                     </div>

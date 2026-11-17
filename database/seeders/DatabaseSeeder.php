@@ -523,7 +523,7 @@ class DatabaseSeeder extends Seeder
                 'email' => 'schulleitung.mmsvn@freiburger-schulen.bwl.de',
                 'group' => PersonGroup::Schulleitung,
                 'sort_order' => 1,
-                'portrait' => 'teacher-blum.jpg',
+                'portrait' => 'Frau_Blum_2026.jpg',
             ],
             [
                 'name' => 'Sabine Caputo',
@@ -858,6 +858,13 @@ class DatabaseSeeder extends Seeder
                 'menu_order' => 3,
                 'summary' => 'Das pädagogische Team der Mühlmattenschule Freiburg-Hochdorf.',
                 'content' => [
+                    [
+                        'type' => 'image_banner',
+                        'data' => [
+                            'image_url' => '/images/school/Kollegium_2026.jpg',
+                            'caption' => 'Das Kollegium der Mühlmattenschule Freiburg-Hochdorf',
+                        ],
+                    ],
                     [
                         'type' => 'rich_text',
                         'data' => [
